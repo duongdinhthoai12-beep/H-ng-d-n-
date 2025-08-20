@@ -69,6 +69,12 @@ local player = Players.LocalPlayer
 player.CharacterAdded:Connect(function(char)
     local humanoid = char:WaitForChild("Humanoid")
 
+Name = "hồi liên tục",
+  Callback = function()
+    local Settings = {
+      JoinTeam = "Pirates";
+      Translator = true;
+      
     -- Vòng lặp hồi máu liên tục
     while humanoid.Parent do
         if humanoid.Health < humanoid.MaxHealth then
