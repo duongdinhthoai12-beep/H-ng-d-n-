@@ -31,8 +31,7 @@ MinimizeButton({
 
 -- Tabs
 local Tab1o = MakeTab({Name = "animation"})
-local Tab2o = MakeTab({Name = "lọ vương"})
-local Tab3o = MakeTab({Name = "cài lệnh"})
+local Tab2o = MakeTab({Name = "cài lệnh"})
 
 -- Button 1
 AddButton(Tab1o, {
@@ -46,8 +45,7 @@ AddButton(Tab1o, {
   end
 })
 
--- Button 2
-AddButton(Tab2o, {
+AddButton(Tab1o, {
   Name = "lọ vương",
   Callback = function()
     local Settings = {
@@ -58,8 +56,8 @@ AddButton(Tab2o, {
   end
 })
 
--- Button 3
-AddButton(Tab3o, {
+-- Button 2
+AddButton(Tab2o, {
   Name = "cài lệnh",
   Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
