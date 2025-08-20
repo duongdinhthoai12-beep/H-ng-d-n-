@@ -32,7 +32,6 @@ MinimizeButton({
 -- Tabs
 local Tab1o = MakeTab({Name = "animation"})
 local Tab2o = MakeTab({Name = "cài lệnh"})
-local Tab3o = MakeTab({Name = "extra"})
 
 -- Button 1
 AddButton(Tab1o, {
@@ -46,7 +45,6 @@ AddButton(Tab1o, {
   end
 })
 
--- Button 2
 AddButton(Tab2o, {
   Name = "lọ vương",
   Callback = function()
@@ -58,7 +56,7 @@ AddButton(Tab2o, {
   end
 })
 
--- Button 3
+-- Button 2
 AddButton(Tab3o, {
   Name = "cài lệnh",
   Callback = function()
@@ -66,34 +64,18 @@ AddButton(Tab3o, {
   end
 })
 
--- Button 4: Bất tử ON/OFF
-AddButton(Tab3o, {
-  Name = "Bật/Tắt bất tử",
-  Callback = function()
-      local Players = game:GetService("Players")
-      local player = Players.LocalPlayer
-      local character = player.Character or player.CharacterAdded:Wait()
-      local humanoid = character:WaitForChild("Humanoid")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
-      if humanoid:FindFirstChild("GodMode") then
-          -- Tắt bất tử
-          humanoid.GodMode:Destroy()
-          warn("❌ Bất tử OFF")
-      else
-          -- Bật bất tử
-          local god = Instance.new("BoolValue")
-          god.Name = "GodMode"
-          god.Parent = humanoid
+-- Khi nhân vật xuất hiện
+player.CharacterAdded:Connect(function(char)
+    local humanoid = char:WaitForChild("Humanoid")
 
-          humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-              if god.Parent and god.Value ~= false then
-                  if humanoid.Health < humanoid.MaxHealth then
-                      humanoid.Health = humanoid.MaxHealth
-                  end
-              end
-          end)
-
-          warn("✅ Bất tử ON")
-      end
-  end
-})
+    -- Vòng lặp hồi máu liên tục
+    while humanoid.Parent do
+        if humanoid.Health < humanoid.MaxHealth then
+            humanoid.Health = humanoid.Health + 1 -- hồi +1 máu mỗi vòng
+        end
+        task.wait(0.1) -- 0.1 giây hồi 1 lần (có thể chỉnh nhanh hơn)
+    end
+end)
