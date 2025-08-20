@@ -1,4 +1,4 @@
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"))()
 
 local Window = MakeWindow({
   Hub = {
@@ -66,41 +66,34 @@ AddButton(Tab3o, {
   end
 })
 
--- Button 4
+-- Button 4: Bất tử ON/OFF
 AddButton(Tab3o, {
-  Name = "lệnh bất tử",
+  Name = "Bật/Tắt bất tử",
   Callback = function()
-    local Players = game:GetService("Players")
+      local Players = game:GetService("Players")
+      local player = Players.LocalPlayer
+      local character = player.Character or player.CharacterAdded:Wait()
+      local humanoid = character:WaitForChild("Humanoid")
 
-    -- Button bất tử ON/OFF
-AddButton(Tab3o, {
-    Name = "Bật/Tắt bất tử",
-    Callback = function()
-        local Players = game:GetService("Players")
-        local player = Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local humanoid = character:WaitForChild("Humanoid")
+      if humanoid:FindFirstChild("GodMode") then
+          -- Tắt bất tử
+          humanoid.GodMode:Destroy()
+          warn("❌ Bất tử OFF")
+      else
+          -- Bật bất tử
+          local god = Instance.new("BoolValue")
+          god.Name = "GodMode"
+          god.Parent = humanoid
 
-        -- Biến trạng thái
-        if humanoid:FindFirstChild("GodMode") then
-            -- Tắt bất tử
-            humanoid.GodMode:Destroy()
-            warn("❌ Bất tử OFF")
-        else
-            -- Bật bất tử
-            local god = Instance.new("BoolValue")
-            god.Name = "GodMode"
-            god.Parent = humanoid
+          humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+              if god.Parent and god.Value ~= false then
+                  if humanoid.Health < humanoid.MaxHealth then
+                      humanoid.Health = humanoid.MaxHealth
+                  end
+              end
+          end)
 
-            humanoid:GetPropertyChangedSignal("Health"):Connect(function()
-                if god.Parent and god.Value ~= false then
-                    if humanoid.Health < humanoid.MaxHealth then
-                        humanoid.Health = humanoid.MaxHealth
-                    end
-                end
-            end)
-
-            warn("✅ Bất tử ON")
-        end
-    end
+          warn("✅ Bất tử ON")
+      end
+  end
 })
