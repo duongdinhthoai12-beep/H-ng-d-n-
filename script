@@ -29,9 +29,10 @@ MinimizeButton({
   StrokeColor = Color3.fromRGB(255, 0, 0)
 })
 
+
 -- Tabs
 local Tab1o = MakeTab({Name = "animation"})
-local Tab2o = MakeTab({Name = "cài lệnh"})
+local Tab2o = MakeTab({Name = "lệnh"})
 
 -- Button 1
 AddButton(Tab1o, {
@@ -54,6 +55,16 @@ AddButton(Tab1o, {
     }
     loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))()
   end
+})
+AddButton(Tab1o, {
+  Name = "gojo v2",
+  Callback = function()
+    local Settings = {
+      JoinTeam = "Pirates";
+      Translator = true;
+    }
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/LolnotaKid/SCRIPTSBYVEUX/refs/heads/main/LALALALALALAGOJOOO.lua.txt"))()
+end
 })
 
 -- Button 2
