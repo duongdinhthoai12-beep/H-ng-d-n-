@@ -75,8 +75,8 @@ AddButton(Tab2o, {
   end
 })
 AddButton(Tab2o, {
-  Name = "bay tốc độ ánh sáng",
+  Name = "kill all",
   Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeMods/GROWAGARDEN/refs/heads/main/script/Mainload."))()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/F3X-Workspace-script-that-lets-u-have-a-lsaer-knife-22875"))()
   end
 })
