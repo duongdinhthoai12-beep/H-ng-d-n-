@@ -1,0 +1,17 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Tạo RemoteEvent 1 lần ở server
+local killEvent = Instance.new("RemoteEvent")
+killEvent.Name = "KillAllEvent"
+killEvent.Parent = ReplicatedStorage
+
+-- Xử lý khi client bấm nút
+killEvent.OnServerEvent:Connect(function(sender)
+    -- TODO: kiểm tra quyền nếu cần (chỉ admin, v.v.)
+    for _, plr in ipairs(Players:GetPlayers()) do
+        local char = plr.Character
+        local hum = char and char:FindFirstChildOfClass("Humanoid")
+        if hum then hum.Health = 0 end
+    end
+end)
