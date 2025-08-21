@@ -80,3 +80,9 @@ AddButton(Tab2o, {
     loadstring(game:HttpGet("https://rawscripts.net/raw/F3X-Workspace-script-that-lets-u-have-a-lsaer-knife-22875"))()
   end
 })
+AddButton(Tab2o, {
+  Name = "ban",
+  Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Ban-Hammer-33938"))()
+end
+})
