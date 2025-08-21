@@ -21,7 +21,7 @@ local Window = MakeWindow({
 })
 
 MinimizeButton({
-  Image = "http://www.roblox.com/asset/?id=112692420860781",
+  Image = "http://www.roblox.com/asset/?id=91113173293148",
   Size = {60, 60},
   Color = Color3.fromRGB(10, 10, 10),
   Corner = true,
@@ -72,5 +72,11 @@ AddButton(Tab2o, {
   Name = "cài lệnh",
   Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+  end
+})
+AddButton(Tab2o, {
+  Name = "bay tốc độ ánh sáng",
+  Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FakeMods/GROWAGARDEN/refs/heads/main/script/Mainload."))()
   end
 })
