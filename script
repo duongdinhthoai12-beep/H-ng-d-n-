@@ -75,7 +75,7 @@ AddButton(Tab2o, {
   end
 })
 AddButton(Tab2o, {
-  Name = "kill all",
+  Name = "knife",
   Callback = function()
     loadstring(game:HttpGet("https://rawscripts.net/raw/F3X-Workspace-script-that-lets-u-have-a-lsaer-knife-22875"))()
   end
