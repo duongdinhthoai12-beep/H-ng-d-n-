@@ -83,6 +83,6 @@ AddButton(Tab2o, {
 AddButton(Tab2o, {
   Name = "ban",
   Callback = function()
-loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Ban-Hammer-33938"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Ban"))()
 end
 })
