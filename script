@@ -4,6 +4,7 @@ local Window = MakeWindow({
   Hub = {
     Title = "taolatraidepVN",
     Animation = "tiktok: STAR179"
+Size = UDim2.new(0, 600, 0, 350)
   },
   Key = {
     KeySystem = false,
@@ -22,7 +23,7 @@ local Window = MakeWindow({
 
 MinimizeButton({
   Image = "http://www.roblox.com/asset/?id=91113173293148",
-  Size = {60, 60},
+  Size = {50, 50},
   Color = Color3.fromRGB(10, 10, 10),
   Corner = true,
   Stroke = false,
