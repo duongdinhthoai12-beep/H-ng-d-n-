@@ -4,7 +4,6 @@ local Window = MakeWindow({
   Hub = {
     Title = "taolatraidepVN",
     Animation = "tiktok: STAR179"
-Size = UDim2.new(0, 600, 0, 350)
   },
   Key = {
     KeySystem = false,
