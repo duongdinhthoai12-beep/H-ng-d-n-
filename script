@@ -87,8 +87,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep
 end
 })
 AddButton(Tab2o, {
-  Name = "ban",
+  Name = "invisible💀",
   Callback = function()
-painter:loadstring(game:HttpGet("https://scriptblox.com/raw/Universal-Script-Mobile-Shiftlock-12348"))()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
 end
 })
