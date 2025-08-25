@@ -3,7 +3,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2
 local Window = MakeWindow({
   Hub = {
     Title = "taolatraidepVN",
-    Animation = "tiktok: STAR179"
+    Animation = "loading..."
   },
   Key = {
     KeySystem = false,
@@ -92,3 +92,8 @@ AddButton(Tab2o, {
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
 end
 })
+AddButton(Tab2o, {
+  Name = "nút nhảy",
+  Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/STAR-179/refs/heads/main/README.md"))()
+end})
