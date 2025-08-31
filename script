@@ -92,3 +92,12 @@ AddButton(Tab2o, {
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
 end
 })
+AddButton(Tab2o, {
+  Name = "aim",
+  Callback = function()
+loadstring(game:HttpGet("AddButton(Tab2o, {
+  Name = "invisible💀",
+  Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/script))()
+end
+})
