@@ -95,6 +95,6 @@ end
 AddButton(Tab2o, {
   Name = "aim",
   Callback = function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/script))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/script"))()
 end
 })
