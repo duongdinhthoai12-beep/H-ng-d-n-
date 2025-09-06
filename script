@@ -31,7 +31,7 @@ local Window = MakeWindow({
 
 -- Nút thu nhỏ
 MinimizeButton({
-    Image = "https://tr.rbxcdn.com/180DAY-5d83768bef6e6d9d2ff665be7b8e5110/150/150/Image/Webp/noFilter",
+    Image = "http://www.roblox.com/asset/?id=81237677662970",
     Size = {50, 50},
     Color = Color3.fromRGB(10, 10, 10),
     Corner = true,
@@ -42,14 +42,6 @@ MinimizeButton({
 -- Tabs
 local Tab1o = MakeTab({Name = "animation"})
 local Tab2o = MakeTab({Name = "lệnh"})
-
--- Button test trong Tab1
-AddButton(Tab1o, {
-    Name = "Test Button",
-    Callback = function()
-        print("Test button chạy OK")
-    end
-})
 
 -- Các nút khác
 AddButton(Tab1o, {
