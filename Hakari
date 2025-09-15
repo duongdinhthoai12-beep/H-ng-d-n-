@@ -1,0 +1,97 @@
+-- https://scriptblox.com/script/Universal-Script-Epik-R6-Dancezz-42246
+ 
+-- RUN LIMB REANIM NOTI
+game:GetService("StarterGui"):SetCore("SendNotification", { 
+	Title = "Limb Reanim V2";
+	Text = "ENJOY!";
+	Icon = "rbxthumb://type=Asset&id=13775452736&w=150&h=150"})
+Duration = 15;
+ 
+-- SETTINGS --
+local settings = _G
+ 
+settings["Use default animations"] = true
+settings["Fake character transparency level"] = 1 -- 0 to disable
+settings["Disable character scripts"] = true
+settings["Fake character should collide"] = true
+settings["Parent real character to fake character"] = false
+settings["Respawn character"] = true --[[ only should be disabled if
+your character havent played ANY animations, otherwise it breaks the reanimate ]]
+settings["Instant respawn"] = false --[[ Instant respawns the
+character, it will still wait the respawn time, but your character wont be dead.
+Requires: replicatesignal function
+Enable if you want the feature
+]]
+settings["Hide HumanoidRootPart"] = false --[[ Enabled by default. when enabled, your chat bubble or name tag
+will not appear above your character, but you will have your character immortal in the Fencing arena.
+]]
+settings["Hide HumanoidRootPart"] = false --[[ Enabled by default. when enabled, your chat bubble or name tag
+will not appear above your character, but you will have your character immortal in the Fencing arena.
+]]
+settings["PermaDeath fake character"] = false --[[When enabled, when you die when the reanimate is on, you
+wont respawn. If you want respawn, set it to false
+]]
+ 
+settings["Names to exclude from transparency"] = {
+    --[[ example:
+    ["HumanoidRootPart"] = true,
+    ["Left Arm"] = true
+    ]]
+}
+(function() if getgenv then return getgenv() else return _G end end)().fling = nil
+local finished = false
+ 
+task.spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/somethingsimade/CurrentAngleV2/refs/heads/main/v2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/gObl00x/My-Scripts/refs/heads/main/Epik%20R6%20Dancezz"))()
+end)
+ 
+repeat task.wait() until finished
+ 
+-- RUN LIMB REANIM NOTI
+game:GetService("StarterGui"):SetCore("SendNotification", { 
+	Title = "Limb Reanim V2";
+	Text = "ENJOY!";
+	Icon = "rbxthumb://type=Asset&id=13775452736&w=150&h=150"})
+Duration = 15;
+ 
+-- SETTINGS --
+local settings = _G
+ 
+settings["Use default animations"] = true
+settings["Fake character transparency level"] = 1 -- 0 to disable
+settings["Disable character scripts"] = true
+settings["Fake character should collide"] = true
+settings["Parent real character to fake character"] = false
+settings["Respawn character"] = true --[[ only should be disabled if
+your character havent played ANY animations, otherwise it breaks the reanimate ]]
+settings["Instant respawn"] = false --[[ Instant respawns the
+character, it will still wait the respawn time, but your character wont be dead.
+Requires: replicatesignal function
+Enable if you want the feature
+]]
+settings["Hide HumanoidRootPart"] = false --[[ Enabled by default. when enabled, your chat bubble or name tag
+will not appear above your character, but you will have your character immortal in the Fencing arena.
+]]
+settings["Hide HumanoidRootPart"] = false --[[ Enabled by default. when enabled, your chat bubble or name tag
+will not appear above your character, but you will have your character immortal in the Fencing arena.
+]]
+settings["PermaDeath fake character"] = false --[[When enabled, when you die when the reanimate is on, you
+wont respawn. If you want respawn, set it to false
+]]
+ 
+settings["Names to exclude from transparency"] = {
+    --[[ example:
+    ["HumanoidRootPart"] = true,
+    ["Left Arm"] = true
+    ]]
+}
+(function() if getgenv then return getgenv() else return _G end end)().fling = nil
+local finished = false
+ 
+task.spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/somethingsimade/CurrentAngleV2/refs/heads/main/v2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/gObl00x/My-Scripts/refs/heads/main/Epik%20R6%20Dancezz"))()
+end)
+ 
+repeat task.wait() until finished
