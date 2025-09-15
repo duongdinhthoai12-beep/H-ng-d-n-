@@ -65,6 +65,13 @@ AddButton(Tab1o, {
     end
 })
 
+AddButton(Tab1o, {
+    Name = "hakari",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Hakari"))()
+end
+})
+
 -- Tab2
 AddButton(Tab2o, {
     Name = "cài lệnh",
