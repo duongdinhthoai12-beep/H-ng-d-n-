@@ -111,7 +111,7 @@ AddButton(Tab2o, {
 
 -- ==================== TAB 3 - ÂM THANH ====================
 local sound = Instance.new("Sound", workspace)
-sound.SoundId = "rbxassetid://9123110932" -- thay ID âm thanh nếu muốn
+sound.SoundId = "rbxassetid://966101142098" -- thay ID âm thanh nếu muốn
 sound.Volume = 2
 sound.Looped = true
 local playing = false
