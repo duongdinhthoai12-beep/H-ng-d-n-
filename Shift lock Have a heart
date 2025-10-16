@@ -1,8 +1,8 @@
 local ref = cloneref or function(x) return x end
 local S = function(n) return ref(game:GetService(n)) end
 
-local Plrs, Tw, UIS, RS, Wk, CG =
-	S("Players"), S("TweenService"), S("UserInputService"), S("RunService"), S("Workspace"), S("CoreGui")
+local Plrs, UIS, RS, Wk, CG =
+	S("Players"), S("UserInputService"), S("RunService"), S("Workspace"), S("CoreGui")
 
 local plr = Plrs.LocalPlayer
 
@@ -72,7 +72,7 @@ local function reapply(v)
 	end)
 end
 
--- 🟦 Giao diện
+-- Giao diện chính
 local gui = Instance.new("ScreenGui")
 gui.Name = "ShiftLockUI"
 gui.ResetOnSpawn = false
@@ -81,23 +81,26 @@ gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 gui.DisplayOrder = 10000
 parentUI(gui)
 
--- 🔘 Nút bật/tắt Shift Lock
-local btn = Instance.new("ImageButton")
-btn.Name = "LockBtn"
+-- Nút Shift Lock hình chữ nhật
+local btn = Instance.new("TextButton")
+btn.Name = "ShiftLockBtn"
 btn.AnchorPoint = Vector2.new(0.5, 0.5)
-btn.Size = UDim2.fromOffset(64, 64)
-btn.Position = UDim2.new(1, -96, 1, -96)
+btn.Size = UDim2.fromOffset(150, 40)
+btn.Position = UDim2.new(0.5, 0, 1, -30) -- nằm trên thanh trắng
 btn.BackgroundColor3 = Color3.fromRGB(34, 34, 38)
+btn.Text = "by : STAR★179"
+btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+btn.Font = Enum.Font.GothamBold
+btn.TextScaled = true
 btn.AutoButtonColor = false
-btn.Image = ""
 btn.Active = true
 btn.Parent = gui
 
 local cr = Instance.new("UICorner")
-cr.CornerRadius = UDim.new(1, 0)
+cr.CornerRadius = UDim.new(0.2, 0)
 cr.Parent = btn
 
--- 🎯 Tạo tâm ngắm giữa màn hình
+-- Tâm giữa màn hình
 local crosshair = Instance.new("Frame")
 crosshair.Name = "Crosshair"
 crosshair.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -106,21 +109,21 @@ crosshair.Position = UDim2.new(0.5, 0, 0.5, 0)
 crosshair.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 crosshair.BorderSizePixel = 0
 crosshair.BackgroundTransparency = 0.2
-crosshair.Visible = false -- ẩn khi chưa bật
+crosshair.Visible = false
 crosshair.Parent = gui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(1, 0)
 corner.Parent = crosshair
 
--- 🔄 Xử lý bật/tắt Shift Lock
+-- Chức năng bật/tắt
 local enabled = false
 
 local function toggleShiftLock()
 	enabled = not enabled
 	reapply(enabled)
 	btn.BackgroundColor3 = enabled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(34, 34, 38)
-	crosshair.Visible = enabled -- Hiện hoặc ẩn tâm
+	crosshair.Visible = enabled
 end
 
 btn.MouseButton1Click:Connect(toggleShiftLock)
