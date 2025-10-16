@@ -1,139 +1,65 @@
--- Mobile + PC ShiftLock with Crosshair
--- by ChatGPT (taolatraidepVN edition)
-
+-- 📌 SHIFT LOCK CHỈ XOAY TRÁI PHẢI + LUÔN NHÌN PHÍA TRƯỚC
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
+local shiftLocked = false
+local crosshair = nil
 
--- Cấu hình
-local DISTANCE = 6       -- khoảng cách camera
-local HEIGHT = 1.5       -- độ cao camera
-local SENSITIVITY = 1.2  -- độ nhạy khi xoay
-local MIN_PITCH = -1.2
-local MAX_PITCH = 1.2
+-- Tạo tâm ngắm
+local function createCrosshair()
+    local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+    gui.Name = "ShiftLockCrosshair"
 
--- Trạng thái
-local enabled = false
-local yaw = 0
-local pitch = 0
-local rootPart = nil
-local prevCameraType = nil
-local connRender = nil
-local touchDelta = {X=0,Y=0}
-
--- Tạo GUI
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "ShiftLockGui"
-screenGui.ResetOnSpawn = false
-
--- Nút bật/tắt
-local button = Instance.new("TextButton", screenGui)
-button.Size = UDim2.new(0,120,0,40)
-button.Position = UDim2.new(0.02,0,0.8,0)
-button.BackgroundColor3 = Color3.fromRGB(40,40,40)
-button.TextColor3 = Color3.new(1,1,1)
-button.Font = Enum.Font.SourceSansBold
-button.TextSize = 18
-button.Text = "ShiftLock: OFF"
-button.AutoButtonColor = true
-
--- Dấu tâm ở giữa
-local cross = Instance.new("Frame", screenGui)
-cross.Name = "Crosshair"
-cross.AnchorPoint = Vector2.new(0.5,0.5)
-cross.Position = UDim2.new(0.5,0,0.5,0)
-cross.Size = UDim2.new(0,4,0,4)
-cross.BackgroundColor3 = Color3.new(1,1,1)
-cross.Visible = false
--- viền nhẹ
-local outline = Instance.new("UIStroke", cross)
-outline.Thickness = 1
-outline.Color = Color3.new(0,0,0)
-
--- Hàm bật
-local function enableShiftLock()
-	if not player.Character then return end
-	rootPart = player.Character:FindFirstChild("HumanoidRootPart")
-	if not rootPart then return end
-	
-	prevCameraType = camera.CameraType
-	camera.CameraType = Enum.CameraType.Scriptable
-	button.Text = "ShiftLock: ON"
-	cross.Visible = true
-	enabled = true
-	
-	connRender = RunService.RenderStepped:Connect(function()
-		if not enabled then return end
-		if not rootPart then return end
-		
-		local delta = UserInputService:GetMouseDelta()
-		yaw -= delta.X * 0.002 * SENSITIVITY
-		pitch = math.clamp(pitch - delta.Y * 0.002 * SENSITIVITY, MIN_PITCH, MAX_PITCH)
-		
-		-- touch xoay
-		yaw -= touchDelta.X * 0.004 * SENSITIVITY
-		pitch = math.clamp(pitch - touchDelta.Y * 0.004 * SENSITIVITY, MIN_PITCH, MAX_PITCH)
-		touchDelta = {X=0,Y=0}
-		
-		local camCF = CFrame.new(rootPart.Position)
-			* CFrame.new(0, HEIGHT, 0)
-			* CFrame.Angles(pitch, yaw, 0)
-			* CFrame.new(0, 0, DISTANCE)
-		camera.CFrame = camCF
-		
-		-- hướng nhân vật nhìn theo camera
-		local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-		if humanoid then
-			humanoid.AutoRotate = false
-			rootPart.CFrame = CFrame.new(rootPart.Position, Vector3.new(camCF.Position.X, rootPart.Position.Y, camCF.Position.Z))
-		end
-	end)
+    local frame = Instance.new("Frame", gui)
+    frame.Size = UDim2.new(0, 6, 0, 6)
+    frame.Position = UDim2.new(0.5, -3, 0.5, -3)
+    frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    frame.BorderSizePixel = 0
+    frame.Visible = false
+    crosshair = frame
 end
 
--- Hàm tắt
-local function disableShiftLock()
-	enabled = false
-	if connRender then connRender:Disconnect() connRender = nil end
-	if prevCameraType then camera.CameraType = prevCameraType else camera.CameraType = Enum.CameraType.Custom end
-	button.Text = "ShiftLock: OFF"
-	cross.Visible = false
-	if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
-		player.Character.Humanoid.AutoRotate = true
-	end
+-- Gắn camera nhìn phía trước
+local function lockCamera()
+    if not player.Character or not player.Character:FindFirstChild("Humanoid") then return end
+    local humanoid = player.Character:FindFirstChild("Humanoid")
+    humanoid.AutoRotate = false
+
+    RunService.RenderStepped:Connect(function()
+        if shiftLocked and player.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = player.Character.HumanoidRootPart
+            local camCF = camera.CFrame
+            -- Giữ hướng nhân vật theo trục Y của camera (trái - phải)
+            hrp.CFrame = CFrame.new(hrp.Position, hrp.Position + Vector3.new(camCF.LookVector.X, 0, camCF.LookVector.Z))
+        end
+    end)
 end
 
--- Khi nhấn nút
-button.MouseButton1Click:Connect(function()
-	if enabled then
-		disableShiftLock()
-	else
-		enableShiftLock()
-	end
-end)
+-- Bật / tắt Shift Lock
+local function toggleShiftLock()
+    shiftLocked = not shiftLocked
+    if shiftLocked then
+        if crosshair then crosshair.Visible = true end
+        player.CameraMode = Enum.CameraMode.LockFirstPerson
+    else
+        if crosshair then crosshair.Visible = false end
+        player.CameraMode = Enum.CameraMode.Classic
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.AutoRotate = true
+        end
+    end
+end
 
--- Cho phép bật bằng phím Shift hoặc P (nếu dùng bàn phím)
-UserInputService.InputBegan:Connect(function(input,gp)
-	if gp then return end
-	if input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.P then
-		if enabled then disableShiftLock() else enableShiftLock() end
-	end
-end)
+-- Khởi tạo
+createCrosshair()
+lockCamera()
 
--- Touch điều khiển xoay
-UserInputService.InputChanged:Connect(function(input,gp)
-	if gp then return end
-	if input.UserInputType == Enum.UserInputType.Touch and enabled then
-		if input.Delta then
-			touchDelta.X += input.Delta.X
-			touchDelta.Y += input.Delta.Y
-		end
-	end
-end)
-
--- Khi nhân vật chết / spawn lại
-player.CharacterAdded:Connect(function()
-	if enabled then disableShiftLock() end
+-- Bật / tắt bằng phím Shift
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        toggleShiftLock()
+    end
 end)
