@@ -1,29 +1,126 @@
--- 🎯 TÂM NGẮM MÀU ĐỎ DÀNH CHO MOBILE
-local player = game.Players.LocalPlayer
-local PlayerGui = player:WaitForChild("PlayerGui")
+local ref = cloneref or function(x) return x end
+local S = function(n) return ref(game:GetService(n)) end
 
--- Xóa tâm cũ (nếu có)
-if PlayerGui:FindFirstChild("Crosshair") then
-	PlayerGui.Crosshair:Destroy()
+local Plrs, Tw, UIS, RS, Wk, CG =
+	S("Players"), S("TweenService"), S("UserInputService"), S("RunService"), S("Workspace"), S("CoreGui")
+
+local plr = Plrs.LocalPlayer
+
+local function NA(i)
+	if not i then return end
+	i.Name = "\0"
+	i.Archivable = false
 end
 
--- Tạo tâm mới
+local function parentUI(g)
+	if gethui then
+		NA(g); g.Parent = gethui(); return g
+	elseif CG and CG:FindFirstChild("RobloxGui") then
+		NA(g); g.Parent = CG:FindFirstChild("RobloxGui"); return g
+	elseif CG then
+		NA(g); g.Parent = CG; return g
+	elseif plr and plr:FindFirstChildWhichIsA("PlayerGui") then
+		NA(g); g.Parent = plr:FindFirstChildWhichIsA("PlayerGui"); g.ResetOnSpawn = false; return g
+	end
+	return g
+end
+
+local function getParts()
+	local c = plr.Character or plr.CharacterAdded:Wait()
+	local hum, hrp
+	for _,d in ipairs(c:GetDescendants()) do
+		if not hum and d:IsA("Humanoid") then hum = d end
+		if not hrp and d:IsA("BasePart") and d.Name == "HumanoidRootPart" then hrp = d end
+		if hum and hrp then break end
+	end
+	hum = hum or c:WaitForChild("Humanoid")
+	hrp = hrp or c:WaitForChild("HumanoidRootPart")
+	return c, hum, hrp
+end
+
+local function lockMouse(v)
+	if UIS.MouseEnabled then
+		UIS.MouseBehavior = v and Enum.MouseBehavior.LockCenter or Enum.MouseBehavior.Default
+	end
+end
+
+local rotCon, oldAR
+local function faceCam(h, hrp, v)
+	if rotCon then rotCon:Disconnect() rotCon = nil end
+	if v then
+		oldAR = h.AutoRotate
+		h.AutoRotate = false
+		rotCon = RS.RenderStepped:Connect(function()
+			local cam = Wk.CurrentCamera
+			if not (hrp and cam) then return end
+			local lv = cam.CFrame.LookVector
+			local flat = Vector3.new(lv.X, 0, lv.Z)
+			if flat.Magnitude > 1e-4 then
+				hrp.CFrame = CFrame.lookAt(hrp.Position, hrp.Position + flat.Unit, Vector3.yAxis)
+			end
+		end)
+	else
+		if oldAR ~= nil then h.AutoRotate = oldAR end
+	end
+end
+
+local function reapply(v)
+	task.defer(function()
+		local _, h, r = getParts()
+		lockMouse(v)
+		faceCam(h, r, v)
+	end)
+end
+
+-- 🟦 Giao diện
+local gui = Instance.new("ScreenGui")
+gui.Name = "ShiftLockUI"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+gui.DisplayOrder = 10000
+parentUI(gui)
+
+-- 🔘 Nút bật/tắt Shift Lock
+local btn = Instance.new("ImageButton")
+btn.Name = "LockBtn"
+btn.AnchorPoint = Vector2.new(0.5, 0.5)
+btn.Size = UDim2.fromOffset(64, 64)
+btn.Position = UDim2.new(1, -96, 1, -96)
+btn.BackgroundColor3 = Color3.fromRGB(34, 34, 38)
+btn.AutoButtonColor = false
+btn.Image = ""
+btn.Active = true
+btn.Parent = gui
+
+local cr = Instance.new("UICorner")
+cr.CornerRadius = UDim.new(1, 0)
+cr.Parent = btn
+
+-- 🎯 Tạo tâm ngắm giữa màn hình
 local crosshair = Instance.new("Frame")
 crosshair.Name = "Crosshair"
-crosshair.Size = UDim2.new(0, 10, 0, 10) -- kích thước
-crosshair.Position = UDim2.new(0.5, -5, 0.5, -5)
-crosshair.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- màu đỏ
+crosshair.AnchorPoint = Vector2.new(0.5, 0.5)
+crosshair.Size = UDim2.fromOffset(6, 6)
+crosshair.Position = UDim2.new(0.5, 0, 0.5, 0)
+crosshair.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 crosshair.BorderSizePixel = 0
-crosshair.Active = false
-crosshair.Parent = PlayerGui
+crosshair.BackgroundTransparency = 0.2
+crosshair.Visible = false -- ẩn khi chưa bật
+crosshair.Parent = gui
 
--- Làm tròn cho đẹp
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(1, 0)
 corner.Parent = crosshair
 
--- Thêm viền đen mảnh cho dễ nhìn
-local stroke = Instance.new("UIStroke")
-stroke.Thickness = 1
-stroke.Color = Color3.fromRGB(0, 0, 0)
-stroke.Parent = crosshair
+-- 🔄 Xử lý bật/tắt Shift Lock
+local enabled = false
+
+local function toggleShiftLock()
+	enabled = not enabled
+	reapply(enabled)
+	btn.BackgroundColor3 = enabled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(34, 34, 38)
+	crosshair.Visible = enabled -- Hiện hoặc ẩn tâm
+end
+
+btn.MouseButton1Click:Connect(toggleShiftLock)
