@@ -1,65 +1,29 @@
--- 📌 SHIFT LOCK CHỈ XOAY TRÁI PHẢI + LUÔN NHÌN PHÍA TRƯỚC
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+-- 🎯 TÂM NGẮM MÀU ĐỎ DÀNH CHO MOBILE
+local player = game.Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
 
-local player = Players.LocalPlayer
-local camera = workspace.CurrentCamera
-local shiftLocked = false
-local crosshair = nil
-
--- Tạo tâm ngắm
-local function createCrosshair()
-    local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-    gui.Name = "ShiftLockCrosshair"
-
-    local frame = Instance.new("Frame", gui)
-    frame.Size = UDim2.new(0, 6, 0, 6)
-    frame.Position = UDim2.new(0.5, -3, 0.5, -3)
-    frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    frame.BorderSizePixel = 0
-    frame.Visible = false
-    crosshair = frame
+-- Xóa tâm cũ (nếu có)
+if PlayerGui:FindFirstChild("Crosshair") then
+	PlayerGui.Crosshair:Destroy()
 end
 
--- Gắn camera nhìn phía trước
-local function lockCamera()
-    if not player.Character or not player.Character:FindFirstChild("Humanoid") then return end
-    local humanoid = player.Character:FindFirstChild("Humanoid")
-    humanoid.AutoRotate = false
+-- Tạo tâm mới
+local crosshair = Instance.new("Frame")
+crosshair.Name = "Crosshair"
+crosshair.Size = UDim2.new(0, 10, 0, 10) -- kích thước
+crosshair.Position = UDim2.new(0.5, -5, 0.5, -5)
+crosshair.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- màu đỏ
+crosshair.BorderSizePixel = 0
+crosshair.Active = false
+crosshair.Parent = PlayerGui
 
-    RunService.RenderStepped:Connect(function()
-        if shiftLocked and player.Character:FindFirstChild("HumanoidRootPart") then
-            local hrp = player.Character.HumanoidRootPart
-            local camCF = camera.CFrame
-            -- Giữ hướng nhân vật theo trục Y của camera (trái - phải)
-            hrp.CFrame = CFrame.new(hrp.Position, hrp.Position + Vector3.new(camCF.LookVector.X, 0, camCF.LookVector.Z))
-        end
-    end)
-end
+-- Làm tròn cho đẹp
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(1, 0)
+corner.Parent = crosshair
 
--- Bật / tắt Shift Lock
-local function toggleShiftLock()
-    shiftLocked = not shiftLocked
-    if shiftLocked then
-        if crosshair then crosshair.Visible = true end
-        player.CameraMode = Enum.CameraMode.LockFirstPerson
-    else
-        if crosshair then crosshair.Visible = false end
-        player.CameraMode = Enum.CameraMode.Classic
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
-            player.Character.Humanoid.AutoRotate = true
-        end
-    end
-end
-
--- Khởi tạo
-createCrosshair()
-lockCamera()
-
--- Bật / tắt bằng phím Shift
-UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.LeftShift then
-        toggleShiftLock()
-    end
-end)
+-- Thêm viền đen mảnh cho dễ nhìn
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 1
+stroke.Color = Color3.fromRGB(0, 0, 0)
+stroke.Parent = crosshair
