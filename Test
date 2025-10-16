@@ -1,131 +1,139 @@
--- Load UI Library
-local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"))()
-end)
+-- Mobile + PC ShiftLock with Crosshair
+-- by ChatGPT (taolatraidepVN edition)
 
-if not success then
-    warn("Không load được UI Library: " .. tostring(err))
-    return
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+-- Cấu hình
+local DISTANCE = 6       -- khoảng cách camera
+local HEIGHT = 1.5       -- độ cao camera
+local SENSITIVITY = 1.2  -- độ nhạy khi xoay
+local MIN_PITCH = -1.2
+local MAX_PITCH = 1.2
+
+-- Trạng thái
+local enabled = false
+local yaw = 0
+local pitch = 0
+local rootPart = nil
+local prevCameraType = nil
+local connRender = nil
+local touchDelta = {X=0,Y=0}
+
+-- Tạo GUI
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+screenGui.Name = "ShiftLockGui"
+screenGui.ResetOnSpawn = false
+
+-- Nút bật/tắt
+local button = Instance.new("TextButton", screenGui)
+button.Size = UDim2.new(0,120,0,40)
+button.Position = UDim2.new(0.02,0,0.8,0)
+button.BackgroundColor3 = Color3.fromRGB(40,40,40)
+button.TextColor3 = Color3.new(1,1,1)
+button.Font = Enum.Font.SourceSansBold
+button.TextSize = 18
+button.Text = "ShiftLock: OFF"
+button.AutoButtonColor = true
+
+-- Dấu tâm ở giữa
+local cross = Instance.new("Frame", screenGui)
+cross.Name = "Crosshair"
+cross.AnchorPoint = Vector2.new(0.5,0.5)
+cross.Position = UDim2.new(0.5,0,0.5,0)
+cross.Size = UDim2.new(0,4,0,4)
+cross.BackgroundColor3 = Color3.new(1,1,1)
+cross.Visible = false
+-- viền nhẹ
+local outline = Instance.new("UIStroke", cross)
+outline.Thickness = 1
+outline.Color = Color3.new(0,0,0)
+
+-- Hàm bật
+local function enableShiftLock()
+	if not player.Character then return end
+	rootPart = player.Character:FindFirstChild("HumanoidRootPart")
+	if not rootPart then return end
+	
+	prevCameraType = camera.CameraType
+	camera.CameraType = Enum.CameraType.Scriptable
+	button.Text = "ShiftLock: ON"
+	cross.Visible = true
+	enabled = true
+	
+	connRender = RunService.RenderStepped:Connect(function()
+		if not enabled then return end
+		if not rootPart then return end
+		
+		local delta = UserInputService:GetMouseDelta()
+		yaw -= delta.X * 0.002 * SENSITIVITY
+		pitch = math.clamp(pitch - delta.Y * 0.002 * SENSITIVITY, MIN_PITCH, MAX_PITCH)
+		
+		-- touch xoay
+		yaw -= touchDelta.X * 0.004 * SENSITIVITY
+		pitch = math.clamp(pitch - touchDelta.Y * 0.004 * SENSITIVITY, MIN_PITCH, MAX_PITCH)
+		touchDelta = {X=0,Y=0}
+		
+		local camCF = CFrame.new(rootPart.Position)
+			* CFrame.new(0, HEIGHT, 0)
+			* CFrame.Angles(pitch, yaw, 0)
+			* CFrame.new(0, 0, DISTANCE)
+		camera.CFrame = camCF
+		
+		-- hướng nhân vật nhìn theo camera
+		local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+		if humanoid then
+			humanoid.AutoRotate = false
+			rootPart.CFrame = CFrame.new(rootPart.Position, Vector3.new(camCF.Position.X, rootPart.Position.Y, camCF.Position.Z))
+		end
+	end)
 end
 
--- Tạo Window
-local Window = MakeWindow({
-    Hub = {
-        Title = "taolatraidepVN",
-        Animation = "loading..."
-    },
-    Key = {
-        KeySystem = false,
-        Title = "Key System",
-        Description = "",
-        KeyLink = "",
-        Keys = {"1234"},
-        Notifi = {
-            Notifications = true,
-            CorrectKey = "Running the Script...",
-            IncorrectKey = "The key is incorrect",
-            CopyKeyLink = "Copied to Clipboard"
-        }
-    }
-})
+-- Hàm tắt
+local function disableShiftLock()
+	enabled = false
+	if connRender then connRender:Disconnect() connRender = nil end
+	if prevCameraType then camera.CameraType = prevCameraType else camera.CameraType = Enum.CameraType.Custom end
+	button.Text = "ShiftLock: OFF"
+	cross.Visible = false
+	if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+		player.Character.Humanoid.AutoRotate = true
+	end
+end
 
--- Nút thu nhỏ
-MinimizeButton({
-    Image = "http://www.roblox.com/asset/?id=81237677662970",
-    Size = {50, 50},
-    Color = Color3.fromRGB(10, 10, 10),
-    Corner = true,
-    Stroke = false,
-    StrokeColor = Color3.fromRGB(255, 0, 0)
-})
+-- Khi nhấn nút
+button.MouseButton1Click:Connect(function()
+	if enabled then
+		disableShiftLock()
+	else
+		enableShiftLock()
+	end
+end)
 
--- Tabs
-local Tab1o = MakeTab({Name = "animation"})
-local Tab2o = MakeTab({Name = "lệnh"})
-local Tab3o = MakeTab({Name = "âm thanh🎵"})
+-- Cho phép bật bằng phím Shift hoặc P (nếu dùng bàn phím)
+UserInputService.InputBegan:Connect(function(input,gp)
+	if gp then return end
+	if input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.P then
+		if enabled then disableShiftLock() else enableShiftLock() end
+	end
+end)
 
--- ==================== TAB 1 ====================
-AddButton(Tab1o, {
-    Name = "gojo",
-    Callback = function()
-        loadstring(game:HttpGet("https://pastefy.app/OS8Atb5c/raw"))()
-    end
-})
+-- Touch điều khiển xoay
+UserInputService.InputChanged:Connect(function(input,gp)
+	if gp then return end
+	if input.UserInputType == Enum.UserInputType.Touch and enabled then
+		if input.Delta then
+			touchDelta.X += input.Delta.X
+			touchDelta.Y += input.Delta.Y
+		end
+	end
+end)
 
-AddButton(Tab1o, {
-    Name = "lọ vương",
-    Callback = function()
-        loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))()
-    end
-})
-
-AddButton(Tab1o, {
-    Name = "gojo v2",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/LolnotaKid/SCRIPTSBYVEUX/refs/heads/main/LALALALALALAGOJOOO.lua.txt"))()
-    end
-})
-
-AddButton(Tab1o, {
-    Name = "hakari",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Hakari"))()
-    end
-})
-
--- ==================== TAB 2 ====================
-AddButton(Tab2o, {
-    Name = "cài lệnh",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-    end
-})
-
-AddButton(Tab2o, {
-    Name = "knife",
-    Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/F3X-Workspace-script-that-lets-u-have-a-lsaer-knife-22875"))()
-    end
-})
-
-AddButton(Tab2o, {
-    Name = "ban",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Ban"))()
-    end
-})
-
-AddButton(Tab2o, {
-    Name = "invisible💀",
-    Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
-    end
-})
-
-AddButton(Tab2o, {
-    Name = "aim",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/script"))()
-    end
-})
-
--- ==================== TAB 3 - ÂM THANH ====================
-local sound = Instance.new("Sound", workspace)
-sound.SoundId = "rbxassetid://966101142098" -- thay ID âm thanh nếu muốn
-sound.Volume = 2
-sound.Looped = true
-local playing = false
-
-AddButton(Tab3o, {
-    Name = "🔊 Bật/Tắt Nhạc",
-    Callback = function()
-        playing = not playing
-        if playing then
-            sound:Play()
-            game.StarterGui:SetCore("SendNotification", {Title="Âm thanh", Text="🎵 Đang phát nhạc", Duration=2})
-        else
-            sound:Stop()
-            game.StarterGui:SetCore("SendNotification", {Title="Âm thanh", Text="🔇 Đã tắt nhạc", Duration=2})
-        end
-    end
-})
+-- Khi nhân vật chết / spawn lại
+player.CharacterAdded:Connect(function()
+	if enabled then disableShiftLock() end
+end)
