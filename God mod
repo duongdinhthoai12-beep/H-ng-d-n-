@@ -1,0 +1,88 @@
+-- GOD MODE
+-- Gui to C++
+-- Version: 9.12 (with cat laugh)
+
+-- Instances:
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local TextButton = Instance.new("TextButton")
+local Sound = Instance.new("Sound")
+
+-- Properties:
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.39, 0, 0.3, 0)
+Frame.Size = UDim2.new(0, 163, 0, 82)
+Frame.Active = true
+Frame.Draggable = true
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TextLabel.BorderSizePixel = 0
+TextLabel.Size = UDim2.new(0, 163, 0, 23)
+TextLabel.Font = Enum.Font.SourceSansBold
+TextLabel.Text = "Killbrick Toggle"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 18
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.Position = UDim2.new(0.18, 0, 0.4, 0)
+TextButton.Size = UDim2.new(0, 104, 0, 31)
+TextButton.Font = Enum.Font.SourceSansItalic
+TextButton.Text = "OFF"
+TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.TextSize = 15
+
+-- Sound settings:
+Sound.SoundId = "rbxassetid://6832470734" -- Mèo cười
+Sound.Volume = 3
+Sound.Looped = false
+Sound.Parent = Frame
+
+-- Script:
+local player = game:GetService("Players").LocalPlayer
+local nega = true -- false = bật, true = tắt
+
+local function updateButtonText()
+	if nega then
+		TextButton.Text = "OFF"
+		TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	else
+		TextButton.Text = "ON"
+		TextButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+	end
+end
+
+local function toggleFeature()
+	nega = not nega
+	updateButtonText()
+
+	if not nega then
+		Sound:Play() -- Bật âm thanh khi bật GOD MODE
+	else
+		Sound:Stop() -- Dừng khi tắt
+	end
+end
+
+TextButton.MouseButton1Click:Connect(toggleFeature)
+
+-- Tác dụng GOD MODE
+task.spawn(function()
+	while task.wait(0.5) do
+		local character = player.Character
+		if character and character:FindFirstChild("Humanoid") then
+			for _, part in ipairs(character:GetDescendants()) do
+				if part:IsA("BasePart") then
+					part.CanTouch = nega -- false = god mode, true = bình thường
+				end
+			end
+		end
+	end
+end)
