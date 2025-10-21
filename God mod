@@ -27,7 +27,7 @@ TextLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 TextLabel.BorderSizePixel = 0
 TextLabel.Size = UDim2.new(0, 163, 0, 23)
 TextLabel.Font = Enum.Font.SourceSansBold
-TextLabel.Text = "Killbrick Toggle"
+TextLabel.Text = "by:STAR179_VN"
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.TextSize = 18
 
@@ -52,10 +52,10 @@ local nega = true -- false = bật, true = tắt
 
 local function updateButtonText()
 	if nega then
-		TextButton.Text = "OFF"
+		TextButton.Text = "OFF/tắt"
 		TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	else
-		TextButton.Text = "ON"
+		TextButton.Text = "ON/bật"
 		TextButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 	end
 end
