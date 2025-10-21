@@ -95,7 +95,8 @@ btn.TextScaled = true
 btn.AutoButtonColor = false
 btn.Active = true
 btn.Parent = gui
-
+btn.Active = true
+btn.Draggable = true
 local cr = Instance.new("UICorner")
 cr.CornerRadius = UDim.new(0.2, 0)
 cr.Parent = btn
