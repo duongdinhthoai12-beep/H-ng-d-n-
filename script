@@ -107,3 +107,15 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/script"))()
     end
 })
+AddButton(Tab2o, {
+    Name = "shift lock",
+    Callback = function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Shift lock Have a heart"))() 
+  end
+})
+AddButton(Tab2o, {
+    Name = "god mod",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/God mod"))()
+  end
+})
