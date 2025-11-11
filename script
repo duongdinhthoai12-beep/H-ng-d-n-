@@ -195,3 +195,27 @@ AddButton(Tab3o, {
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/noli-void-rush-control/refs/heads/main/scripr"))()
   end
 })
+AddButton(Tab3o, {
+    Name = "two time",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-backstab-two-time/refs/heads/main/Auto%20backstab%20v2"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "7π7",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/NumanTF3/invis-7n7-upon-clone/refs/heads/main/main.lua"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "chance",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/Chance%20aimbot%20v2"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "stamina",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/NgKhaiVN/Roblox/refs/heads/main/FORSAKEN/stamina.lua"))()
+  end
+})
