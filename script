@@ -65,6 +65,7 @@ AddButton(Tab1o, {
     end
 })
 
+
 AddButton(Tab1o, {
     Name = "hakari",
     Callback = function()
@@ -87,6 +88,18 @@ AddButton(Tab2o, {
     end
 })
 
+AddButton(Tab2o, {
+    Name = "knife v2",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/retpirato/Roblox-Scripts/refs/heads/master/Grab%20Knife%20V2.lua"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "gun",
+    Callback = function()
+    @script hay độc lạ:loadstring(game:HttpGet("https://raw.githubusercontent.com/nicolasbarbosa323/rare/refs/heads/main/kitcher%20gun.lua"))()
+end
+})
 AddButton(Tab2o, {
     Name = "ban",
     Callback = function()
@@ -117,5 +130,11 @@ AddButton(Tab2o, {
     Name = "god mod",
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/God mod"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "tua ngược",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/MSTTOPPER/Scripts/refs/heads/main/FlashBack"))()
   end
 })
