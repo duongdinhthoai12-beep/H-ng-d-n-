@@ -104,7 +104,7 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-grab-knife-
 AddButton(Tab2o, {
     Name = "gun",
     Callback = function()
-    @script hay độc lạ:loadstring(game:HttpGet("https://raw.githubusercontent.com/nicolasbarbosa323/rare/refs/heads/main/kitcher%20gun.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/nicolasbarbosa323/rare/refs/heads/main/kitcher%20gun.lua"))()
 end
 })
 AddButton(Tab2o, {
