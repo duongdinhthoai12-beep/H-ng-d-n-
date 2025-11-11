@@ -42,6 +42,7 @@ MinimizeButton({
 -- Tabs
 local Tab1o = MakeTab({Name = "animation"})
 local Tab2o = MakeTab({Name = "lệnh"})
+local Tab3o = MakeTab({Name = "forsaken"})
 
 -- Các nút khác
 AddButton(Tab1o, {
@@ -168,5 +169,29 @@ AddButton(Tab2o, {
     Name = "god 99 day",
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ProBaconHub/DATABASE/refs/heads/main/99%20Nights%20in%20the%20Forest/Infinite%20Health.lua"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "Guest 1337",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-block-script/refs/heads/main/FINAL%20AUTO%20BLOCK"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "auto farm",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-gen-and-esp/refs/heads/main/Script"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "John doe",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/John-doe-auto-parry-404/refs/heads/main/Script"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "noli",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/noli-void-rush-control/refs/heads/main/scripr"))()
   end
 })
