@@ -94,6 +94,13 @@ AddButton(Tab2o, {
 loadstring(game:HttpGet("https://raw.githubusercontent.com/retpirato/Roblox-Scripts/refs/heads/master/Grab%20Knife%20V2.lua"))()
   end
 })
+
+AddButton(Tab2o, {
+    Name = "knife v3",
+    Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-grab-knife-v3-9232"))()
+  end
+})
 AddButton(Tab2o, {
     Name = "gun",
     Callback = function()
@@ -117,9 +124,10 @@ AddButton(Tab2o, {
 AddButton(Tab2o, {
     Name = "aim",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/script"))()
-    end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DanielHubll/DanielHubll/refs/heads/main/Aimbot%20Mobile"))()
+   end
 })
+
 AddButton(Tab2o, {
     Name = "shift lock",
     Callback = function()
@@ -137,4 +145,16 @@ AddButton(Tab2o, {
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/MSTTOPPER/Scripts/refs/heads/main/FlashBack"))()
   end
+})
+AddButton(Tab2o, {
+    Name = "wall hop",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ScpGuest666/Random-Roblox-script/refs/heads/main/Roblox%20WallHop%20V4%20script"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "invisible r15",
+    Callback = function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/Invisible%20Mode'))()
+   end
 })
