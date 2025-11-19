@@ -51,6 +51,8 @@ staminaBackground.BackgroundColor3 = Color3.new(0, 0, 0)
 staminaBackground.BackgroundTransparency = 0.5
 staminaBackground.BorderSizePixel = 0
 staminaBackground.Parent = gui
+staminaBackground.Active = true
+staminaBackground.Draggable = true
 
 local staminaFill = Instance.new("Frame")
 staminaFill.Size = UDim2.new(1, 0, 1, 0)
