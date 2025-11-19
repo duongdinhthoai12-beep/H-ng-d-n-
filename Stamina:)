@@ -42,7 +42,7 @@ gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local staminaBackground = Instance.new("Frame")
-staminaBackground.Size = UDim2.new(0.3, 0, 1.4, 0)
+staminaBackground.Size = UDim2.new(0.3, 0, 9.4, 0)
 staminaBackground.Position = UDim2.new(0.05, 0, 0.9, 0)
 staminaBackground.BackgroundColor3 = Color3.new(0, 0, 0)
 staminaBackground.BackgroundTransparency = 0.5
