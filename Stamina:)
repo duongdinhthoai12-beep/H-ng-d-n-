@@ -22,7 +22,7 @@ local fovExhausted = 50
 local fadeSpeed = 10
 local flashInterval = 0.3
 
-local sprintButtonYOffset = 70
+local sprintButtonYOffset = 30
 
 local stamina = maxStamina
 local sprinting = false
