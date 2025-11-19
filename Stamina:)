@@ -1,0 +1,351 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+-- ScriptBlox Account @STAR★179
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local cam = workspace.CurrentCamera
+
+local blurEffect = Instance.new("BlurEffect")
+blurEffect.Size = 0
+blurEffect.Parent = cam
+
+local walkSpeed = 5
+local sprintSpeed = 25
+local accelRate = 20
+local decelRate = 15
+local maxStamina = 100
+local staminaDrainRate = 20
+local staminaRegenRate = 20
+local fovSprint = 85
+local fovNormal = 70
+local fovExhausted = 50
+local fadeSpeed = 10
+local flashInterval = 0.3
+
+local sprintButtonYOffset = 60
+
+local stamina = maxStamina
+local sprinting = false
+local isFlashing = false
+local isExhausted = false
+local isShaking = false
+local isCameraShaking = false
+
+local currentFOVState = "normal"
+local currentWalkSpeed = walkSpeed
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "SprintSystem"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local staminaBackground = Instance.new("Frame")
+staminaBackground.Size = UDim2.new(0.3, 0, 0.05, 0)
+staminaBackground.Position = UDim2.new(0.05, 0, 0.9, 0)
+staminaBackground.BackgroundColor3 = Color3.new(0, 0, 0)
+staminaBackground.BackgroundTransparency = 0.5
+staminaBackground.BorderSizePixel = 0
+staminaBackground.Parent = gui
+
+local staminaFill = Instance.new("Frame")
+staminaFill.Size = UDim2.new(1, 0, 1, 0)
+staminaFill.BackgroundColor3 = Color3.new(1, 1, 1)
+staminaFill.BorderSizePixel = 0
+staminaFill.Parent = staminaBackground
+
+local sprintBtn = Instance.new("ImageButton")
+sprintBtn.Name = "SprintButton"
+sprintBtn.AnchorPoint = Vector2.new(0.5, 1)
+sprintBtn.BackgroundTransparency = 1
+sprintBtn.Image = "rbxassetid://89190879948216"
+sprintBtn.Parent = gui
+
+local breathSound = Instance.new("Sound")
+breathSound.SoundId = "rbxassetid://6814463121"
+breathSound.Volume = 1
+breathSound.Looped = true
+
+local sprintSound = Instance.new("Sound")
+sprintSound.SoundId = "rbxassetid://180337919"
+sprintSound.Volume = 0
+sprintSound.Looped = true
+
+local walkSound = Instance.new("Sound")
+walkSound.SoundId = "rbxassetid://2812419402"
+walkSound.Volume = 0
+walkSound.Looped = true
+
+local fadeRate = 5
+
+local function changeFOV(target)
+    TweenService:Create(cam, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {FieldOfView = target}):Play()
+end
+
+local function shakeStaminaUI()
+    if isShaking then return end
+    isShaking = true
+    task.spawn(function()
+        while isShaking do
+            local offsetX = math.random(-5, 5)
+            local offsetY = math.random(-2, 2)
+            staminaBackground.Position = UDim2.new(0.05, offsetX, 0.9, offsetY)
+            task.wait(0.05)
+        end
+    end)
+end
+
+local function stopShakeStaminaUI()
+    isShaking = false
+    staminaBackground.Position = UDim2.new(0.05, 0, 0.9, 0)
+end
+
+local function shakeCamera(humanoid)
+    if isCameraShaking then return end
+    isCameraShaking = true
+    task.spawn(function()
+        while isCameraShaking do
+            local camX = (math.random(-2, 2) * 0.1)
+            local camY = (math.random(-2, 2) * 0.1)
+            humanoid.CameraOffset = Vector3.new(camX, camY, 0)
+            task.wait(0.05)
+        end
+    end)
+end
+
+local function stopShakeCamera(humanoid)
+    isCameraShaking = false
+    humanoid.CameraOffset = Vector3.new(0, 0, 0)
+end
+
+local function startFlash()
+    if isFlashing then return end
+    isFlashing = true
+    task.spawn(function()
+        while isFlashing do
+            staminaFill.BackgroundColor3 = Color3.new(1, 0, 0)
+            TweenService:Create(staminaFill, TweenInfo.new(flashInterval), {BackgroundTransparency = 0}):Play()
+            task.wait(flashInterval)
+            TweenService:Create(staminaFill, TweenInfo.new(flashInterval), {BackgroundTransparency = 1}):Play()
+            task.wait(flashInterval)
+        end
+    end)
+end
+
+local function stopFlash()
+    isFlashing = false
+    staminaFill.BackgroundColor3 = Color3.new(1, 1, 1)
+    staminaFill.BackgroundTransparency = 0
+end
+
+local function setupSprintButton()
+    sprintBtn.MouseButton1Down:Connect(function()
+        if stamina > 0 and not isExhausted then
+            sprinting = true
+            sprintBtn.Image = "rbxassetid://96892467644525"
+        end
+    end)
+
+    sprintBtn.MouseButton1Up:Connect(function()
+        sprinting = false
+        sprintBtn.Image = "rbxassetid://89190879948216"
+    end)
+end
+
+setupSprintButton()
+
+local function initializeCharacter(newCharacter)
+    local humanoid = newCharacter:WaitForChild("Humanoid")
+    local hrp = newCharacter:WaitForChild("HumanoidRootPart")
+    
+    breathSound.Parent = hrp
+    sprintSound.Parent = hrp
+    walkSound.Parent = hrp
+    stamina = maxStamina
+    sprinting = false
+    isExhausted = false
+    stopFlash()
+    stopShakeStaminaUI()
+    stopShakeCamera(humanoid)
+    if breathSound.IsPlaying then
+        breathSound:Stop()
+    end
+    if sprintSound.IsPlaying then
+        sprintSound:Stop()
+    end
+    if walkSound.IsPlaying then
+        walkSound:Stop()
+    end
+    TweenService:Create(blurEffect, TweenInfo.new(1), {Size = 0}):Play()
+    changeFOV(fovNormal)
+    currentFOVState = "normal"
+    currentWalkSpeed = walkSpeed
+    humanoid.WalkSpeed = walkSpeed
+    
+    humanoid.Died:Connect(function()
+        sprinting = false
+        isExhausted = false
+        stopFlash()
+        stopShakeStaminaUI()
+        stopShakeCamera(humanoid)
+        if breathSound.IsPlaying then
+            breathSound:Stop()
+        end
+        if sprintSound.IsPlaying then
+            sprintSound:Stop()
+        end
+        if walkSound.IsPlaying then
+            walkSound:Stop()
+        end
+        TweenService:Create(blurEffect, TweenInfo.new(1), {Size = 0}):Play()
+    end)
+    
+    return humanoid
+end
+
+local humanoid = initializeCharacter(player.Character or player.CharacterAdded:Wait())
+
+player.CharacterAdded:Connect(function(newCharacter)
+    humanoid = initializeCharacter(newCharacter)
+end)
+
+RunService.RenderStepped:Connect(function()
+    local jumpBtn = player.PlayerGui:FindFirstChild("TouchGui") 
+        and player.PlayerGui.TouchGui:FindFirstChild("TouchControlFrame") 
+        and player.PlayerGui.TouchGui.TouchControlFrame:FindFirstChild("JumpButton")
+    
+    if jumpBtn then
+        sprintBtn.Size = jumpBtn.Size
+        local pos = jumpBtn.AbsolutePosition
+        local size = jumpBtn.AbsoluteSize
+        sprintBtn.Position = UDim2.new(0, pos.X + size.X/2, 0, pos.Y - size.Y + sprintButtonYOffset)
+    end
+end)
+
+RunService.RenderStepped:Connect(function(dt)
+    local isMoving = humanoid.MoveDirection.Magnitude > 0.1
+
+    if isExhausted or stamina <= 0 then
+        sprinting = false
+        sprintBtn.Image = "rbxassetid://89190879948216"
+    end
+
+    local targetSpeed = (sprinting and stamina > 0 and isMoving and not isExhausted) and sprintSpeed or walkSpeed
+
+    local rate = (currentWalkSpeed < targetSpeed) and accelRate or decelRate
+    if currentWalkSpeed < targetSpeed then
+        currentWalkSpeed = math.min(currentWalkSpeed + rate * dt, targetSpeed)
+    elseif currentWalkSpeed > targetSpeed then
+        currentWalkSpeed = math.max(currentWalkSpeed - rate * dt, targetSpeed)
+    end
+
+    humanoid.WalkSpeed = currentWalkSpeed
+
+    local speedFraction = math.clamp((currentWalkSpeed - walkSpeed) / (sprintSpeed - walkSpeed), 0, 1)
+
+    if sprinting and stamina > 0 and isMoving and not isExhausted then
+        local effectiveDrainRate = staminaDrainRate * speedFraction
+        stamina = math.max(0, stamina - effectiveDrainRate * dt)
+        
+        if not sprintSound.IsPlaying then
+            sprintSound.Volume = 0
+            sprintSound:Play()
+        end
+        sprintSound.Volume = math.min(sprintSound.Volume + fadeRate * dt, speedFraction)
+    else
+        if sprintSound.IsPlaying then
+            sprintSound.Volume = math.max(sprintSound.Volume - fadeRate * dt, 0)
+            if sprintSound.Volume <= 0 then
+                sprintSound:Stop()
+            end
+        end
+        
+        local effectiveRegenRate
+        if isExhausted then
+            effectiveRegenRate = staminaRegenRate * 0.5 * (1 - speedFraction)
+            stamina = math.min(maxStamina, stamina + effectiveRegenRate * dt)
+        else
+            effectiveRegenRate = staminaRegenRate * (1 - speedFraction)
+            stamina = math.min(maxStamina, stamina + effectiveRegenRate * dt)
+        end
+    end
+
+    if isMoving and not sprinting and not isExhausted then
+        if not walkSound.IsPlaying then
+            walkSound.Volume = 0
+            walkSound:Play()
+        end
+        walkSound.Volume = math.min(walkSound.Volume + fadeRate * dt, 1)
+    else
+        if walkSound.IsPlaying then
+            walkSound.Volume = math.max(walkSound.Volume - fadeRate * dt, 0)
+            if walkSound.Volume <= 0 then
+                walkSound:Stop()
+            end
+        end
+    end
+
+    staminaFill.Size = UDim2.new(stamina / maxStamina, 0, 1, 0)
+
+    if stamina <= 0 and not isExhausted then
+        stamina = 0
+        sprinting = false
+        sprintBtn.Image = "rbxassetid://89190879948216"
+        isExhausted = true
+        startFlash()
+        shakeStaminaUI()
+        shakeCamera(humanoid)
+        if not breathSound.IsPlaying then
+            breathSound:Play()
+            breathSound.Volume = 1
+        end
+        TweenService:Create(blurEffect, TweenInfo.new(0.5), {Size = 20}):Play()
+
+    elseif isExhausted and stamina >= maxStamina * 0.5 then
+        isExhausted = false
+        stopFlash()
+        stopShakeStaminaUI()
+        stopShakeCamera(humanoid)
+        TweenService:Create(blurEffect, TweenInfo.new(1), {Size = 0}):Play()
+    end
+
+    if breathSound.IsPlaying then
+        if isExhausted then
+            breathSound.Volume = 1
+        else
+            breathSound.Volume = math.clamp(breathSound.Volume - dt * 5, 0, 1)
+            if breathSound.Volume <= 0 then
+                breathSound:Stop()
+                breathSound.Volume = 1
+            end
+        end
+    else
+        if isExhausted then
+            breathSound:Play()
+            breathSound.Volume = 1
+        end
+    end
+
+    local targetTransparency = (stamina >= maxStamina) and 1 or 0
+    staminaBackground.BackgroundTransparency = staminaBackground.BackgroundTransparency + (targetTransparency - staminaBackground.BackgroundTransparency) * dt * fadeSpeed
+    staminaFill.BackgroundTransparency = staminaFill.BackgroundTransparency + (targetTransparency - staminaFill.BackgroundTransparency) * dt * fadeSpeed
+
+    local targetFOV
+    if isExhausted then
+        targetFOV = fovExhausted
+        if currentFOVState ~= "exhausted" then
+            changeFOV(targetFOV)
+            currentFOVState = "exhausted"
+        end
+    else
+        targetFOV = fovNormal + (fovSprint - fovNormal) * speedFraction
+        cam.FieldOfView = targetFOV
+        currentFOVState = (speedFraction > 0) and "sprint" or "normal"
+    end
+end)
+
+cam.FieldOfView = fovNormal
