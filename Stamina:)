@@ -15,7 +15,7 @@ blurEffect.Size = 0
 blurEffect.Parent = cam
 
 local walkSpeed = 5
-local sprintSpeed = 25
+local sprintSpeed = 55
 local accelRate = 20
 local decelRate = 15
 local maxStamina = 100
