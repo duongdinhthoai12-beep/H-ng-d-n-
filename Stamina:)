@@ -57,6 +57,15 @@ staminaFill.Size = UDim2.new(1, 0, 1, 0)
 staminaFill.BackgroundColor3 = Color3.new(1, 1, 1)
 staminaFill.BorderSizePixel = 0
 staminaFill.Parent = staminaBackground
+-- 🌈 Hiệu ứng cầu vồng stamina
+task.spawn(function()
+    while true do
+        task.wait()
+        if staminaBar then
+            staminaBar.BackgroundColor3 = Color3.fromHSV((tick() % 5) / 5, 1, 1)
+        end
+    end
+end)
 
 local sprintBtn = Instance.new("ImageButton")
 sprintBtn.Name = "SprintButton"
