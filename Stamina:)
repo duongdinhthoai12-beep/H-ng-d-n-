@@ -1,7 +1,4 @@
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
--- ScriptBlox Account @STAR★179
+
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -14,20 +11,20 @@ local blurEffect = Instance.new("BlurEffect")
 blurEffect.Size = 0
 blurEffect.Parent = cam
 
-local walkSpeed = 22
-local sprintSpeed = 55
-local accelRate = 55
+local walkSpeed = 5
+local sprintSpeed = 25
+local accelRate = 20
 local decelRate = 15
 local maxStamina = 100
 local staminaDrainRate = 20
-local staminaRegenRate = 20
+local staminaRegenRate = 55
 local fovSprint = 85
 local fovNormal = 70
 local fovExhausted = 50
 local fadeSpeed = 10
 local flashInterval = 0.3
 
-local sprintButtonYOffset = 60
+local sprintButtonYOffset = 50
 
 local stamina = maxStamina
 local sprinting = false
@@ -45,61 +42,18 @@ gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local staminaBackground = Instance.new("Frame")
-staminaBackground.Size = UDim2.new(0.3, 0, 0.05, 0)
+staminaBackground.Size = UDim2.new(0.3, 0, 0.08, 0)
 staminaBackground.Position = UDim2.new(0.05, 0, 0.9, 0)
 staminaBackground.BackgroundColor3 = Color3.new(0, 0, 0)
 staminaBackground.BackgroundTransparency = 0.5
 staminaBackground.BorderSizePixel = 0
 staminaBackground.Parent = gui
--- Cho phép kéo button tự do
-local dragging = false
-local dragInput, dragStart, startPos
-
-sprintBtn.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = sprintBtn.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-sprintBtn.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-RunService.RenderStepped:Connect(function()
-    if dragging and dragInput then
-        local delta = dragInput.Position - dragStart
-        sprintBtn.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
 
 local staminaFill = Instance.new("Frame")
 staminaFill.Size = UDim2.new(1, 0, 1, 0)
 staminaFill.BackgroundColor3 = Color3.new(1, 1, 1)
 staminaFill.BorderSizePixel = 0
 staminaFill.Parent = staminaBackground
--- 🌈 Hiệu ứng cầu vồng stamina
-task.spawn(function()
-    while true do
-        task.wait()
-        if staminaBar then
-            staminaBar.BackgroundColor3 = Color3.fromHSV((tick() % 5) / 5, 1, 1)
-        end
-    end
-end)
 
 local sprintBtn = Instance.new("ImageButton")
 sprintBtn.Name = "SprintButton"
