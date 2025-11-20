@@ -225,6 +225,12 @@ AddButton(Tab2o, {
     end
 })
 
+AddButton(Tab3o, {
+    Name = "stamina",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Stamina%3A)"))()
+end
+})
 AddButton(Tab2o, {
     Name = "knife",
     Callback = function()
