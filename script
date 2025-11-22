@@ -231,7 +231,7 @@ AddButton(Tab2o, {
     end
 })
 
-AddButton(Tab3o, {
+AddButton(Tab2o, {
     Name = "stamina",
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Stamina%3A)"))()
