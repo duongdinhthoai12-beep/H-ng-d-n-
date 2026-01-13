@@ -332,6 +332,12 @@ AddButton(Tab2o, {
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ProBaconHub/DATABASE/refs/heads/main/99%20Nights%20in%20the%20Forest/Infinite%20Health.lua"))()
   end
 })
+AddButton(Tab2o, {
+    Name = "goku",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/to-nh%E1%BB%8F"))()
+end
+})
 AddButton(Tab3o, {
     Name = "Guest 1337",
     Callback = function()
