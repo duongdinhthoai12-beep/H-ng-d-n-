@@ -1,0 +1,207 @@
+local Players = game:GetService("Players")
+
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+
+local deathPos
+
+local godModeEnabled = true
+
+local reviveSound = Instance.new("Sound")
+
+reviveSound.SoundId = "rbxassetid://18597544476"
+
+reviveSound.Volume = 3
+
+reviveSound.Name = "ReviveSound"
+
+reviveSound.Parent = workspace
+
+local gui = Instance.new("ScreenGui")
+
+gui.Name = "ReZeroGodModeGUI"
+
+gui.ResetOnSpawn = false
+
+gui.Parent = game.CoreGui
+
+local text = Instance.new("TextLabel", gui)
+
+text.Text = "Re-Zero God Mode - 0"
+
+text.Size = UDim2.new(0, 250, 0, 25)
+
+text.Position = UDim2.new(0.02, 0, 0.02, 0)
+
+text.BackgroundTransparency = 1
+
+text.TextScaled = true
+
+text.Font = Enum.Font.GothamBold
+
+text.TextColor3 = Color3.new(1, 0, 0)
+
+task.spawn(function()
+
+	while true do		for i = 0, 1, 0.01 do
+
+			text.TextColor3 = Color3.fromHSV(i, 1, 1)
+
+			task.wait(0.05)
+
+		end
+
+	end
+
+end)
+
+local function spawnRebornEffect(position)
+
+	local part = Instance.new("Part")
+
+	part.Anchored = true
+
+	part.CanCollide = false
+
+	part.Shape = Enum.PartType.Ball
+
+	part.Material = Enum.Material.Neon
+
+	part.Color = Color3.fromRGB(255, 255, 255)
+
+	part.Transparency = 0.3
+
+	part.Size = Vector3.new(1, 1, 1)
+
+	part.CFrame = CFrame.new(position)
+
+	part.Parent = workspace
+
+	task.spawn(function()
+
+		for i = 1, 25 do
+
+			part.Size = part.Size + Vector3.new(1, 1, 1)
+
+			part.Transparency = part.Transparency + 0.03
+
+			task.wait(0.02)
+
+		end
+
+		part:Destroy()
+
+	end)
+
+end
+
+local function setGodMode(state, hum)
+
+	godModeEnabled = state
+
+	if hum then
+
+		if state then
+
+			hum.Health = hum.MaxHealth
+
+			print("🌀 God Mode ON")
+
+		else
+
+			print("⚠️ God Mode dimatikan sebab jatuh ke void.")
+
+		end
+
+	end
+
+end
+
+local function onCharacterAdded(char)
+
+	local hum = char:WaitForChild("Humanoid")
+
+	local root = char:WaitForChild("HumanoidRootPart")
+
+	setGodMode(true, hum)
+
+	
+
+	if deathPos then
+
+		task.wait(0.05)
+
+		root.CFrame = CFrame.new(deathPos)
+
+		deathPos = nil
+
+	end
+
+	-- Auto revive bila mati biasa
+
+	hum.Died:Connect(function()
+
+		if godModeEnabled then
+
+			deathPos = root.Position
+
+			task.wait(0.05)
+
+			player:LoadCharacter()
+
+		end
+
+	end)
+
+	-- Auto refill darah bila damage
+
+	hum.HealthChanged:Connect(function(health)
+
+		if godModeEnabled and health <= 0 then
+
+			hum.Health = hum.MaxHealth
+
+		end
+
+	end)
+
+	hum.Health = hum.MaxHealth
+
+	-- Pantau void
+
+	RunService.Heartbeat:Connect(function()
+
+		if root and root.Position.Y < -100 and godModeEnabled then
+
+			setGodMode(false, hum)
+
+			hum.Health = 0
+
+		end
+
+	end)
+
+	-- Sound + efek masa hidup
+
+	task.spawn(function()
+
+		task.wait(0.05)
+
+		reviveSound:Play()
+
+		spawnRebornEffect(root.Position)
+
+	end)
+
+end
+
+player.CharacterAdded:Connect(onCharacterAdded)
+
+if player.Character then
+
+	onCharacterAdded(player.Character)
+
+end
+
+print("✅ Re-Zero God Mode - 0 v7 ON — Instant revive, teleport, RGB label, void auto reset.")
