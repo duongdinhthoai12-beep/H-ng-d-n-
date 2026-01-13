@@ -338,17 +338,29 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/to-nh%E1%BB%8F"))()
 end
 })
+AddButton(Tab2o, {
+    Name = "hồi sinh tại chỗ",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/h%E1%BB%93i%20sinh"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "kj",
+    Callback = function()
+loadstring(game:HttpGet("https://pastebin.com/raw/GCBxsqRs"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "Ami npc",
+    Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Alpha-aimbot-npc-script-29375"))()
+  end
+})
 AddButton(Tab3o, {
     Name = "Guest 1337",
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-block-script/refs/heads/main/FINAL%20AUTO%20BLOCK"))()
   end
-})
-AddButton(Tabo, {
-    Name = "hồi sinh tại chỗ",
-    Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/h%E1%BB%93i%20sinh"))()
-end
 })
 AddButton(Tab3o, {
     Name = "auto farm",
