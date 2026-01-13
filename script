@@ -333,7 +333,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/ProBaconHub/DATABASE/
   end
 })
 AddButton(Tab2o, {
-    Name = "goku",
+    Name = "to nhỏ",
     Callback = function()
         loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/to-nh%E1%BB%8F"))()
 end
@@ -343,6 +343,12 @@ AddButton(Tab3o, {
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-block-script/refs/heads/main/FINAL%20AUTO%20BLOCK"))()
   end
+})
+AddButton(Tabo, {
+    Name = "hồi sinh tại chỗ",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/h%E1%BB%93i%20sinh"))()
+end
 })
 AddButton(Tab3o, {
     Name = "auto farm",
