@@ -223,6 +223,12 @@ AddButton(Tab1o, {
 end
 })
 
+AddButton(Tab1o, {
+    Name = "gojo 3",
+    Callback = function()
+     loadstring(game:HttpGet("https://pastefy.app/ibr9Vh52/raw"))()
+end
+})
 -- Tab2
 AddButton(Tab2o, {
     Name = "cài lệnh",
