@@ -349,7 +349,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/ProBaconHub/DATABASE/
 AddButton(Tab2o, {
     Name = "to nhỏ",
     Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/to-nh%E1%BB%8F"))()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/to-nh%E1%BB%8F"))() 
 end
 })
 AddButton(Tab2o, {
