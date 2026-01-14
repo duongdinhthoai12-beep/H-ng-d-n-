@@ -1,0 +1,468 @@
+-- Được tạo bởi ban_thid hoặc Rob_SB4 [tôi nghĩ cái này trông không đẹp lắm nhưng tôi cứ đăng lên thôi ;)]
+
+writefile("KJ21.mp3", game:HttpGet("https://github.com/ian49972/smth/raw/refs/heads/main/KJ21.mp3"))
+
+local TS = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local CollectionService = game:GetService("CollectionService")
+local TextService = game:GetService("TextService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local Lighting = game:GetService("Lighting")
+local LocalPlayer = Players.LocalPlayer
+
+công cụ cục bộ = Instance.new("Công cụ")
+tool.Name = "Unlimited Flex Works"
+tool.RequiresHandle = false
+tool.Parent = LocalPlayer.Backpack
+
+local dialogueModel = game:GetObjects("rbxassetid 74714833540240")[1]
+dialogueModel.Parent = Workspace
+
+local animModel = game:GetObjects("rbxassetid://108921694205594")[1]
+animModel.Parent = Workspace
+animModel:PivotTo(LocalPlayer.Character and LocalPlayer.Character:GetPivot() or CFrame.new())
+
+local keyframeSequence = animModel.AnimSaves:FindFirstChild("Unlimited Flex Works ")
+nếu không phải là chuỗi khung hình chính thì
+    cảnh báo ("Không tìm thấy khung hình chính")
+    trở lại
+kết thúc
+
+local ServerStorage = game:GetService("ServerStorage")
+keyframeSequence.Parent = ServerStorage
+animModel:Destroy()
+
+local Object = game:GetObjects("rbxassetid131871998323979")[1]
+Đối tượng cha = Không gian làm việc
+
+local vfxFolder = Object:FindFirstChild("vfx")
+nếu không phải là vfxFolder thì
+    cảnh báo("Không tìm thấy thư mục VFX trong mô hình")
+    trở lại
+kết thúc
+
+local vfxComponents = {
+    "ThingStart",
+    "ThingMiddle",
+    "ThingEnd",
+    "Không gian",
+    "Space1",
+    "UFWSkyroom"
+}
+
+local vfxStorage = Instance.new("Folder")
+vfxStorage.Name = "UnlimitedFlexWorksVFX"
+vfxStorage.Parent = ReplicatedStorage
+
+local impactFramesGui = Object:FindFirstChild("ImpactFrames")
+nếu impactFramesGui và impactFramesGui:IsA("ScreenGui") thì
+    impactFramesGui.Parent = vfxStorage
+    print("Giao diện người dùng ImpactFrames được lưu trữ trong ReplicatedStorage")
+khác
+    cảnh báo("Không tìm thấy giao diện người dùng ImpactFrames trong mô hình VFX")
+kết thúc
+
+for _, vfxName in ipairs(vfxComponents) do
+    local vfx = vfxFolder:FindFirstChild(vfxName)
+    nếu là hiệu ứng hình ảnh thì
+        vfx.Parent = vfxStorage
+        các phần cục bộ, các phần lưới, đề can, hạt, lưới đặc biệt = 0, 0, 0, 0, 0
+        for _, obj in ipairs(vfx:GetDescendants()) do
+            nếu obj:IsA("BasePart") thì
+                các phần ± 1
+                obj.CanCollide = false
+                obj.Anchored = true
+                obj.Transparency = 1
+            elseif obj:IsA("MeshPart") then
+                meshParts += 1
+                obj.CanCollide = false
+                obj.Anchored = true
+                obj.RenderFidelity = Enum.RenderFidelity.Precise
+                obj.DoubleSided = true
+                obj.Transparency = 1
+            elseif obj:IsA("SpecialMesh") then
+                specialMeshes += 1
+            elseif obj:IsA("Decal") then
+                đề can += 1
+            elseif obj:IsA("ParticleEmitter") or obj:IsA("Beam") or obj:IsA("Trail") then
+                các hạt ± 1
+                obj.Enabled = false
+            kết thúc
+        kết thúc
+        nếu vfxName == "UFWSkyroom" thì
+            nếu vfx:IsA("MeshPart") thì
+                vfx.Color = Color3.fromRGB(255, 105, 180)
+                vfx.Material = Enum.Material.Neon
+                vfx.Transparency = 0
+                print("UFWSkyroom là một MeshPart, được đặt màu hồng")
+            elseif vfx:IsA("BasePart") and vfx:FindFirstChildWhichIsA("SpecialMesh") then
+                vfx.Color = Color3.fromRGB(255, 105, 180)
+                vfx.Material = Enum.Material.Neon
+                vfx.Transparency = 0
+                local specialMesh = vfx:FindFirstChildWhichIsA("SpecialMesh")
+                specialMesh.VertexColor = Vector3.new(1, 0.412, 0.706)
+                print("UFWSkyroom là một BasePart với SpecialMesh, được đặt thành màu hồng")
+            khác
+                cảnh báo("UFWSkyroom không phải là MeshPart hoặc BasePart có SpecialMesh")
+            kết thúc
+        kết thúc
+        print("VFX " .. vfxName .. " contents: " .. parts .. " parts, " .. meshParts .. " meshParts, " .. specialMeshes .. " specialMeshes, " .. decals .. " decals, " .. particles .. " particle effects")
+        nếu vfx:IsA("Model") và không phải là vfx.PrimaryPart thì
+            phần trung tâm địa phương
+            for _, part in ipairs(vfx:GetDescendants()) do
+                nếu (part:IsA("BasePart") hoặc part:IsA("MeshPart")) và part.Name ~= "GrayBlock" thì
+                    phần trung tâm = phần
+                    vfx.PrimaryPart = part
+                    phá vỡ
+                kết thúc
+            kết thúc
+            nếu không phải là centralPart thì
+                cảnh báo("Không tìm thấy phần hợp lệ nào để đặt làm PrimaryPart cho VFX: " .. vfxName)
+            khác
+                print("Đặt PrimaryPart cho " .. vfxName .. " thành: " .. centralPart.Name)
+            kết thúc
+        kết thúc
+    khác
+        cảnh báo("Không tìm thấy thành phần VFX: " .. vfxName)
+    kết thúc
+kết thúc
+
+Đối tượng: Hủy()
+
+hàm cục bộ transitionMeshes(thingStart, thingMiddle, thingEnd, duration)
+    nếu không phải (thingStart và thingMiddle và thingEnd) thì
+        cảnh báo("Thiếu một hoặc nhiều VFX cho quá trình chuyển đổi: ThingStart=" .. tostring(thingStart) .. ", ThingMiddle=" .. tostring(thingMiddle) .. ", ThingEnd=" .. tostring(thingEnd))
+        trở lại
+    kết thúc
+
+    local startMeshes, middleMeshes, endMeshes = {}, {}, {}
+    for _, obj in ipairs(thingStart:GetDescendants()) do
+        nếu (obj:IsA("MeshPart") hoặc (obj:IsA("BasePart") và obj:FindFirstChildWhichIsA("SpecialMesh"))) và obj.Name ~= "GrayBlock" thì
+            table.insert(startMeshes, obj)
+        kết thúc
+    kết thúc
+    for _, obj in ipairs(thingMiddle:GetDescendants()) do
+        nếu (obj:IsA("MeshPart") hoặc (obj:IsA("BasePart") và obj:FindFirstChildWhichIsA("SpecialMesh"))) và obj.Name ~= "GrayBlock" thì
+            table.insert(middleMeshes, obj)
+        kết thúc
+    kết thúc
+    for _, obj in ipairs(thingEnd:GetDescendants()) do
+        nếu (obj:IsA("MeshPart") hoặc (obj:IsA("BasePart") và obj:FindFirstChildWhichIsA("SpecialMesh"))) và obj.Name ~= "GrayBlock" thì
+            table.insert(endMeshes, obj)
+        kết thúc
+    kết thúc
+
+    print("ThingStart meshes: " .. #startMeshes .. ", ThingMiddle meshes: " .. #middleMeshes .. ", ThingEnd meshes: " .. #endMeshes)
+
+    nếu #startMeshes ~= #middleMeshes hoặc #middleMeshes ~= #endMeshes thì
+        cảnh báo("Số lượng lưới không khớp: ThingStart=" .. #startMeshes .. ", ThingMiddle=" .. #middleMeshes .. ", ThingEnd=" .. #endMeshes)
+        trở lại
+    kết thúc
+    nếu #startMeshes == 0 thì
+        cảnh báo("Không tìm thấy lưới hợp lệ nào")
+        trở lại
+    kết thúc
+
+    local meshCount = #startMeshes
+    Thời gian pha cục bộ = thời gian / 2
+    local tweenDuration = phaseDuration / meshCount
+    local tweenInfo = TweenInfo.new(tweenDuration, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+
+    for i = 1, meshCount do
+        local startMesh = startMeshes[i]
+        local middleMesh = middleMeshes[i]
+        nếu startMesh và middleMesh thì
+            local startTween = TS:Create(startMesh, tweenInfo, {Transparency = 1})
+            local middleTween = TS:Create(middleMesh, tweenInfo, {Transparency = 0})
+            local scaleTween = TS:Create(middleMesh, tweenInfo, {Size = middleMesh.Size * 1.1})
+            local wobbleTween = TS:Create(middleMesh, TweenInfo.new(tweenDuration / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {CFrame = middleMesh.CFrame * CFrame.new(0, 0.5, 0)})
+            task.delay((i - 1) * tweenDuration * 0.5, function() -- 50% chồng chéo để làm mượt
+                print("Làm mờ lưới ThingStart " .. startMesh.Name .. ", làm hiện lưới ThingMiddle " .. middleMesh.Name)
+                startTween:Play()
+                middleTween:Play()
+                scaleTween:Play()
+                wobbleTween:Play()
+            kết thúc)
+        kết thúc
+    kết thúc
+
+    task.delay(phaseDuration, function()
+        cục bộ allVisible = true
+        for _, mesh in ipairs(middleMeshes) do
+            nếu mesh.Transparency > 0 thì
+                allVisible = false
+                phá vỡ
+            kết thúc
+        kết thúc
+        nếu tất cả đều hiển thị thì
+            print("ThingMiddle hiển thị đầy đủ, bắt đầu Giai đoạn 2")
+            for i = 1, meshCount do
+                local middleMesh = middleMeshes[i]
+                local endMesh = endMeshes[i]
+                nếu middleMesh và endMesh thì
+                    local middleTween = TS:Create(middleMesh, tweenInfo, {Transparency = 1})
+                    local endTween = TS:Create(endMesh, tweenInfo, {Transparency = 0})
+                    local scaleTween = TS:Create(endMesh, tweenInfo, {Size = endMesh.Size * 1.1})
+                    local wobbleTween = TS:Create(endMesh, TweenInfo.new(tweenDuration / 2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {CFrame = endMesh.CFrame * CFrame.new(0, 0.5, 0)})
+                    task.delay((i - 1) * tweenDuration * 0.5, function()
+                        print("Làm mờ dần lưới ThingMiddle " .. middleMesh.Name .. ", làm hiện dần lưới ThingEnd " .. endMesh.Name)
+                        middleTween:Play()
+                        endTween:Play()
+                        scaleTween:Play()
+                        wobbleTween:Play()
+                    kết thúc)
+                kết thúc
+            kết thúc
+        khác
+            cảnh báo("ThingMiddle chưa hiển thị đầy đủ, đang trì hoãn Giai đoạn 2")
+        kết thúc
+    kết thúc)
+kết thúc
+
+local function teleportToCamera(vfx, duration, useFOVTween, fovMax)
+    nếu không phải vfx hoặc không phải LocalPlayer.Character hoặc không phải Workspace.CurrentCamera thì
+        cảnh báo("Không thể dịch chuyển VFX: " .. vfx.Name .. " - Thiếu nhân vật hoặc camera")
+        trả về nil
+    kết thúc
+
+    local vfxClone = vfx:Clone()
+    vfxClone.Name = vfx.Name .. "_Clone"
+    vfxClone.Parent = Workspace
+
+    phần chính địa phương
+    nếu vfxClone:IsA("Model") thì
+        primaryPart = vfxClone.PrimaryPart
+        nếu không phải là primaryPart thì
+            for _, part in ipairs(vfxClone:GetDescendants()) do
+                nếu (part:IsA("BasePart") hoặc part:IsA("MeshPart")) và part.Name ~= "GrayBlock" thì
+                    primaryPart = part
+                    vfxClone.PrimaryPart = part
+                    phá vỡ
+                kết thúc
+            kết thúc
+        kết thúc
+        nếu không phải là primaryPart thì
+            cảnh báo("Không tìm thấy phần chính hợp lệ cho mô hình VFX: " .. vfxClone.Name)
+            vfxClone:Destroy()
+            trả về nil
+        kết thúc
+    khác
+        primaryPart = vfxClone
+    kết thúc
+
+    for _, obj in ipairs(vfxClone:GetDescendants()) do
+        nếu obj:IsA("ParticleEmitter") hoặc obj:IsA("Beam") hoặc obj:IsA("Trail") thì
+            obj.Enabled = true
+        elseif obj:IsA("MeshPart") then
+            obj.RenderFidelity = Enum.RenderFidelity.Precise
+            obj.DoubleSided = true
+            obj.Transparency = 1 -- Ban đầu vô hình
+        elseif obj:IsA("BasePart") and obj:FindFirstChildWhichIsA("SpecialMesh") then
+            obj.Transparency = 1 -- Ban đầu vô hình
+        kết thúc
+    kết thúc
+
+    camera cục bộ = Workspace.CurrentCamera
+    camera.CameraType = Enum.CameraType.Scriptable
+    local playerPos = LocalPlayer.Character:GetPivot().Position
+    local skyPos = playerPos + Vector3.new(0, 50, 0)
+    local skyCFrame = CFrame.new(skyPos, skyPos + Vector3.new(0, 0, -1))
+    camera.CFrame = skyCFrame
+
+    độ lệch cục bộ = CFrame.new(0, 0, -10) * CFrame.Angles(0, math.rad(180), 0)
+    vfxClone:PivotTo(camera.CFrame * offset)
+    print("VFX " .. vfxClone.Name .. " đã được dịch chuyển đến: ", vfxClone:GetPivot().Position, " với hướng: ", vfxClone:GetPivot().Rotation)
+
+    nếu sử dụng FOVTween thì
+        local tweenOut = TS:Create(camera, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {FieldOfView = fovMax or 120})
+        local tweenIn = TS:Create(camera, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {FieldOfView = 70})
+        tweenOut:Play()
+        tweenOut.Completed:Connect(function()
+            tweenIn:Play()
+        kết thúc)
+    kết thúc
+
+    trả về vfxClone
+kết thúc
+
+hàm cục bộ followCamera(vfx, duration, useFOVTween, fovMax, scale, offset)
+    nếu không phải vfx hoặc không phải LocalPlayer.Character hoặc không phải Workspace.CurrentCamera thì
+        cảnh báo("Không thể theo dõi camera cho VFX: " .. vfx.Name .. " - Thiếu nhân vật hoặc camera")
+        trả về nil
+    kết thúc
+
+    local vfxClone = vfx:Clone()
+    vfxClone.Name = vfx.Name .. "_Clone"
+    vfxClone.Parent = Workspace
+
+    phần chính địa phương
+    nếu vfxClone:IsA("Model") thì
+        primaryPart = vfxClone.PrimaryPart
+        nếu không phải là primaryPart thì
+            for _, part in ipairs(vfxClone:GetDescendants()) do
+                nếu (part:IsA("BasePart") hoặc part:IsA("MeshPart")) và part.Name ~= "GrayBlock" thì
+                    primaryPart = part
+                    vfxClone.PrimaryPart = part
+                    phá vỡ
+                kết thúc
+            kết thúc
+        kết thúc
+        nếu không phải là primaryPart thì
+            cảnh báo("Không tìm thấy phần chính hợp lệ cho mô hình VFX: " .. vfxClone.Name)
+            vfxClone:Destroy()
+            trả về nil
+        kết thúc
+    khác
+        primaryPart = vfxClone
+    kết thúc
+
+    for _, obj in ipairs(vfxClone:GetDescendants()) do
+        nếu obj:IsA("ParticleEmitter") hoặc obj:IsA("Beam") hoặc obj:IsA("Trail") thì
+            obj.Enabled = true
+        elseif obj:IsA("MeshPart") then
+            obj.RenderFidelity = Enum.RenderFidelity.Precise
+            obj.DoubleSided = true
+            obj.Transparency = 0
+        elseif obj:IsA("BasePart") and obj:FindFirstChildWhichIsA("SpecialMesh") then
+            obj.Transparency = 0
+        kết thúc
+    kết thúc
+
+    nếu scale và vfxClone:IsA("Model") thì
+        for _, part in ipairs(vfxClone:GetDescendants()) do
+            nếu part:IsA("BasePart") hoặc part:IsA("MeshPart") thì
+                Kích thước phần = Kích thước phần * tỷ lệ
+            kết thúc
+        kết thúc
+        print("VFX " .. vfxClone.Name .. " được thu phóng bởi: " .. scale)
+    kết thúc
+
+    camera cục bộ = Workspace.CurrentCamera
+    camera.CameraType = Enum.CameraType.Scriptable
+    local playerPos = LocalPlayer.Character:GetPivot().Position
+    local skyPos = playerPos + Vector3.new(0, 50, 0)
+    local skyCFrame = CFrame.new(skyPos, skyPos + Vector3.new(0, 0, -1))
+
+    nếu sử dụng FOVTween thì
+        local tweenOut = TS:Create(camera, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {FieldOfView = fovMax or 120})
+        local tweenIn = TS:Create(camera, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {FieldOfView = 70})
+        tweenOut:Play()
+        tweenOut.Completed:Connect(function()
+            tweenIn:Play()
+        kết thúc)
+        print("FOV tween for " .. vfx.Name .. ": " .. fovMax .. " over 1s, back to 70 over 0.5s")
+    khác
+        camera.FieldOfView = 70
+    kết thúc
+
+    kết nối cục bộ
+    local startTime = tick()
+    connection = RunService.RenderStepped:Connect(function()
+        nếu không phải vfxClone.Parent hoặc không phải camera hoặc (tick() - startTime) > duration thì
+            Kết nối: Ngắt kết nối()
+            nếu vfxClone.Parent thì
+                vfxClone:Destroy()
+                print("VFX " .. vfxClone.Name .. " bị hủy sau khi hết thời gian")
+            kết thúc
+            camera.FieldOfView = 70
+            trở lại
+        kết thúc
+        camera.CFrame = skyCFrame
+        local offsetCFrame = offset or CFrame.new(0, 0, -10)
+        vfxClone:PivotTo(camera.CFrame * offsetCFrame)
+        print("VFX " .. vfxClone.Name .. " được định vị tại: ", vfxClone:GetPivot().Position)
+    kết thúc)
+
+    trả về vfxClone
+kết thúc
+
+hàm cục bộ hideVFX(vfx)
+    nếu vfx và vfx.Parent thì
+        for _, obj in ipairs(vfx:GetDescendants()) do
+            nếu obj:IsA("ParticleEmitter") hoặc obj:IsA("Beam") hoặc obj:IsA("Trail") thì
+                obj.Enabled = false
+            kết thúc
+        kết thúc
+        vfx:Destroy()
+        print("VFX " .. vfx.Name .. " đã bị phá hủy")
+    khác
+        cảnh báo("Không tìm thấy VFX hoặc VFX đã bị hủy: " .. (vfx và vfx.Name hoặc "nil"))
+    kết thúc
+kết thúc
+
+hàm cục bộ showImpactFrames(gui, startFrame, endFrame, duration)
+    nếu không phải gui hoặc không phải gui.Parent thì
+        cảnh báo("Không tìm thấy giao diện ImpactFrames hoặc không có trong PlayerGui")
+        trở lại
+    kết thúc
+    local frameCount = endFrame - startFrame + 1
+    local staggerTime = 0.05 -- Độ trễ giữa mỗi lần xuất hiện khung hình
+    với i = startFrame, endFrame thì làm
+        khung cục bộ = gui:FindFirstChild(tostring(i))
+        nếu frame và frame:IsA("ImageLabel") thì
+            local delayTime = (i - startFrame) * staggerTime
+            task.delay(delayTime, function()
+                local tweenIn = TS:Create(frame, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {ImageTransparency = 0})
+                local tweenOut = TS:Create(frame, TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {ImageTransparency = 1})
+                tweenIn:Play()
+                tweenIn.Completed:Connect(function()
+                    task.wait(duration - 0.4 - delayTime) -- Điều chỉnh thời gian hiển thị để tính đến độ trễ
+                    tweenOut:Play()
+                kết thúc)
+                print("Hiển thị ImpactFrame " .. i .. " với độ trong suốt 0 sau độ trễ " .. delayTime)
+            kết thúc)
+        khác
+            cảnh báo("ImpactFrame " .. i .. " không được tìm thấy hoặc không phải là ImageLabel")
+        kết thúc
+    kết thúc
+kết thúc
+
+hàm cục bộ getColor(timeLength, points)
+    dữ liệu cục bộ1 = điểm[1]
+    local allPoints = points[#points]
+    local newPoint = 0
+    giá trị cục bộ = data1.Value
+    for i = 1, #points - 1 do
+        nếu points[i].Time <= timeLength và timeLength <= points[i + 1].Time thì
+            data1 = points[i]
+            allPoints = points[i + 1]
+            newPoint = (timeLength - data1.Time) / (allPoints.Time - data1.Time)
+            return data1.Value:lerp(allPoints.Value, newPoint)
+        kết thúc
+    kết thúc
+    giá trị trả về
+kết thúc
+
+hàm cục bộ EndDialogue(gui)
+    for _, v in gui:GetChildren() do
+        nếu v.Name == "letter" thì
+            v:SetAttribute("Ending", true)
+            TS:Create(v, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+                Vị trí = v.Vị trí + UDim2.new(0, 0, 0, 50),
+                Độ trong suốt của văn bản = 1,
+                Độ trong suốt của nét chữ = 1
+            }):Chơi()
+            game.Debris:AddItem(v, 0.5)
+        kết thúc
+    kết thúc
+kết thúc
+
+hàm cục bộ CreateDialogue(data, model)
+    mô hình = mô hình hoặc mô hình hội thoại
+    local dialogueId = tostring(os.clock())
+    local DialogueUI = LocalPlayer.PlayerGui:FindFirstChild(model.Name .. "CUSTOM_DIALOGUE_" .. dialogueId) or dialogueModel:WaitForChild("CUSTOM_DIALOGUE"):Clone()
+    DialogueUI.Name = model.Name .. "CUSTOM_DIALOGUE_" .. dialogueId
+    văn bản cục bộ = ""
+    vị trí cục bộ = 0
+    vị trí cục bộ X = 0
+    Giờ địa phương = 0
+    local totalDuration = 0
+
+    nếu không phải DialogueUI:GetAttribute("Created") thì
+        local Template = DialogueUI:WaitForChild("Holder"):WaitForChild("Template")
+        local Holder = DialogueUI.Holder
+        Holder.Position = UDim2.new(0.5, 0, 1, 0)
+        local NameLabel = Template:WaitForChild("Name")
+    
