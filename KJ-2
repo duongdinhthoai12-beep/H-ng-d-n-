@@ -227,11 +227,9 @@ local function drop_kick()
 
 local targetHRP = TRootPart
 if targetHRP and humanoidrootpart then
-    local direction = (targetHRP.Position - humanoidrootpart.Position).Unit
     targetHRP:ApplyImpulse(direction * 99999 + Vector3.new(0, 1200, 0))
 end
 
-connection:Disconnect()
 
 for _, Anim in pairs(humanoid:GetPlayingAnimationTracks()) do
     Anim:Stop()
