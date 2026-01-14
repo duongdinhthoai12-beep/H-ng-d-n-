@@ -223,11 +223,19 @@ AddButton(Tab1o, {
 end
 })
 AddButton(Tab1o, {
+    Name = "KJ-V2",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/KJ-v2"))()
+end
+})
+
+AddButton(Tab1o, {
     Name = "KJ-V3",
     Callback = function()
         loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/Kj-3"))()
 end
 })
+
 AddButton(Tab1o, {
     Name = "goku",
     Callback = function()
