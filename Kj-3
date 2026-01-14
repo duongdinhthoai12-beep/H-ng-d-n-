@@ -1,0 +1,267 @@
+lặp lại tác vụ.wait() cho đến khi trò chơi được tải xong.
+
+print("Đã tải")
+
+người chơi cục bộ = trò chơi:GetService("Người chơi")
+người chơi cục bộ = players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildOfClass('Humanoid')
+local humanoidrootpart = character:FindFirstChild('HumanoidRootPart') or character.PrimaryPart
+local rootjoint = humanoidrootpart:WaitForChild'RootJoint'
+cục bộ rootc0 = rootjoint.C0
+
+player.CharacterAdded:Connect(function()
+    nhân vật = người chơi.Nhân vật
+    humanoid = character:FindFirstChildOfClass('Humanoid')
+    humanoidrootpart = character:FindFirstChild('HumanoidRootPart') or character.PrimaryPart
+    rootjoint = humanoidrootpart:WaitForChild'RootJoint'
+    rootc0 = rootjoint.C0
+kết thúc)
+
+local active_move = nil
+
+hàm cục bộ stoic_bomb()
+    nếu active_move thì
+        trở lại
+    kết thúc
+    active_move = "Bom Khắc Kỷ"
+
+    đường ray sáo cục bộ
+    cục bộ giữ theo dõi
+    cục bộ freezeVelo = true
+
+    -------------------< hoạt hình >-------------------
+        task.spawn(function()
+
+        task.wait(0.2)
+
+        local flute_anim = Instance.new("Animation")
+        flute_anim.AnimationId = "rbxassetid 52154760"
+        local hold_anim = Instance.new("Animation")
+        hold_anim.AnimationId = "rbxassetid://48138189"
+
+        flute_track = humanoid:LoadAnimation(flute_anim)
+        hold_track = humanoid:LoadAnimation(hold_anim)
+
+        flute_track:Play(); hold_track:Play();
+
+        task.wait(1)
+
+        flute_track:AdjustSpeed(0); flute_track:AdjustSpeed(0);
+
+        kết thúc)
+    ----------------------------------------------------
+
+    -------------------< chuyển động >---------------------
+        --// Xin lỗi...
+        task.spawn(function()
+
+        task.wait(0.2)
+
+        local TweenService = game:GetService("TweenService")
+        local initial_position = humanoidrootpart.CFrame
+
+        local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+        local tween = TweenService:Create(humanoidrootpart, tweenInfo, {CFrame = initial_position + Vector3.new(0, 140, 0)})
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        tweenInfo = TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        tween = TweenService:Create(humanoidrootpart, tweenInfo, {CFrame = initial_position + Vector3.new(0, 150, 0)})
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        tween = TweenService:Create(humanoidrootpart, tweenInfo, {CFrame = initial_position + Vector3.new(0, 8, 0)})
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        tween = TweenService:Create(humanoidrootpart, tweenInfo, {CFrame = initial_position + Vector3.new(0, 5, 0)})
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        task.wait(0.75)
+
+        flute_track:Stop(); hold_track:Stop();
+
+        freezeVelo = false
+
+        kết thúc)
+    ----------------------------------------------------
+
+    ----------------< xoay >-----------------
+        task.spawn(function()
+
+        game:GetService("RunService").RenderStepped:Connect(function()
+            nếu không phải freezeVelo thì
+                trở lại
+            kết thúc
+            humanoidrootpart.Velocity = Vector3.zero
+        kết thúc)
+
+        local TweenService = game:GetService("TweenService")
+
+        local tweenInfo = TweenInfo.new(0.18, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+        local tween = TweenService:Create(humanoidrootpart, tweenInfo, {CFrame = humanoidrootpart.CFrame * CFrame.Angles(math.rad(-15), 0, 0)})
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        task.wait(0.2)
+
+        humanoidrootpart.CFrame = humanoidrootpart.CFrame * CFrame.Angles(math.rad(-160), 0, 0)
+
+        tweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+        tween = TweenService:Create(humanoidrootpart, tweenInfo, {CFrame = humanoidrootpart.CFrame * CFrame.Angles(math.rad(-340), 0, 0)})
+
+        tween:Play()
+        tween.Completed:Wait()
+
+        kết thúc)
+    ---------------------------------------------
+
+    ---------------< chung >-------------
+        task.spawn(function()
+
+        for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
+            track:Stop()
+        kết thúc
+
+        local org_WalkSpeed = humanoid.WalkSpeed
+        local org_AutoRotate = humanoid.AutoRotate
+        local org_JumpPower = humanoid.JumpPower
+
+        humanoid.WalkSpeed = 0
+        humanoid.AutoRotate = false
+        humanoid.JumpPower = 0
+
+        nhiệm vụ.chờ(3)
+
+        humanoid.WalkSpeed = org_WalkSpeed
+        hình người.AutoRotate = org_AutoRotate
+        humanoid.JumpPower = org_JumpPower
+
+        humanoid.HipHeight = 0
+
+        active_move = nil
+
+        kết thúc)
+    ---------------------------------------
+kết thúc
+
+hàm cục bộ drop_kick()
+    nếu active_move thì
+        trở lại
+    kết thúc
+
+    active_move = "20-20-20 Dropkick"
+
+    local nearestPlayer = nil
+    local nearestDistance = math.huge
+
+    nếu không phải là humanoidrootpart thì trả về end
+
+    for _, plr in ipairs(players:GetPlayers()) do
+        if plr ~= game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+            local targetRootPart = plr.Character.HumanoidRootPart
+            khoảng cách cục bộ = (vị trí của humanoidrootpart - vị trí của targetRootPart).độ lớn
+
+            nếu khoảng cách < khoảng cách gần nhất thì
+                khoảng cách gần nhất = khoảng cách
+                nearestPlayer = plr
+            kết thúc
+        kết thúc
+    kết thúc
+
+    nếu không phải là người chơi gần nhất thì trả về end
+
+    mục tiêu cục bộ = nearestPlayer.Character
+    nếu không phải là mục tiêu thì trả về end
+
+    if not target:FindFirstChild("Humanoid") then return end
+
+    TCharacter cục bộ = mục tiêu
+    local TRootPart = TCharacter:FindFirstChild("HumanoidRootPart")
+
+    humanoid:MoveTo(TRootPart.Position)
+    humanoid.WalkSpeed = 85
+
+    lặp lại
+        humanoid.WalkSpeed = 85
+        humanoid:MoveTo(TRootPart.Position)
+        task.wait()
+    cho đến khi (humanoidrootpart.Position - TRootPart.Position).Magnitude < 5
+
+    local anim = Instance.new("Animation")
+    hoạt hình.AnimationId = "rbxassetid://180436148"
+
+    for _, Anim in pairs(humanoid:GetPlayingAnimationTracks()) do
+        Anim:Stop()
+    kết thúc
+
+    theo dõi cục bộ = humanoid:LoadAnimation(anim)
+    track:Play()
+    track.TimePosition = 0.1
+    track:AdjustSpeed(0)
+
+    anim:Destroy()
+
+    humanoid:MoveTo(humanoidrootpart.Position)
+
+    kết nối cục bộ = trò chơi:GetService('RunService').RenderStepped:Connect(function()
+        nếu không phải là humanoidrootpart thì trả về end
+
+        humanoidrootpart.CFrame = CFrame.new(TRootPart.Position + Vector3.new(0, 1.75, 0) + (TRootPart.CFrame.LookVector * 2.4))
+        hướng cục bộ = (TRootPart.Position - humanoidrootpart.Position).unit
+        local lookAtCFrame = CFrame.lookAt(humanoidrootpart.Position, TRootPart.Position)
+        humanoidrootpart.CFrame = lookAtCFrame * CFrame.Angles(math.rad(115), math.rad(90), 0)
+        humanoidrootpart.Velocity = Vector3.new(0, 0, 0)
+    kết thúc)
+
+    nhiệm vụ.chờ(2)
+
+    Kết nối: Ngắt kết nối()
+
+    for _, Anim in pairs(humanoid:GetPlayingAnimationTracks()) do
+        Anim:Stop()
+    kết thúc
+
+    humanoidrootpart.CFrame = CFrame.new(humanoidrootpart.Position, TRootPart.Position or nil)
+    người máy.Ngồi = đúng
+
+    task.wait(0.5)
+
+    humanoid.Sit = false
+    humanoid.WalkSpeed = 16
+    humanoid.AutoRotate = true
+    humanoid.JumpPower = 50
+
+    active_move = nil
+kết thúc
+
+local stoic_bomb_skill = Instance.new("Tool")
+stoic_bomb_skill.Name = "Bom Khắc Kỷ"
+stoic_bomb_skill.RequiresHandle = false
+stoic_bomb_skill.Parent = player.Backpack
+
+stoic_bomb_skill.Equipped:Connect(function()
+    bom kiên định()
+    task.wait()
+    stoic_bomb_skill.Parent = player.Backpack
+kết thúc)
+
+local drop_kick_skill = Instance.new("Tool")
+drop_kick_skill.Name = "20-20-20 Dropkick"
+drop_kick_skill.RequiresHandle = false
+drop_kick_skill.Parent = player.Backpack
+
+drop_kick_skill.Equipped:Connect(function()
+    task.spawn(drop_kick)
+    task.wait()
+    drop_kick_skill.Parent = player.Backpack
+kết thúc)
