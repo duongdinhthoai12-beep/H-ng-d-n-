@@ -299,7 +299,7 @@ AddButton(Tab2o, {
 AddButton(Tab2o, {
     Name = "god mod",
     Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/God mod"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Rawbr10/Roblox-Scripts/refs/heads/main/God%20Mode%20Script%20Universal"))()
   end
 })
 AddButton(Tab2o, {
