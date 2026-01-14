@@ -217,6 +217,12 @@ AddButton(Tab1o, {
 end
 })
 AddButton(Tab1o, {
+    Name = "hakari",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/kj-v1"))()
+end
+})
+AddButton(Tab1o, {
     Name = "goku",
     Callback = function()
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Goku-UI-and-MUI-Script-CLIENTSIDED-43364"))()
