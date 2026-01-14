@@ -209,6 +209,12 @@ AddButton(Tab1o, {
     end
 })
 
+AddButton(Tab1o, {
+    Name = "gojo 3",
+    Callback = function()
+     loadstring(game:HttpGet("https://pastefy.app/ibr9Vh52/raw"))()
+end
+})
 
 AddButton(Tab1o, {
     Name = "hakari",
@@ -216,23 +222,17 @@ AddButton(Tab1o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Hakari"))()
 end
 })
+
 AddButton(Tab1o, {
     Name = "KJ-V1",
     Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/kj-v1"))()
+        loadstring(game:HttpGet("https://pastefy.app/g0CLohAl/raw"))()
 end
 })
 AddButton(Tab1o, {
     Name = "KJ-V2",
     Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/KJ-v2"))()
-end
-})
-
-AddButton(Tab1o, {
-    Name = "KJ-V3",
-    Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/Kj-3"))()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Universal-Temu-KJ-19593"))()
 end
 })
 
@@ -243,12 +243,6 @@ AddButton(Tab1o, {
 end
 })
 
-AddButton(Tab1o, {
-    Name = "gojo 3",
-    Callback = function()
-     loadstring(game:HttpGet("https://pastefy.app/ibr9Vh52/raw"))()
-end
-})
 -- Tab2
 AddButton(Tab2o, {
     Name = "cài lệnh",
