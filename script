@@ -243,6 +243,12 @@ AddButton(Tab1o, {
 end
 })
 
+AddButton(Tab1o, {
+    Name = "animation speed",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Public-Bathroom-Simulator-Animation-Speed-27273"))()
+end
+})
 -- Tab2
 AddButton(Tab2o, {
     Name = "cài lệnh",
@@ -263,7 +269,12 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://rawscripts.net/raw/F3X-Workspace-script-that-lets-u-have-a-lsaer-knife-22875"))()
     end
 })
-
+AddButton(Tab2o, {
+    Name = "lay",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Lay-button-21244"))()
+end
+})
 AddButton(Tab2o, {
     Name = "knife v2",
     Callback = function()
