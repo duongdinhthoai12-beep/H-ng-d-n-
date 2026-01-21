@@ -259,9 +259,9 @@ AddButton(Tab2o, {
 AddButton(Tab2o, {
     Name = "free cam",
     Callback = function()
-
+        
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREECAM-script-80365"))()
-   end
+    end
 })
 addbutton(Tab2o,{
     Name = "goku tool",
