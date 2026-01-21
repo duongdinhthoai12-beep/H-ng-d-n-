@@ -263,14 +263,14 @@ AddButton(Tab2o, {
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREECAM-script-80365"))()
     end
 })
-addbutton(Tab2o,{
+AddButton(Tab2o,{
     Name = "goku tool",
     Callback = function()
 
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FE-MOD-GOKU-HABILIDADES-86300"))()
    end
 })
-addbutton(Tab2o,{
+AddButton(Tab2o,{
     Name = "dịch chuyển lưu vị trí",
     Callback = function()
 
