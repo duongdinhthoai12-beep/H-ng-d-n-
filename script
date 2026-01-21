@@ -270,6 +270,12 @@ AddButton(Tab2o, {
     end
 })
 AddButton(Tab2o, {
+    Name = "knife",
+    Callback = function()
+       loadstring(game:HttpGet("https://pastebin.com/raw/pzxK2xx7"))()
+    end
+})
+AddButton(Tab2o, {
     Name = "lay",
     Callback = function()
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Lay-button-21244"))()
