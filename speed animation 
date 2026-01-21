@@ -46,6 +46,6 @@ while wait() do
     if not b then continue end
 
     for _, d in next, b:GetPlayingAnimationTracks() do
-        d:AdjustSpeed(99)
+        d:AdjustSpeed(50)
     end
 end
