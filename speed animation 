@@ -1,0 +1,49 @@
+local player =
+game.Players.LocalPlayer
+local enbled = false
+local wait = task.wail
+
+local a = player.character or player.CharacterAdded:Wail()
+player.CharacterAdded:Connect(function(char)
+ a = char
+end)
+
+local gui = Instance.new("screenGui")
+gui.parent = player:WailForChild("PlayerGui")
+
+local button = Instance.new("textButton")
+button.Parent = gui
+button.size = UDim2.new(0,200,0,50)
+button.Position = UDim2.new(0.5,-100,0.5,-25)
+button.Text = "Speed OFF"
+button.BackgroundColor3 = Color3 = Color3.fromRGB(255,0,0)
+button.TextColor3 = Color3.fromRGB(255,255,255)
+button.TextScaled = true
+
+button.Active = true 
+button.Draggable = true
+button.MouseButton1Click:Connect(function()
+ enabled = not enabled
+ if enabled then 
+ button.Text = "Speed animation ON"
+ button.BlackgroundColor3 = Color3.fromRGB(0,200,0)
+else
+ button.Text = "Speed animation OFF"
+ button.Back groundColor3 = Color3.formRGB(255,0,0)
+ end
+end)
+
+whie wail() do
+ if not enabled or not a then continue end 
+ 
+ local b = a:FindFistchildoOfClass("Humanoid")
+   or a:FindFistChildOfClass(AnimationController")
+
+ if not b then continue end
+
+ for_,d in next, b: GetPlayingAnimationTracks()do
+  d:AdjustSpeed(50)
+ end
+end
+
+bởi STAR★179
