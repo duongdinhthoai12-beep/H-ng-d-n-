@@ -256,6 +256,27 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
     end
 })
+addbutton(Tab2o,{
+    Name = "free cam",
+    Callback = function()
+
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREECAM-script-80365"))()
+   end
+})
+addbutton(Tab2o,{
+    Name = "goku tool",
+    Callback = function()
+
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FE-MOD-GOKU-HABILIDADES-86300"))()
+   end
+})
+addbutton(Tab2o,{
+    Name = "dịch chuyển lưu vị trí",
+    Callback = function()
+
+loadstring(game:HttpGet("https://pastebin.com/raw/fMGDKujc"))()
+   end
+})
 
 AddButton(Tab2o, {
     Name = "stamina",
@@ -270,7 +291,7 @@ AddButton(Tab2o, {
     end
 })
 AddButton(Tab2o, {
-    Name = "knife",
+    Name = "gojo lưu ý: bật 1.1.1.1",
     Callback = function()
        loadstring(game:HttpGet("https://pastebin.com/raw/pzxK2xx7"))()
     end
