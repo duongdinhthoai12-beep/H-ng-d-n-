@@ -1,0 +1,51 @@
+local player = game.Players.LocalPlayer
+local enabled = false
+local wait = task.wait
+
+-- character
+local a = player.Character or player.CharacterAdded:Wait()
+player.CharacterAdded:Connect(function(char)
+    a = char
+end)
+
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local button = Instance.new("TextButton")
+button.Parent = gui
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0.5, -100, 0.5, -25)
+button.Text = "Speed OFF"
+button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.TextScaled = true
+
+button.Active = true
+button.Draggable = true
+
+-- Toggle
+button.MouseButton1Click:Connect(function()
+    enabled = not enabled
+    if enabled then
+        button.Text = "Speed ON"
+        button.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+    else
+        button.Text = "Speed OFF"
+        button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end)
+
+-- Main loop
+while wait() do
+    if not enabled or not a then continue end
+
+    local b = a:FindFirstChildOfClass("Humanoid")
+        or a:FindFirstChildOfClass("AnimationController")
+
+    if not b then continue end
+
+    for _, d in next, b:GetPlayingAnimationTracks() do
+        d:AdjustSpeed(99)
+    end
+end
