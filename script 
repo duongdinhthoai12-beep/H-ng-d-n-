@@ -397,9 +397,9 @@ AddButton(Tab2o, {
 end
 })
 AddButton(Tab2o, {
-    Name = "kj",
+    Name = "tp chỗ cũ",
     Callback = function()
-loadstring(game:HttpGet("https://pastebin.com/raw/GCBxsqRs"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/l%C6%B0u%20v%C3%A0%20d%E1%BB%8Bch%20chuy%E1%BB%83n"))()
   end
 })
 AddButton(Tab2o, {
