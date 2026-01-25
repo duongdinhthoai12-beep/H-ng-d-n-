@@ -1,0 +1,19 @@
+local Players = game:GetService("Players") local player = Players.LocalPlayer
+local invisible = false
+local function getChar() return player.Character or player.CharacterAdded:Wait() end
+
+-- GUI local gui = Instance.new("ScreenGui") gui.Parent = player:WaitForChild("PlayerGui")
+local button = Instance.new("TextButton") button.Parent = gui button.Size = UDim2.new(0, 200, 0, 50) button.Position = UDim2.new(0.5, -100, 0.8, 0) button.Text = "TÀNG HÌNH : OFF" button.TextColor3 = Color3.new(1,1,1) button.TextScaled = true button.Active = true button.Draggable = true
+
+-- 🌈 Rainbow button task.spawn(function() local hue = 0 while true do hue = (hue + 0.01) % 1 button.BackgroundColor3 = Color3.fromHSV(hue, 1, 1) task.wait(0.03) end end)
+
+-- Hàm tàng hình local function setInvisible(state) local char = getChar() for _, v in pairs(char:GetDescendants()) do if v:IsA("BasePart") then v.Transparency = state and 1 or 0 v.CanCollide = not state elseif v:IsA("Decal") then v.Transparency = state and 1 or 0 end end end
+-- Toggle button.MouseButton1Click:Connect(function() invisible = not invisible
+if invisible then
+    button.Text = "TÀNG HÌNH : ON"
+    setInvisible(true)
+else
+    button.Text = "TÀNG HÌNH : OFF"
+    setInvisible(false)
+end
+end)
