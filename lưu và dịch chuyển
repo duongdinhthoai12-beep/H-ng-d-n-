@@ -1,0 +1,89 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Chờ nhân vật
+local function getChar()
+    return player.Character or player.CharacterAdded:Wait()
+end
+
+local savedCFrame = nil -- nơi lưu vị trí
+
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Parent = gui
+frame.Size = UDim2.new(0, 220, 0, 140)
+frame.Position = UDim2.new(0.5, -110, 0.5, -70)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.Active = true
+frame.Draggable = true
+
+-- TẠO TITLE
+local title = Instance.new("TextLabel")
+title.Parent = frame
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, -30)
+title.Text = "STAR★179"
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(255, 255, 0)
+title.TextScaled = true
+title.Font = Enum.Font.GothamBold
+
+task.spawn(function()
+    local hue = 0
+    while true do
+        hue = (hue + 0.01) % 1
+        title.TextColor3 = Color3.fromHSV(hue, 1, 1)
+        task.wait(0.03)
+    end
+end)
+
+-- Nút SAVE
+local saveBtn = Instance.new("TextButton")
+saveBtn.Parent = frame
+saveBtn.Size = UDim2.new(1, -20, 0, 45)
+saveBtn.Position = UDim2.new(0, 10, 0, 10)
+saveBtn.Text = "SAVE VỊ TRÍ"
+saveBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+saveBtn.TextColor3 = Color3.new(1,1,1)
+saveBtn.TextScaled = true
+
+-- Nút TELEPORT
+local tpBtn = Instance.new("TextButton")
+tpBtn.Parent = frame
+tpBtn.Size = UDim2.new(1, -20, 0, 45)
+tpBtn.Position = UDim2.new(0, 10, 0, 75)
+tpBtn.Text = "DỊCH CHUYỂN"
+tpBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+tpBtn.TextColor3 = Color3.new(1,1,1)
+tpBtn.TextScaled = true
+
+-- SAVE vị trí
+saveBtn.MouseButton1Click:Connect(function()
+    local char = getChar()
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        savedCFrame = hrp.CFrame
+        saveBtn.Text = "ĐÃ LƯU ✔"
+        task.wait(1)
+        saveBtn.Text = "SAVE VỊ TRÍ"
+    end
+end)
+
+-- TELEPORT về vị trí đã lưu
+tpBtn.MouseButton1Click:Connect(function()
+    if not savedCFrame then
+        tpBtn.Text = "CHƯA LƯU!"
+        task.wait(1)
+        tpBtn.Text = "DỊCH CHUYỂN"
+        return
+    end
+
+    local char = getChar()
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        hrp.CFrame = savedCFrame
+    end
+end)
