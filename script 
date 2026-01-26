@@ -271,10 +271,10 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FE-MOD-GOKU
    end
 })
 AddButton(Tab2o,{
-    Name = "dịch chuyển lưu vị trí",
+    Name = "tàng hình lưu ý: bật 1.1.1 ",
     Callback = function()
 
-loadstring(game:HttpGet("https://pastebin.com/raw/fMGDKujc"))()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
    end
 })
 
@@ -291,7 +291,7 @@ AddButton(Tab2o, {
     end
 })
 AddButton(Tab2o, {
-    Name = "gojo lưu ý: bật 1.1.1.1",
+    Name = "jojo lưu ý: bật 1.1.1.1",
     Callback = function()
        loadstring(game:HttpGet("https://pastebin.com/raw/pzxK2xx7"))()
     end
@@ -329,9 +329,9 @@ AddButton(Tab2o, {
 })
 
 AddButton(Tab2o, {
-    Name = "invisible💀",
+    Name = "sit",
     Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-FE-19153"))()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sit-button-21013"))()
     end
 })
 
