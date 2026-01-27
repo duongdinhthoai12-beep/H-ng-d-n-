@@ -1,16 +1,19 @@
--- STAR★179 FLY SCRIPT
+-- STAR★179 FIXED FLY
 local Players = game:GetService("Players")
-local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 
+local function getChar()
+	return player.Character or player.CharacterAdded:Wait()
+end
+
 -- GUI
 local gui = Instance.new("ScreenGui", player.PlayerGui)
-gui.Name = "STAR179_FLY"
+gui.Name = "STAR179_FLY_FIX"
 
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 420, 0, 260)
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
+main.Size = UDim2.new(0,420,0,260)
+main.Position = UDim2.new(0.5,-210,0.5,-130)
 main.BackgroundColor3 = Color3.fromRGB(30,30,30)
 main.Active = true
 main.Draggable = true
@@ -19,11 +22,11 @@ main.Draggable = true
 local title = Instance.new("TextLabel", main)
 title.Size = UDim2.new(1,0,0,35)
 title.Text = "STAR★179"
-title.Font = Enum.Font.GothamBold
 title.TextScaled = true
+title.Font = Enum.Font.GothamBold
 title.BackgroundTransparency = 1
 
--- RAINBOW
+-- RAINBOW TITLE
 task.spawn(function()
 	local h = 0
 	while gui.Parent do
@@ -33,87 +36,60 @@ task.spawn(function()
 	end
 end)
 
--- CLOSE
-local close = Instance.new("TextButton", main)
-close.Size = UDim2.new(0,35,0,35)
-close.Position = UDim2.new(1,-35,0,0)
-close.Text = "X"
-close.TextScaled = true
-close.BackgroundColor3 = Color3.fromRGB(180,50,50)
-close.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
-
--- MINIMIZE
-local mini = Instance.new("TextButton", main)
-mini.Size = UDim2.new(0,35,0,35)
-mini.Position = UDim2.new(1,-70,0,0)
-mini.Text = "-"
-mini.TextScaled = true
-mini.BackgroundColor3 = Color3.fromRGB(80,80,80)
-
-local minimized = false
-mini.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	for _,v in pairs(main:GetChildren()) do
-		if v ~= title and v ~= mini and v ~= close then
-			v.Visible = not minimized
-		end
-	end
-	main.Size = minimized and UDim2.new(0,420,0,35) or UDim2.new(0,420,0,260)
-end)
-
 -- VARIABLES
 local flying = false
 local speed = 1
-local maxSpeed = 10
 local minSpeed = 0.5
+local maxSpeed = 10
 local up = false
 local down = false
-local bodyGyro, bodyVel
+local gyro, vel
 
-local function getChar()
-	return player.Character or player.CharacterAdded:Wait()
-end
+-- SPEED LABEL
+local speedLabel = Instance.new("TextLabel", main)
+speedLabel.Size = UDim2.new(0,150,0,30)
+speedLabel.Position = UDim2.new(0.5,-75,0,40)
+speedLabel.Text = "Speed: 1.0"
+speedLabel.TextScaled = true
+speedLabel.BackgroundColor3 = Color3.fromRGB(50,50,50)
+speedLabel.TextColor3 = Color3.new(1,1,1)
 
--- FLY TOGGLE
-local flyBtn = Instance.new("TextButton", main)
-flyBtn.Size = UDim2.new(0,120,0,50)
-flyBtn.Position = UDim2.new(1,-130,1,-60)
-flyBtn.Text = "FLY : OFF"
-flyBtn.TextScaled = true
-flyBtn.BackgroundColor3 = Color3.fromRGB(200,50,50)
-
--- SPEED +
+-- PLUS
 local plus = Instance.new("TextButton", main)
-plus.Size = UDim2.new(0,50,0,50)
-plus.Position = UDim2.new(0.5,-25,1,-60)
+plus.Size = UDim2.new(0,50,0,40)
+plus.Position = UDim2.new(0.5,30,0,75)
 plus.Text = "+"
 plus.TextScaled = true
 
--- SPEED -
+-- MINUS
 local minus = Instance.new("TextButton", main)
-minus.Size = UDim2.new(0,50,0,50)
-minus.Position = UDim2.new(0.5,-85,1,-60)
+minus.Size = UDim2.new(0,50,0,40)
+minus.Position = UDim2.new(0.5,-80,0,75)
 minus.Text = "-"
 minus.TextScaled = true
 
+local function updateSpeed()
+	speedLabel.Text = string.format("Speed: %.1f", speed)
+end
+
 plus.MouseButton1Click:Connect(function()
 	speed = math.clamp(speed + 0.5, minSpeed, maxSpeed)
+	updateSpeed()
 end)
 
 minus.MouseButton1Click:Connect(function()
 	speed = math.clamp(speed - 0.5, minSpeed, maxSpeed)
+	updateSpeed()
 end)
 
--- UP
+-- UP BUTTON
 local upBtn = Instance.new("TextButton", main)
 upBtn.Size = UDim2.new(0,50,0,50)
 upBtn.Position = UDim2.new(0,20,0.5,-60)
 upBtn.Text = "↑"
 upBtn.TextScaled = true
 
--- DOWN
+-- DOWN BUTTON
 local downBtn = Instance.new("TextButton", main)
 downBtn.Size = UDim2.new(0,50,0,50)
 downBtn.Position = UDim2.new(0,20,0.5,0)
@@ -125,7 +101,14 @@ upBtn.MouseButton1Up:Connect(function() up = false end)
 downBtn.MouseButton1Down:Connect(function() down = true end)
 downBtn.MouseButton1Up:Connect(function() down = false end)
 
--- FLY LOGIC
+-- FLY BUTTON
+local flyBtn = Instance.new("TextButton", main)
+flyBtn.Size = UDim2.new(0,120,0,50)
+flyBtn.Position = UDim2.new(1,-130,1,-60)
+flyBtn.Text = "FLY : OFF"
+flyBtn.TextScaled = true
+flyBtn.BackgroundColor3 = Color3.fromRGB(200,50,50)
+
 flyBtn.MouseButton1Click:Connect(function()
 	flying = not flying
 	local char = getChar()
@@ -135,27 +118,30 @@ flyBtn.MouseButton1Click:Connect(function()
 		flyBtn.Text = "FLY : ON"
 		flyBtn.BackgroundColor3 = Color3.fromRGB(50,200,50)
 
-		bodyGyro = Instance.new("BodyGyro", hrp)
-		bodyGyro.P = 9e4
-		bodyGyro.MaxTorque = Vector3.new(9e9,9e9,9e9)
+		gyro = Instance.new("BodyGyro", hrp)
+		gyro.MaxTorque = Vector3.new(9e9,9e9,9e9)
+		gyro.P = 9e4
 
-		bodyVel = Instance.new("BodyVelocity", hrp)
-		bodyVel.MaxForce = Vector3.new(9e9,9e9,9e9)
+		vel = Instance.new("BodyVelocity", hrp)
+		vel.MaxForce = Vector3.new(9e9,9e9,9e9)
+		vel.Velocity = Vector3.zero
 
 		RunService.RenderStepped:Connect(function()
 			if not flying then return end
-			bodyGyro.CFrame = workspace.CurrentCamera.CFrame
+			gyro.CFrame = workspace.CurrentCamera.CFrame
 
-			local vel = workspace.CurrentCamera.CFrame.LookVector * speed * 10
-			if up then vel += Vector3.new(0, speed*10, 0) end
-			if down then vel -= Vector3.new(0, speed*10, 0) end
+			local move = Vector3.zero
+			if up then move += Vector3.new(0, speed*10, 0) end
+			if down then move -= Vector3.new(0, speed*10, 0) end
 
-			bodyVel.Velocity = vel
+			vel.Velocity = move
 		end)
 	else
 		flyBtn.Text = "FLY : OFF"
 		flyBtn.BackgroundColor3 = Color3.fromRGB(200,50,50)
-		if bodyGyro then bodyGyro:Destroy() end
-		if bodyVel then bodyVel:Destroy() end
+		if gyro then gyro:Destroy() end
+		if vel then vel:Destroy() end
 	end
 end)
+
+updateSpeed()
