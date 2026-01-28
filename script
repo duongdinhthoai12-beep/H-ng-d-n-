@@ -23,7 +23,7 @@ logo.AnchorPoint = Vector2.new(0.5,0.5)
 logo.Position = UDim2.new(0.5,0,0.5,0)
 logo.Size = UDim2.new(0,0,0,0) -- bắt đầu nhỏ rồi zoom
 logo.BackgroundTransparency = 1
-logo.Image = "http://www.roblox.com/asset/?id=76961334873391"
+logo.Image = "http://www.roblox.com/asset/?id=133835513968402"
 logo.ImageTransparency = 1
 
 -- Hiện logo (zoom + fade in)
@@ -82,7 +82,7 @@ ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.1,0,0.15,0)
 ImageButton.Size = UDim2.new(0,40,0,40)
 ImageButton.Draggable = true
-ImageButton.Image = "http://www.roblox.com/asset/?id=76961334873391"
+ImageButton.Image = "http://www.roblox.com/asset/?id=133835513968402"
 
 local UICorner = Instance.new("UICorner")
 UICorner.Parent = ImageButton
