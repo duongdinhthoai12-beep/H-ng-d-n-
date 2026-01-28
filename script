@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
---INTRO GUI
+-- INTRO GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "GraiIntro"
 gui.IgnoreGuiInset = true
