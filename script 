@@ -11,6 +11,10 @@ if not success or not Redz then
     return
 end
 
+local MakeWindow     = Redz.MakeWindow
+local MakeTab        = Redz.MakeTab
+local AddButton      = Redz.AddButton
+local MinimizeButton = Redz.MinimizeButton
 
 -- Tạo Window (tạm thời tạo, nhưng nội dung sẽ chặn cho đến khi xác thực)
 local Window = MakeWindow({
