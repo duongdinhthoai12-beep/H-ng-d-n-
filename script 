@@ -271,10 +271,9 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FE-MOD-GOKU
    end
 })
 AddButton(Tab2o,{
-    Name = "tàng hình lưu ý: bật 1.1.1 ",
+    Name = "tàng hình  ",
     Callback = function()
-
-loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ymkeee/ArbizHub/refs/heads/main/Invisible.lua'))()
    end
 })
 
