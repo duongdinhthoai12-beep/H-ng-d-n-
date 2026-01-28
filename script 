@@ -1,12 +1,16 @@
--- Load UI Library
+-- Load UI Library (ĐÚNG)
+local Redz
 local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"))()
+    Redz = loadstring(game:HttpGet(
+        "https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"
+    ))()
 end)
 
-if not success then
-    warn("Không load được UI Library: " .. tostring(err))
+if not success or not Redz then
+    warn("Không load được UI Redz V2:", err)
     return
 end
+
 
 -- Tạo Window (tạm thời tạo, nhưng nội dung sẽ chặn cho đến khi xác thực)
 local Window = MakeWindow({
