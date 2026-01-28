@@ -1,13 +1,16 @@
--- Load UI Library (ĐÚNG)
+-- Load UI Redz V2 (FIX cho Delta)
 local Redz
 local success, err = pcall(function()
-    Redz = loadstring(game:HttpGet(
-        "https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"
-    ))()
+    local src = game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/main/UiREDzV2.lua")
+    local f = loadstring(src)
+    Redz = f()
+    if not Redz then
+        Redz = getgenv().Redz
+    end
 end)
 
-if not success or not Redz then
-    warn("Không load được UI Redz V2:", err)
+if not Redz then
+    warn("UI Redz V2 không chạy trên executor này")
     return
 end
 
