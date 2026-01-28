@@ -31,7 +31,7 @@ local Window = MakeWindow({
 
 -- Nút thu nhỏ
 MinimizeButton({
-    Image = "http://www.roblox.com/asset/?id=76961334873391",
+    Image = "http://www.roblox.com/asset/?id=81237677662970",
     Size = {50, 50},
     Color = Color3.fromRGB(10, 10, 10),
     Corner = true,
@@ -271,10 +271,12 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FE-MOD-GOKU
    end
 })
 AddButton(Tab2o,{
-    Name = "tàng hình 
+    Name = "tàng hình lưu ý: bật 1.1.1 ",
     Callback = function()
 
-loadstring(game:HttpGet('https://raw.githubusercontent.com/ymkeee/ArbizHub/refs/heads/main/Invisible.lua'))()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
+   end
+})
 
 AddButton(Tab2o, {
     Name = "stamina",
