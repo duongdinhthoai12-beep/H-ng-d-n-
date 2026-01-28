@@ -1,8 +1,6 @@
 -- Load UI Library
 local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"))()
-end)
-
+    
 if not success then
     warn("Không load được UI Library: " .. tostring(err))
     return
@@ -31,7 +29,7 @@ local Window = MakeWindow({
 
 -- Nút thu nhỏ
 MinimizeButton({
-    Image = "http://www.roblox.com/asset/?id=81237677662970",
+    Image = "http://www.roblox.com/asset/?id=76961334873391",
     Size = {50, 50},
     Color = Color3.fromRGB(10, 10, 10),
     Corner = true,
