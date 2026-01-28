@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 
--- 🌌 INTRO GUI
+--INTRO GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "GraiIntro"
 gui.IgnoreGuiInset = true
@@ -106,13 +106,11 @@ local Window = Fluent:CreateWindow({
     MinimizeKey=Enum.KeyCode.End
 })
 
-local Tab1o = MakeTab({Name = "animation"})
-local Tab2o = MakeTab({Name = "lệnh"})
-local Tab3o = MakeTab({Name = "forsaken"})
+local Tabs  = {
+ local Tab1o = MakeTab({Name = "animation"})
+ local Tab2o = MakeTab({Name = "lệnh"})
+ local Tab3o = MakeTab({Name = "forsaken"})
 
--- (giữ nguyên phần AddButton... của bạn ở dưới đây)
-
--- Các nút khác
 AddButton(Tab1o, {
     Name = "gojo",
     Callback = function()
