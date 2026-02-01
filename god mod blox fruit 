@@ -1,0 +1,45 @@
+-- GOD MODE | bởi STAR★179
+
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local god = false
+
+local function apply(char)
+    local hum = char:WaitForChild("Humanoid")
+    hum.MaxHealth = math.huge
+    hum.Health = math.huge
+    hum:GetPropertyChangedSignal("Health"):Connect(function()
+        if god and hum.Health < hum.MaxHealth then
+            hum.Health = hum.MaxHealth
+        end
+    end)
+end
+
+-- GUI
+local gui = Instance.new("ScreenGui", lp.PlayerGui)
+gui.ResetOnSpawn = false
+
+local btn = Instance.new("TextButton", gui)
+btn.Size = UDim2.new(0,200,0,45)
+btn.Position = UDim2.new(0.5,-100,0,15)
+btn.Text = "GOD MODE : OFF"
+btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+btn.TextColor3 = Color3.new(1,1,1)
+btn.Font = Enum.Font.GothamBold
+btn.TextSize = 14
+
+btn.MouseButton1Click:Connect(function()
+    god = not god
+    if god then
+        btn.Text = "GOD MODE : ON"
+        btn.BackgroundColor3 = Color3.fromRGB(0,170,0)
+        apply(lp.Character or lp.CharacterAdded:Wait())
+    else
+        btn.Text = "GOD MODE : OFF"
+        btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    end
+end)
+
+lp.CharacterAdded:Connect(function(c)
+    if god then apply(c) end
+end)
