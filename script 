@@ -329,12 +329,6 @@ end
 })
 
 AddButton(Tab2o, {
-    Name = "FPS boost",
-    Callback = function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/soxcy-script/5f30788aecf18271b4c13c11e806e6f9/raw"))()
-    end
-})
-AddButton(Tab2o, {
     Name = "sit",
     Callback = function()
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sit-button-21013"))()
