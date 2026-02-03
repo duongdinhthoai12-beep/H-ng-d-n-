@@ -11,7 +11,7 @@ local hrp = char:WaitForChild("HumanoidRootPart")
 -- CONFIG
 local DASH_DISTANCE = 32       
 local DASH_TIME = 0.30          
-local COOLDOWN = 1.5            
+local COOLDOWN = 0.5            
 local canDash = true
 
 -- GUI
@@ -30,9 +30,9 @@ frame.Draggable = true
 local corner = Instance.new("UICorner", frame)
 corner.CornerRadius = UDim.new(0, 12)
 
--- Stroke (viền)
+-- Stroke 
 local stroke = Instance.new("UIStroke", frame)
-stroke.Thickness = 2
+stroke.Thickness = 4
 
 -- Button
 local button = Instance.new("TextButton", frame)
