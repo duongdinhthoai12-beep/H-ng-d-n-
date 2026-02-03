@@ -308,12 +308,18 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/long191910/all-my-rob
     end
 })
 AddButton(Tab2o,{
-    Name = "tàng hình  ",
+    Name = "invisibility ",
     Callback = function()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/ymkeee/ArbizHub/refs/heads/main/Invisible.lua'))()
    end
 })
 
+AddButton(Tab2o,{
+    Name = "invisibility 1.1.1.1",
+    Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
+   end
+})
 AddButton(Tab2o, {
     Name = "stamina",
     Callback = function()
