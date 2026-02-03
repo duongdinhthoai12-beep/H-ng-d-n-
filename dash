@@ -9,9 +9,9 @@ local char = player.Character or player.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart")
 
 -- CONFIG
-local DASH_DISTANCE = 12       -- 12 step
-local DASH_TIME = 0.15         -- thời gian dash
-local COOLDOWN = 2             -- hồi chiêu 2s
+local DASH_DISTANCE = 32       
+local DASH_TIME = 0.30          
+local COOLDOWN = 1.5            
 local canDash = true
 
 -- GUI
@@ -23,6 +23,7 @@ local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 160, 0, 60)
 frame.Position = UDim2.new(1, -180, 1, -120)
 frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+
 frame.Active = true
 frame.Draggable = true
 
