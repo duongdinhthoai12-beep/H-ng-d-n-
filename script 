@@ -333,7 +333,12 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Lay-button-21244"))()
 end
 })
-
+AddButton(Tab2o, {
+    Name = "dash",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/dash"))()
+end
+})
 AddButton(Tab2o, {
     Name = "sit",
     Callback = function()
@@ -457,4 +462,10 @@ AddButton(Tab3o, {
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ProBaconHub/DATABASE/refs/heads/main/99%20Nights%20in%20the%20Forest/Infinite%20Health.lua"))()
   end
+})
+AddButton(Tab3o, {
+    Name = "thoát khỏi sóng thần brainrots",
+    Callback = function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/Uranus9103/apexhubpro/refs/heads/main/EscapeTsunamiForBrainrots!/APEXHUB"))()
+end
 })
