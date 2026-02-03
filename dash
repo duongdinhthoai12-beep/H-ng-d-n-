@@ -1,0 +1,98 @@
+-- DASH SCRIPT | STAR★179
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+
+-- CONFIG
+local DASH_DISTANCE = 12       -- 12 step
+local DASH_TIME = 0.15         -- thời gian dash
+local COOLDOWN = 2             -- hồi chiêu 2s
+local canDash = true
+
+-- GUI
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+gui.Name = "DashGUI"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 160, 0, 60)
+frame.Position = UDim2.new(1, -180, 1, -120)
+frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+frame.Active = true
+frame.Draggable = true
+
+local corner = Instance.new("UICorner", frame)
+corner.CornerRadius = UDim.new(0, 12)
+
+-- Stroke (viền)
+local stroke = Instance.new("UIStroke", frame)
+stroke.Thickness = 2
+
+-- Button
+local button = Instance.new("TextButton", frame)
+button.Size = UDim2.new(1, -10, 1, -10)
+button.Position = UDim2.new(0,5,0,5)
+button.Text = "DASH"
+button.Font = Enum.Font.GothamBold
+button.TextSize = 20
+button.TextColor3 = Color3.new(1,1,1)
+button.BackgroundColor3 = Color3.fromRGB(40,40,40)
+
+local btnCorner = Instance.new("UICorner", button)
+btnCorner.CornerRadius = UDim.new(0, 10)
+
+-- RAINBOW EFFECT
+task.spawn(function()
+    local hue = 0
+    while gui.Parent do
+        hue = (hue + 0.01) % 1
+        local color = Color3.fromHSV(hue,1,1)
+        stroke.Color = color
+        button.BackgroundColor3 = color
+        task.wait(0.03)
+    end
+end)
+
+-- SOUND
+local sound = Instance.new("Sound", hrp)
+sound.SoundId = "rbxassetid://1598682218"
+sound.Volume = 1
+
+-- DASH FUNCTION
+local function dash()
+    if not canDash then return end
+    canDash = false
+
+    sound:Play()
+
+    local direction = hrp.CFrame.LookVector
+    local goal = {
+        CFrame = hrp.CFrame + direction * DASH_DISTANCE
+    }
+
+    local tween = TweenService:Create(
+        hrp,
+        TweenInfo.new(DASH_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        goal
+    )
+
+    tween:Play()
+
+    task.delay(COOLDOWN, function()
+        canDash = true
+    end)
+end
+
+button.MouseButton1Click:Connect(dash)
+
+-- Fix khi chết
+player.CharacterAdded:Connect(function(c)
+    char = c
+    hrp = char:WaitForChild("HumanoidRootPart")
+    sound.Parent = hrp
+end)
