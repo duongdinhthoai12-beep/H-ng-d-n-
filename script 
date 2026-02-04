@@ -310,6 +310,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/long191910/all-my-rob
 AddButton(Tab2o,{
     Name = "invisibility ",
     Callback = function()
+
 loadstring(game:HttpGet('https://raw.githubusercontent.com/ymkeee/ArbizHub/refs/heads/main/Invisible.lua'))()
    end
 })
@@ -317,19 +318,22 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/ymkeee/ArbizHub/refs/
 AddButton(Tab2o,{
     Name = "invisibility 1.1.1.1",
     Callback = function()
+
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
    end
 })
 AddButton(Tab2o, {
     Name = "auto fire",
     Callback = function()
-loadstring(game: HttpGet("https://raw
+
+loadstring(game:HttpGet("https://raw
 .githubusercontent.com/EnesXVC/FireParts/main/Script"))()
 end
 })
 AddButton(Tab2o, {
     Name = "stamina",
     Callback = function()
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Stamina%3A)"))()
 end
 })
@@ -411,7 +415,7 @@ AddButton(Tab2o, {
 AddButton(Tab2o, {
     Name = "to nhỏ",
     Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/to-nh%E1%BB%8F"))() 
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/to-nh%E1%BB%8F"))()
 end
 })
 AddButton(Tab2o, {
@@ -423,11 +427,12 @@ end
 AddButton(Tab2o, {
     Name = "tp chỗ cũ",
     Callback = function()
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/l%C6%B0u%20v%C3%A0%20d%E1%BB%8Bch%20chuy%E1%BB%83n"))()
   end
 })
 AddButton(Tab2o, {
-    Name = "Ami npc",
+    Name = "Aim npc",
     Callback = function()
 loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Alpha-aimbot-npc-script-29375"))()
   end
@@ -448,6 +453,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/John-doe-a
 AddButton(Tab3o, {
     Name = "noli-forsaken",
     Callback = function()
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/noli-void-rush-control/refs/heads/main/scripr"))()
   end
 })
