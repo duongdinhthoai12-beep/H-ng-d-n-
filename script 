@@ -235,13 +235,7 @@ AddButton(Tab1o, {
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Universal-Temu-KJ-19593"))()
 end
 })
-AddButton(Tab2o, {
-    Name = "auto fire",
-    Callback = function()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/amdzy088/Auto-fire-part-universal-/refs/heads/main/Auto%20fire%20part%20universal"))()
-end
-})
 AddButton(Tab1o, {
     Name = "goku",
     Callback = function()
@@ -273,13 +267,7 @@ AddButton(Tab1o, {
 loadstring(game:HttpGet("https://raw.githubusercontent.com/retpirato/Roblox-Scripts/refs/heads/master/Grab%20Knife%20V2.lua"))()
   end
 })
-AddButton(Tab2o, {
-    Name = "slap 1000x",
-    Callback = function()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/amdzy088/Slap-Power/refs/heads/main/Slap%20power"))()
-end
-})
 AddButton(Tab1o, {
     Name = "knife v3",
     Callback = function()
@@ -331,6 +319,13 @@ AddButton(Tab2o,{
     Callback = function()
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
    end
+})
+AddButton(Tab2o, {
+    Name = "auto fire",
+    Callback = function()
+loadstring(game: HttpGet("https://raw
+.githubusercontent.com/EnesXVC/FireParts/main/Script"))()
+end
 })
 AddButton(Tab2o, {
     Name = "stamina",
