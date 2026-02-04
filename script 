@@ -325,10 +325,8 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-s
 AddButton(Tab2o, {
     Name = "auto fire",
     Callback = function()
-
-loadstring(game:HttpGet("https://raw
-.githubusercontent.com/EnesXVC/FireParts/main/Script"))()
-end
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EnesXVC/FireParts/main/Script"))()
+    end
 })
 AddButton(Tab2o, {
     Name = "stamina",
