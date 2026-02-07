@@ -1,0 +1,86 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+
+local player = Players.LocalPlayer
+
+-- --- Lighting tweak (client-side) ---
+Lighting.FogStart = 0
+Lighting.FogEnd = 1e9
+Lighting.Brightness = 3
+Lighting.GlobalShadows = false
+Lighting.ClockTime = 12
+Lighting.ExposureCompensation = 1
+
+-- Disable certain effects if present
+for _,v in ipairs(Lighting:GetChildren()) do
+    if v:IsA("Atmosphere") or v:IsA("BloomEffect")
+    or v:IsA("ColorCorrectionEffect") or v:IsA("BlurEffect")
+    or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+        pcall(function() v.Enabled = false end)
+    end
+end
+
+-- (Optional) add a subtle SunRays for nicer look
+local sr = Lighting:FindFirstChild("__STAR179_SunRays")
+if not sr then
+    sr = Instance.new("SunRaysEffect")
+    sr.Name = "__STAR179_SunRays"
+    sr.Intensity = 0.08
+    sr.Parent = Lighting
+end
+
+-- --- GUI: hiện tên trong 3 giây ---
+local function showNameFor3s(text)
+    -- tạo ScreenGui
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "Star179_ShowName"
+    gui.ResetOnSpawn = false
+    gui.IgnoreGuiInset = true
+    gui.Parent = player:WaitForChild("PlayerGui")
+
+    -- nền trắng mảnh (dùng để đặt nút/thanh nếu bạn muốn)
+    local bar = Instance.new("Frame")
+    bar.Name = "TopBar"
+    bar.Size = UDim2.new(0.5, 0, 0, 36)
+    bar.Position = UDim2.new(0.5, 0, 0.05, 0)
+    bar.AnchorPoint = Vector2.new(0.5, 0)
+    bar.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    bar.BackgroundTransparency = 0 -- trắng
+    bar.ClipsDescendants = true
+    bar.Parent = gui
+
+    local txt = Instance.new("TextLabel")
+    txt.Size = UDim2.new(1, -10, 1, -6)
+    txt.Position = UDim2.new(0, 5, 0, 3)
+    txt.AnchorPoint = Vector2.new(0, 0)
+    txt.BackgroundTransparency = 1
+    txt.Font = Enum.Font.GothamBold
+    txt.TextScaled = true
+    txt.Text = text
+    txt.TextColor3 = Color3.fromRGB(0,0,0)
+    txt.TextStrokeTransparency = 0.8
+    txt.Parent = bar
+
+    -- Tween: hiện -> giữ -> mờ
+    local tweenInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    bar.BackgroundTransparency = 1
+    txt.TextTransparency = 1
+
+    -- appear
+    TweenService:Create(bar, tweenInfo, {BackgroundTransparency = 0}):Play()
+    TweenService:Create(txt, tweenInfo, {TextTransparency = 0}):Play()
+
+    -- chờ 3s (giữ)
+    task.delay(3, function()
+        -- fade out
+        local outTween = TweenService:Create(bar, TweenInfo.new(0.5), {BackgroundTransparency = 1})
+        local outTween2 = TweenService:Create(txt, TweenInfo.new(0.5), {TextTransparency = 1})
+        outTween:Play(); outTween2:Play()
+        outTween.Completed:Wait()
+        pcall(function() gui:Destroy() end)
+    end)
+end
+
+-- gọi hiển thị tên
+showNameFor3s("by : STAR★179")
