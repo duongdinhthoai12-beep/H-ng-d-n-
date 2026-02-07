@@ -301,6 +301,12 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREECAM-scr
     end
 })
 AddButton(Tab2o, {
+    Name = "xoá bóng tối(click)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/xo%C3%A1%20b%C3%B3ng%20t%E1%BB%91i%20"))()
+end
+})
+AddButton(Tab2o, {
     Name = "fling",
     Callback = function()
         
@@ -484,5 +490,23 @@ AddButton(Tab3o, {
     Name = "thoát khỏi sóng thần brainrots",
     Callback = function()
          loadstring(game:HttpGet("https://raw.githubusercontent.com/Uranus9103/apexhubpro/refs/heads/main/EscapeTsunamiForBrainrots!/APEXHUB"))()
+end
+})
+AddButton(Tab3o, {
+    Name = "menu script-mm2",
+    Callback = function()
+        @Renww1227:Script here - loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/mm2/refs/heads/main/bawe.lua", true))()
+end
+})
+AddButton(Tab3o, {
+    Name = "chọn nhân vật - mm2",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/MM2%20Duels'))()
+end
+})
+AddButton(Tab1o, {
+    Name = "auto shoot - mm2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Free-Keyless-Script/MurderMystery2/refs/heads/main/Main.lua"))()
 end
 })
