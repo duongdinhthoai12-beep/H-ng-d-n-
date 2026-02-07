@@ -495,7 +495,7 @@ end
 AddButton(Tab3o, {
     Name = "menu script-mm2",
     Callback = function()
-        @Renww1227:Script here - loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/mm2/refs/heads/main/bawe.lua", true))()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/mm2/refs/heads/main/bawe.lua", true))()
 end
 })
 AddButton(Tab3o, {
