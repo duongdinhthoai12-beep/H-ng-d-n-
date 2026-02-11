@@ -15,6 +15,7 @@ frame.Size = UDim2.new(0, 220, 0, 120)
 frame.Position = UDim2.new(0.5, -110, 0.7, -60)
 frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
 frame.BorderSizePixel = 0
+frame.Active = true
 
 -- Rainbow viền
 local stroke = Instance.new("UIStroke", frame)
