@@ -343,6 +343,13 @@ end
 })
 
 AddButton(Tab2o, {
+    Name = "stamina",
+    Callback = function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/tp%20player%20"))()
+end
+})
+AddButton(Tab2o, {
     Name = "ngưng động thời gian: bật 1.1.1.1",
     Callback = function()
        loadstring(game:HttpGet("https://pastebin.com/raw/pzxK2xx7"))()
@@ -504,7 +511,7 @@ AddButton(Tab3o, {
         loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/MM2%20Duels'))()
 end
 })
-AddButton(Tab1o, {
+AddButton(Tab3o, {
     Name = "auto shoot - mm2",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Free-Keyless-Script/MurderMystery2/refs/heads/main/Main.lua"))()
