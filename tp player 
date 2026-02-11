@@ -1,0 +1,78 @@
+local SOUND_ID = "rbxassetid://135712815039142" -- âm thanh TP
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "TP_Player_GUI"
+gui.ResetOnSpawn = false
+gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Khung chính (Rainbow)
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 220, 0, 120)
+frame.Position = UDim2.new(0.5, -110, 0.7, -60)
+frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+frame.BorderSizePixel = 0
+
+-- Rainbow viền
+local stroke = Instance.new("UIStroke", frame)
+stroke.Thickness = 2
+
+task.spawn(function()
+	while true do
+		for i = 0, 1, 0.01 do
+			stroke.Color = Color3.fromHSV(i,1,1)
+			task.wait(0.03)
+		end
+	end
+end)
+
+-- Ô nhập tên
+local box = Instance.new("TextBox", frame)
+box.Size = UDim2.new(1, -20, 0, 35)
+box.Position = UDim2.new(0, 10, 0, 10)
+box.PlaceholderText = "Nhập tên (vd: no)"
+box.Text = ""
+box.TextColor3 = Color3.new(1,1,1)
+box.BackgroundColor3 = Color3.fromRGB(40,40,40)
+
+-- Nút TP
+local btn = Instance.new("TextButton", frame)
+btn.Size = UDim2.new(1, -20, 0, 35)
+btn.Position = UDim2.new(0, 10, 0, 60)
+btn.Text = "TELEPORT"
+btn.TextColor3 = Color3.new(1,1,1)
+btn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+
+-- Âm thanh
+local sound = Instance.new("Sound")
+sound.SoundId = SOUND_ID
+sound.Volume = 3
+sound.Parent = frame
+
+-- Hàm tìm player theo 1 phần tên
+local function findPlayer(partial)
+	partial = partial:lower()
+	for _,plr in pairs(Players:GetPlayers()) do
+		if plr.Name:lower():sub(1,#partial) == partial then
+			return plr
+		end
+	end
+end
+
+-- Khi bấm TP
+btn.MouseButton1Click:Connect(function()
+	local target = findPlayer(box.Text)
+	if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+		
+		local myChar = LocalPlayer.Character
+		if myChar and myChar:FindFirstChild("HumanoidRootPart") then
+			myChar.HumanoidRootPart.CFrame =
+				target.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+			
+			sound:Play() -- phát âm thanh TP
+		end
+	end
+end)
