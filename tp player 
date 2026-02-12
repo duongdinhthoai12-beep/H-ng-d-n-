@@ -1,19 +1,19 @@
-local SOUND_ID = "rbxassetid://135712815039142" -- âm thanh TP
+local SOUND_ID = "rbxassetid://135712815039142"
 
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
--- GUI
+--================ GUI ================
 local gui = Instance.new("ScreenGui")
-gui.Name = "TP_Player_GUI"
+gui.Name = "STAR179_ALLINONE"
 gui.ResetOnSpawn = false
 gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
--- Khung chính (Rainbow)
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 220, 0, 120)
-frame.Position = UDim2.new(0.5, -110, 0.7, -60)
-frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+frame.Size = UDim2.new(0, 240, 0, 200)
+frame.Position = UDim2.new(0.5, -120, 0.6, -100)
+frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
 frame.BorderSizePixel = 0
 frame.Active = true
 
@@ -23,37 +23,73 @@ stroke.Thickness = 2
 
 task.spawn(function()
 	while true do
-		for i = 0, 1, 0.01 do
+		for i = 0,1,0.01 do
 			stroke.Color = Color3.fromHSV(i,1,1)
 			task.wait(0.03)
 		end
 	end
 end)
 
--- Ô nhập tên
+-- TITLE Rainbow
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1,0,0,30)
+title.BackgroundTransparency = 1
+title.Text = "STAR★179"
+title.TextScaled = true
+title.Font = Enum.Font.GothamBold
+
+task.spawn(function()
+	local h = 0
+	while true do
+		h = (h + 0.01) % 1
+		title.TextColor3 = Color3.fromHSV(h,1,1)
+		task.wait(0.03)
+	end
+end)
+
+--================ TP PLAYER ================
 local box = Instance.new("TextBox", frame)
-box.Size = UDim2.new(1, -20, 0, 35)
-box.Position = UDim2.new(0, 10, 0, 10)
-box.PlaceholderText = "Nhập tên (vd: no)"
+box.Size = UDim2.new(1,-20,0,30)
+box.Position = UDim2.new(0,10,0,35)
+box.PlaceholderText = "Tên player (vd: no)"
 box.Text = ""
 box.TextColor3 = Color3.new(1,1,1)
-box.BackgroundColor3 = Color3.fromRGB(40,40,40)
+box.BackgroundColor3 = Color3.fromRGB(45,45,45)
 
--- Nút TP
-local btn = Instance.new("TextButton", frame)
-btn.Size = UDim2.new(1, -20, 0, 35)
-btn.Position = UDim2.new(0, 10, 0, 60)
-btn.Text = "TELEPORT"
-btn.TextColor3 = Color3.new(1,1,1)
-btn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+local tpPlayerBtn = Instance.new("TextButton", frame)
+tpPlayerBtn.Size = UDim2.new(1,-20,0,30)
+tpPlayerBtn.Position = UDim2.new(0,10,0,70)
+tpPlayerBtn.Text = "TP PLAYER"
+tpPlayerBtn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+tpPlayerBtn.TextColor3 = Color3.new(1,1,1)
 
--- Âm thanh
-local sound = Instance.new("Sound")
+--================ SAVE POSITION ================
+local saveBtn = Instance.new("TextButton", frame)
+saveBtn.Size = UDim2.new(1,-20,0,30)
+saveBtn.Position = UDim2.new(0,10,0,110)
+saveBtn.Text = "SAVE VỊ TRÍ"
+saveBtn.BackgroundColor3 = Color3.fromRGB(255,170,0)
+saveBtn.TextColor3 = Color3.new(1,1,1)
+
+local tpSavedBtn = Instance.new("TextButton", frame)
+tpSavedBtn.Size = UDim2.new(1,-20,0,30)
+tpSavedBtn.Position = UDim2.new(0,10,0,145)
+tpSavedBtn.Text = "TP ĐÃ LƯU"
+tpSavedBtn.BackgroundColor3 = Color3.fromRGB(0,200,0)
+tpSavedBtn.TextColor3 = Color3.new(1,1,1)
+
+--================ SOUND ================
+local sound = Instance.new("Sound", frame)
 sound.SoundId = SOUND_ID
 sound.Volume = 3
-sound.Parent = frame
 
--- Hàm tìm player theo 1 phần tên
+--================ FUNCTIONS ================
+local function getChar()
+	return LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+end
+
+local savedCFrame = nil
+
 local function findPlayer(partial)
 	partial = partial:lower()
 	for _,plr in pairs(Players:GetPlayers()) do
@@ -63,23 +99,41 @@ local function findPlayer(partial)
 	end
 end
 
--- Khi bấm TP
-btn.MouseButton1Click:Connect(function()
+-- TP TO PLAYER
+tpPlayerBtn.MouseButton1Click:Connect(function()
 	local target = findPlayer(box.Text)
 	if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-		
-		local myChar = LocalPlayer.Character
-		if myChar and myChar:FindFirstChild("HumanoidRootPart") then
-			myChar.HumanoidRootPart.CFrame =
-				target.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
-			
-			sound:Play() -- phát âm thanh TP
+		local myChar = getChar()
+		local hrp = myChar:FindFirstChild("HumanoidRootPart")
+		if hrp then
+			hrp.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,3)
+			sound:Play()
 		end
 	end
 end)
---// DRAG MOVE GUI
-local UIS = game:GetService("UserInputService")
 
+-- SAVE POSITION
+saveBtn.MouseButton1Click:Connect(function()
+	local hrp = getChar():FindFirstChild("HumanoidRootPart")
+	if hrp then
+		savedCFrame = hrp.CFrame
+		saveBtn.Text = "ĐÃ LƯU ✔"
+		task.wait(1)
+		saveBtn.Text = "SAVE VỊ TRÍ"
+	end
+end)
+
+-- TP SAVED
+tpSavedBtn.MouseButton1Click:Connect(function()
+	if not savedCFrame then return end
+	local hrp = getChar():FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.CFrame = savedCFrame
+		sound:Play()
+	end
+end)
+
+--================ DRAG MOVE ================
 local dragging = false
 local dragInput, dragStart, startPos
 
