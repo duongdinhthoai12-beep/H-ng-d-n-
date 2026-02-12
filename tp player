@@ -92,8 +92,14 @@ local savedCFrame = nil
 
 local function findPlayer(partial)
 	partial = partial:lower()
-	for _,plr in pairs(Players:GetPlayers()) do
-		if plr.Name:lower():sub(1,#partial) == partial then
+
+	for _, plr in pairs(Players:GetPlayers()) do
+		local username = plr.Name:lower()
+		local display = plr.DisplayName:lower()
+
+		-- So khớp đầu tên (vd: "no" -> "nood")
+		if username:sub(1, #partial) == partial
+		or display:sub(1, #partial) == partial then
 			return plr
 		end
 	end
