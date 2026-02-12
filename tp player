@@ -97,6 +97,7 @@ local function findPlayer(partial)
 		local username = plr.Name:lower()
 		local display = plr.DisplayName:lower()
 
+		-- So khớp
 		if username:sub(1, #partial) == partial
 		or display:sub(1, #partial) == partial then
 			return plr
