@@ -1,4 +1,4 @@
-local SOUND_ID = "rbxassetid://135712815039142"
+klocal SOUND_ID = "rbxassetid://135712815039142"
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
@@ -16,6 +16,7 @@ frame.Position = UDim2.new(0.5, -120, 0.6, -100)
 frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
 frame.BorderSizePixel = 0
 frame.Active = true
+frame.Draggable = true
 
 -- Rainbow viền
 local stroke = Instance.new("UIStroke", frame)
