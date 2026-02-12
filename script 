@@ -346,7 +346,7 @@ AddButton(Tab2o, {
     Name = "tp player",
     Callback = function()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/tp%20player%20"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/tp%20player"))()
 end
 })
 AddButton(Tab2o, {
