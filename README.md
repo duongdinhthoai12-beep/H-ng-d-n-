@@ -43,6 +43,18 @@ f.Size = UDim2.new(0, 220, 0, 210)
 f.Position = UDim2.new(0, 25, 0, 25)
 f.BackgroundColor3 = Color3.fromRGB(30,30,30)
 f.Active = true f.Draggable = true
+-- 🌈 Rainbow Border
+local stroke = Instance.new("UIStroke", f)
+stroke.Thickness = 2
+
+task.spawn(function()
+    while true do
+        for i = 0, 1, 0.01 do
+            stroke.Color = Color3.fromHSV(i, 1, 1)
+            task.wait(0.03)
+        end
+    end
+end)
 Instance.new("UICorner", f).CornerRadius = UDim.new(0, 10)
 
 local title = Instance.new("TextLabel", f)
