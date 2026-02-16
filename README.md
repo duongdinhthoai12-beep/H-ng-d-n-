@@ -138,15 +138,7 @@ note.TextScaled = true
 note.TextWrapped = true
 
 -- FPS Counter
-local count, last = 0, tick()
-rs.RenderStepped:Connect(function()
-    count += 1
-    if tick() - last >= 1 then
-        fps.Text = "FPS: " .. count
-        count = 0
-        last = tick()
-    end
-end)
+
 
 -- Boost đồ họa
 local function boost()
@@ -157,7 +149,27 @@ local function boost()
     Lighting.FogEnd = 1e9
     for _,v in ipairs(workspace:GetDescendants()) do
         if v:IsA("Decal") or v:IsA("Texture") or v:IsA("Sound") then pcall(function() v:Destroy() end) end
-        if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then v.Enabled = false end
+        if v:IsA("ParticleEmitter") or v:Is-- FPS Counter + đổi màu
+local count, last = 0, os.clock()
+
+rs.RenderStepped:Connect(function()
+    count += 1
+    if os.clock() - last >= 1 then
+        fps.Text = "FPS: " .. count
+
+        -- 🎨 Đổi màu theo FPS
+        if count <= 10 then
+            fps.TextColor3 = Color3.fromRGB(255, 60, 60) -- 🔴 Đỏ
+        elseif count <= 30 then
+            fps.TextColor3 = Color3.fromRGB(255, 200, 0) -- 🟡 Vàng
+        else
+            fps.TextColor3 = Color3.fromRGB(100, 255, 100) -- 🟢 Xanh
+        end
+
+        count = 0
+        last = os.clock()
+    end
+end)A("Trail") or v:IsA("Beam") then v.Enabled = false end
         if v:IsA("BasePart") then
             v.Material = Enum.Material.SmoothPlastic
             v.Reflectance = 0
