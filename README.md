@@ -138,31 +138,6 @@ note.TextScaled = true
 note.TextWrapped = true
 
 -- FPS Counter
--- FPS Counter + đổi màu + viền theo FPS
-local count, last = 0, os.clock()
-
-rs.RenderStepped:Connect(function()
-    count += 1
-    if os.clock() - last >= 1 then
-        fps.Text = "FPS: " .. count
-
-        -- 🎨 Đổi màu chữ theo FPS
-        if count <= 10 then
-            fps.TextColor3 = Color3.fromRGB(255,60,60) -- đỏ
-            stroke.Color = Color3.fromRGB(255,60,60)
-        elseif count <= 30 then
-            fps.TextColor3 = Color3.fromRGB(255,200,0) -- vàng
-            stroke.Color = Color3.fromRGB(255,200,0)
-        else
-            fps.TextColor3 = Color3.fromRGB(100,255,100) -- xanh
-            stroke.Color = Color3.fromRGB(100,255,100)
-        end
-
-        count = 0
-        last = os.clock()
-    end
-end)
--- Boost đồ họa
 local function boost()
     local Lighting = game:GetService("Lighting")
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
