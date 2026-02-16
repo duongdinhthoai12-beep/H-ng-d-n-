@@ -418,9 +418,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/amdzy088/Immune-slap-
   end
 })
 AddButton(Tab2o, {
-    Name = "FPS boost",
+    Name = "anti afk+FPS boost",
     Callback = function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/soxcy-script/5f30788aecf18271b4c13c11e806e6f9/raw"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/25752582225858852582825815711577157%29%28%29%28%29%28%29%28%29%28%29%28%29%28%29%28%29%28%28%28%28%29%28%29%28%29%28%29%28%28%29%28%29"))()
     end
 })
 AddButton(Tab2o, {
