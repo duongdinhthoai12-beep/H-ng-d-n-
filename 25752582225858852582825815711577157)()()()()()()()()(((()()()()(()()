@@ -1,0 +1,177 @@
+-- AFK + FPS Boost UI (Simple)
+
+local plr = game:GetService("Players").LocalPlayer
+local cam = workspace.CurrentCamera
+local vu = game:GetService("VirtualUser")
+local rs = game:GetService("RunService")
+local uis = game:GetService("UserInputService")
+
+local gui = Instance.new("ScreenGui", plr:WaitForChild("PlayerGui"))
+    -- Nút Ẩn / Hiện GUI
+local toggleButton = Instance.new("ImageButton", gui)
+toggleButton.Size = UDim2.new(0, 40, 0, 40)
+toggleButton.Position = UDim2.new(1, -50, 1, -50)
+toggleButton.Image = "rbxassetid://6034287594"
+toggleButton.BackgroundTransparency = 1
+
+-- Biến kiểm tra trạng thái
+local hidden = false
+
+toggleButton.MouseButton1Click:Connect(function()
+    hidden = not hidden
+    
+    for _, v in pairs(gui:GetChildren()) do
+        if v:IsA("Frame") or v:IsA("TextButton") or v:IsA("TextLabel") then
+            v.Visible = not hidden
+        end
+    end
+    
+    toggleButton.Visible = true -- giữ nút luôn hiện
+end)
+-- Anti AFK
+plr.Idled:Connect(function()
+    vu:Button2Down(Vector2.new(), cam.CFrame)
+    task.wait(0.5)
+    vu:Button2Up(Vector2.new(), cam.CFrame)
+end)
+
+-- UI
+local f = Instance.new("Frame", gui)
+f.Size = UDim2.new(0, 220, 0, 230)
+f.Position = UDim2.new(0, 25, 0, 25)
+f.BackgroundColor3 = Color3.fromRGB(30,30,30)
+f.Active = true
+f.Draggable = true
+Instance.new("UICorner", f).CornerRadius = UDim.new(0, 10)
+
+-- Rainbow border
+local stroke = Instance.new("UIStroke", f)
+stroke.Thickness = 2
+
+task.spawn(function()
+    while true do
+        for i = 0, 1, 0.01 do
+            stroke.Color = Color3.fromHSV(i, 1, 1)
+            task.wait(0.03)
+        end
+    end
+end)
+
+-- Title
+local title = Instance.new("TextLabel", f)
+title.Size = UDim2.new(1, -20, 0, 25)
+title.Position = UDim2.new(0, 10, 0, 5)
+title.Text = "💸 Auto AFK"
+title.Font = Enum.Font.GothamBold
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1,1,1)
+
+-- AFK Timer
+local timer = Instance.new("TextLabel", f)
+timer.Position = UDim2.new(0, 10, 0, 35)
+timer.Size = UDim2.new(1, -20, 0, 25)
+timer.Text = "AFK: 0s"
+timer.BackgroundColor3 = Color3.fromRGB(40,40,45)
+timer.TextColor3 = Color3.new(1,1,1)
+timer.Font = Enum.Font.Gotham
+timer.TextScaled = true
+Instance.new("UICorner", timer)
+
+-- FPS Label
+local fps = Instance.new("TextLabel", f)
+fps.Position = UDim2.new(0, 10, 0, 70)
+fps.Size = UDim2.new(1, -20, 0, 25)
+fps.Text = "FPS: 0"
+fps.BackgroundColor3 = Color3.fromRGB(40,40,45)
+fps.TextColor3 = Color3.fromRGB(100,255,100)
+fps.Font = Enum.Font.Gotham
+fps.TextScaled = true
+Instance.new("UICorner", fps)
+
+-- FPS Counter + đổi màu
+local frames = 0
+local last = os.clock()
+
+rs.RenderStepped:Connect(function()
+    frames += 1
+    if os.clock() - last >= 1 then
+        fps.Text = "FPS: " .. frames
+
+        if frames <= 10 then
+            fps.TextColor3 = Color3.fromRGB(255,60,60)
+            stroke.Color = Color3.fromRGB(255,60,60)
+        elseif frames <= 30 then
+            fps.TextColor3 = Color3.fromRGB(255,200,0)
+            stroke.Color = Color3.fromRGB(255,200,0)
+        else
+            fps.TextColor3 = Color3.fromRGB(100,255,100)
+            stroke.Color = Color3.fromRGB(100,255,100)
+        end
+
+        frames = 0
+        last = os.clock()
+    end
+end)
+
+-- FPS Boost (bấm là chạy luôn)
+local function boost()
+    local Lighting = game:GetService("Lighting")
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    Lighting.GlobalShadows = false
+    Lighting.Brightness = 0
+    Lighting.FogEnd = 1e9
+
+    for _,v in ipairs(workspace:GetDescendants()) do
+        if v:IsA("Decal") or v:IsA("Texture") then
+            pcall(function() v:Destroy() end)
+        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then
+            v.Enabled = false
+        elseif v:IsA("BasePart") then
+            v.Material = Enum.Material.SmoothPlastic
+            v.CastShadow = false
+        end
+    end
+end
+
+-- Nút bật FPS Boost (KHÔNG đổi chữ)
+local btn = Instance.new("TextButton", f)
+btn.Position = UDim2.new(0, 10, 0, 110)
+btn.Size = UDim2.new(1, -20, 0, 25)
+btn.Text = "🚀 Bật FPS Boost"
+btn.BackgroundColor3 = Color3.fromRGB(50,120,50)
+btn.Font = Enum.Font.GothamBold
+btn.TextScaled = true
+btn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", btn)
+
+btn.MouseButton1Click:Connect(boost)
+
+-- Chú thích dưới (cho đỡ trống)
+local info = Instance.new("TextLabel", f)
+info.Position = UDim2.new(0, 10, 0, 150)
+info.Size = UDim2.new(1, -20, 0, 65)
+info.BackgroundTransparency = 1
+info.TextColor3 = Color3.fromRGB(200,200,200)
+info.Font = Enum.Font.Gotham
+info.TextScaled = true
+info.TextWrapped = true
+info.Text =
+"• FPS đỏ = lag\n"..
+"• FPS vàng = trung bình\n"..
+"• FPS xanh = mượt\n"..
+"• Script tự chống AFK 20 phút"
+
+-- AFK Timer Loop
+task.spawn(function()
+    while true do
+        for i = 300, 0, -1 do
+            timer.Text = "AFK: "..i.."s"
+            task.wait(1)
+        end
+        cam.CFrame *= CFrame.Angles(0, math.rad(math.random(3, 6)), 0)
+        vu:Button2Down(Vector2.new(), cam.CFrame)
+        task.wait(0.5)
+        vu:Button2Up(Vector2.new(), cam.CFrame)
+    end
+end)
