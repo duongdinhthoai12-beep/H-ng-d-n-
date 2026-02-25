@@ -213,7 +213,7 @@ AddButton(Tab2o, {
     Name = "music",
     Callback = function()
 
-musicloadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-YouTube-Music-Player-72222"))()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-YouTube-Music-Player-72222"))()
 end
 })
 AddButton(Tab2o, {
@@ -299,7 +299,7 @@ end
 AddButton(Tab2o, {
     Name = "tp vị trí die",
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/hồi sinh"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/h%E1%BB%93i%20sinh"))()
 end
 })
 
