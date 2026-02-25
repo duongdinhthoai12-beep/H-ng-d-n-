@@ -302,6 +302,7 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/hồi sinh"))()
 end
 })
+
 AddButton(Tab2o, {
     Name = "auto click",
     Callback = function()
