@@ -297,9 +297,9 @@ AddButton(Tab2o, {
 end
 })
 AddButton(Tab2o, {
-    Name = "hồi sinh tại chỗ",
+    Name = "auto click",
     Callback = function()
-        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/h%E1%BB%93i%20sinh"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/auto%20click%20"))()
 end
 })
 
