@@ -1,0 +1,87 @@
+-- ESP PLAYER (Drawing API)
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+
+local ESP = {}
+
+local function createESP(player)
+    if player == LocalPlayer then return end
+
+    local box = Drawing.new("Square")
+    box.Thickness = 1
+    box.Color = Color3.fromRGB(0,255,0)
+    box.Filled = false
+    box.Visible = false
+
+    local text = Drawing.new("Text")
+    text.Size = 13
+    text.Color = Color3.fromRGB(255,255,255)
+    text.Center = true
+    text.Outline = true
+    text.Visible = false
+
+    ESP[player] = {box = box, text = text}
+end
+
+local function removeESP(player)
+    if ESP[player] then
+        ESP[player].box:Remove()
+        ESP[player].text:Remove()
+        ESP[player] = nil
+    end
+end
+
+for _, player in pairs(Players:GetPlayers()) do
+    createESP(player)
+end
+
+Players.PlayerAdded:Connect(createESP)
+Players.PlayerRemoving:Connect(removeESP)
+
+RunService.RenderStepped:Connect(function()
+    for player, drawings in pairs(ESP) do
+        local character = player.Character
+        local box = drawings.box
+        local text = drawings.text
+
+        if character and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Humanoid") then
+            local root = character.HumanoidRootPart
+            local humanoid = character.Humanoid
+
+            if humanoid.Health > 0 then
+                local pos, onScreen = Camera:WorldToViewportPoint(root.Position)
+
+                if onScreen then
+                    local distance = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) and
+                        math.floor((LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude) or 0
+
+                    local size = math.clamp(3000 / pos.Z, 20, 300)
+
+                    box.Size = Vector2.new(size, size * 1.5)
+                    box.Position = Vector2.new(pos.X - box.Size.X/2, pos.Y - box.Size.Y/2)
+                    box.Visible = true
+
+                    text.Position = Vector2.new(pos.X, pos.Y - box.Size.Y/2 - 15)
+                    text.Text = player.Name ..
+                        " | HP: "..math.floor(humanoid.Health)..
+                        " | "..distance.."m"
+                    text.Visible = true
+                else
+                    box.Visible = false
+                    text.Visible = false
+                end
+            else
+                box.Visible = false
+                text.Visible = false
+            end
+        else
+            box.Visible = false
+            text.Visible = false
+        end
+    end
+end)
+
+print("Drawing ESP Loaded ✅")
