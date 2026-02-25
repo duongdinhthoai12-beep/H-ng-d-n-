@@ -1,230 +1,395 @@
---[[
-📦 TÊN CÔNG CỤ: AFK + FPS Boost UI
-
-📌 TÍNH NĂNG CHÍNH:
-+ Tự động hoạt động để tránh bị kick khi AFK
-+ Hiển thị FPS (khung hình/giây) và thời gian AFK
-+ Bật/tắt chế độ giảm đồ họa giúp tăng FPS (hạn chế lag)
-+ Ẩn/hiện giao diện bằng phím [V] (PC) hoặc nút 👁️ (Mobile)
-+ Thiết kế giao diện đẹp, hiện đại và có thể kéo thả
-
-📘 CÁCH DÙNG:
-1. Dán đoạn mã này vào LocalScript (Client)
-2. Giao diện sẽ hiện ngay trong game
-3. Nhấn nút "Bật FPS Boost" để giảm đồ họa tối đa
-4. Nhấn "V" hoặc biểu tượng 👁️ để ẩn/hiện giao diện
-5. Nhấn ✕ để tắt giao diện hoàn toàn
-]
-
-local plr = game:GetService("Players").LocalPlayer
-local cam = workspace.CurrentCamera
-local vu = game:GetService("VirtualUser")
-local rs = game:GetService("RunService")
-local uis = game:GetService("UserInputService")
-local gui = Instance.new("ScreenGui", plr:WaitForChild("PlayerGui"))
-
--- Nút ẩn/hiện dành cho mobile (hình con mắt)
-local toggleButton = Instance.new("ImageButton", gui)
-toggleButton.Size = UDim2.new(0, 40, 0, 40)
-toggleButton.Position = UDim2.new(1, -50, 1, -50) -- Góc dưới bên phải
-toggleButton.Image = "rbxassetid://6034287594" -- Eye-slash (ẩn) -- icon hình con mắt 👁️
-toggleButton.BackgroundTransparency = 1
-
--- Chống kick khi AFK
-plr.Idled:Connect(function()
-    vu:Button2Down(Vector2.new(), cam.CFrame)
-    wait(0.5)
-    vu:Button2Up(Vector2.new(), cam.CFrame)
+    -- Load UI Library
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/daucobonhi/Ui-Redz-V2/refs/heads/main/UiREDzV2.lua"))()
 end)
 
--- Tạo UI
-local f = Instance.new("Frame", gui)
-f.Size = UDim2.new(0, 220, 0, 210)
-f.Position = UDim2.new(0, 25, 0, 25)
-f.BackgroundColor3 = Color3.fromRGB(30,30,30)
-f.Active = true f.Draggable = true
--- 🌈 Rainbow Border
-local stroke = Instance.new("UIStroke", f)
-stroke.Thickness = 2
-
-task.spawn(function()
-    while true do
-        for i = 0, 1, 0.01 do
-            stroke.Color = Color3.fromHSV(i, 1, 1)
-            task.wait(0.03)
-        end
-    end
-end)
-Instance.new("UICorner", f).CornerRadius = UDim.new(0, 10)
-
-local title = Instance.new("TextLabel", f)
-title.Size = UDim2.new(1, -30, 0, 25)
-title.Position = UDim2.new(0, 10, 0, 5)
-title.Text = "💸 Auto"
-title.Font = Enum.Font.GothamBold
-title.TextScaled = true
-title.BackgroundTransparency = 1
-title.TextColor3 = Color3.new(1,1,1)
-title.TextXAlignment = Enum.TextXAlignment.Left
-
-local close = Instance.new("TextButton", f)
-close.Size = UDim2.new(0, 25, 0, 25)
-close.Position = UDim2.new(1, -30, 0, 5)
-close.Text = "✕"
-close.BackgroundColor3 = Color3.fromRGB(200,60,60)
-Instance.new("UICorner", close)
-close.MouseButton1Click:Connect(function() f:Destroy() end)
-
-local timer = Instance.new("TextLabel", f)
-timer.Position = UDim2.new(0, 10, 0, 40)
-timer.Size = UDim2.new(1, -20, 0, 25)
-timer.Text = "AFK: 300s"
-timer.BackgroundColor3 = Color3.fromRGB(40,40,45)
-timer.TextColor3 = Color3.new(1,1,1)
-timer.Font = Enum.Font.Gotham
-timer.TextScaled = true
-Instance.new("UICorner", timer)
-
--- Ghi chú cho timer
-local afkNote = Instance.new("TextLabel", f)
-afkNote.Position = UDim2.new(0, 10, 0, 65)
-afkNote.Size = UDim2.new(1, -20, 0, 15)
-afkNote.Text = "⏳ Đếm ngược đến lần tiếp theo nhân vật sẽ tự hoạt động để tránh bị kick khỏi game."
-afkNote.TextColor3 = Color3.fromRGB(255, 255, 160)
-afkNote.BackgroundTransparency = 1
-afkNote.Font = Enum.Font.GothamBold
-afkNote.TextScaled = true
-afkNote.TextSize = 20
-afkNote.TextWrapped = true
-
-local totalTime = Instance.new("TextLabel", f)
-totalTime.Position = UDim2.new(0, 10, 0, 85)
-totalTime.Size = UDim2.new(1, -20, 0, 20)
-totalTime.Text = "🕒 Tổng thời gian AFK: 0 phút"
-totalTime.BackgroundTransparency = 1
-totalTime.TextColor3 = Color3.fromRGB(180, 180, 180)
-totalTime.Font = Enum.Font.GothamSemibold
-totalTime.TextScaled = true
-
-local fps = Instance.new("TextLabel", f)
-fps.Position = UDim2.new(0, 10, 0, 110)
-fps.Size = UDim2.new(1, -20, 0, 25)
-fps.Text = "FPS: 0"
-fps.BackgroundColor3 = Color3.fromRGB(40,40,45)
-fps.TextColor3 = Color3.fromRGB(100,255,100)
-fps.Font = Enum.Font.Gotham
-fps.TextScaled = true
-Instance.new("UICorner", fps)
-
-local toggle = Instance.new("TextButton", f)
-toggle.Position = UDim2.new(0, 10, 0, 140)
-toggle.Size = UDim2.new(1, -20, 0, 25)
-toggle.Text = "🟢 Bật FPS Boost"
-toggle.BackgroundColor3 = Color3.fromRGB(50,120,50)
-toggle.Font = Enum.Font.GothamBold
-toggle.TextScaled = true
-toggle.TextColor3 = Color3.new(1,1,1)
-Instance.new("UICorner", toggle)
-
--- Ghi chú
-local note = Instance.new("TextLabel", f)
-note.Position = UDim2.new(0, 10, 0, 170)
-note.Size = UDim2.new(1, -20, 0, 25)
-note.Text = "👁️ Nhấn [V] trên PC hoặc icon 👁️ (mobile) để ẩn/hiện UI — ✕ để tắt giao diện"
-note.TextColor3 = Color3.fromRGB(200, 200, 200)
-note.BackgroundTransparency = 1
-note.Font = Enum.Font.GothamSemibold
-note.TextScaled = true
-note.TextWrapped = true
-
--- FPS Counter
-local function boost()
-    local Lighting = game:GetService("Lighting")
-    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-    Lighting.GlobalShadows = false
-    Lighting.Brightness = 0
-    Lighting.FogEnd = 1e9
-    for _,v in ipairs(workspace:GetDescendants()) do
-        if v:IsA("Decal") or v:IsA("Texture") or v:IsA("Sound") then pcall(function() v:Destroy() end) end
-        if v:IsA("ParticleEmitter") or v:Is-- FPS Counter + đổi màu
-local count, last = 0, os.clock()
-
-rs.RenderStepped:Connect(function()
-    count += 1
-    if os.clock() - last >= 1 then
-        fps.Text = "FPS: " .. count
-
-        -- 🎨 Đổi màu theo FPS
-        if count <= 10 then
-            fps.TextColor3 = Color3.fromRGB(255, 60, 60) -- 🔴 Đỏ
-        elseif count <= 30 then
-            fps.TextColor3 = Color3.fromRGB(255, 200, 0) -- 🟡 Vàng
-        else
-            fps.TextColor3 = Color3.fromRGB(100, 255, 100) -- 🟢 Xanh
-        end
-
-        count = 0
-        last = os.clock()
-    end
-end)A("Trail") or v:IsA("Beam") then v.Enabled = false end
-        if v:IsA("BasePart") then
-            v.Material = Enum.Material.SmoothPlastic
-            v.Reflectance = 0
-            v.CastShadow = false
-        end
-    end
+if not success then
+    warn("Không load được UI Library: " .. tostring(err))
+    return
 end
 
-local function unboost()
-    local Lighting = game:GetService("Lighting")
-    Lighting.GlobalShadows = true
-    Lighting.Brightness = 2
-    Lighting.FogEnd = 1000
+-- Tạo Window (tạm thời tạo, nhưng nội dung sẽ chặn cho đến khi xác thực)
+local Window = MakeWindow({
+    Hub = {
+        Title = "STAR★179VN",
+        Animation = "loading..."
+    },
+    Key = {
+        KeySystem = false, -- chúng ta sẽ kiểm soát mật khẩu thủ công bên dưới
+        Title = "Key System",
+        Description = "",
+        KeyLink = "",
+        Keys = {"1234"},
+        Notifi = {
+            Notifications = true,
+            CorrectKey = "Running the Script...",
+            IncorrectKey = "The key is incorrect",
+            CopyKeyLink = "Copied to Clipboard"
+        }
+    }
+})
+
+-- Nút thu nhỏ
+MinimizeButton({
+    Image = "http://www.roblox.com/asset/?id=81237677662970",
+    Size = {50, 50},
+    Color = Color3.fromRGB(10, 10, 10),
+    Corner = true,
+    Stroke = false,
+    StrokeColor = Color3.fromRGB(255, 0, 0)
+})
+
+-- Nếu xác thực đúng thì tạo tabs và nội dung tiếp
+local Tab1o = MakeTab({Name = "animation"})
+local Tab2o = MakeTab({Name = "lệnh"})
+local Tab3o = MakeTab({Name = "game riêng"})
+local Tab4o = MakeTab({Name = "sever"})
+
+-- (giữ nguyên phần AddButton... của bạn ở dưới đây)
+
+-- Các nút khác
+AddButton(Tab1o, {
+    Name = "gojo",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/OS8Atb5c/raw"))()
+    end
+})
+
+AddButton(Tab1o, {
+    Name = "lọ",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))()
+    end
+})
+
+AddButton(Tab1o, {
+    Name = "gojo v2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/LolnotaKid/SCRIPTSBYVEUX/refs/heads/main/LALALALALALAGOJOOO.lua.txt"))()
+    end
+})
+
+AddButton(Tab1o, {
+    Name = "gojo 3",
+    Callback = function()
+     loadstring(game:HttpGet("https://pastefy.app/ibr9Vh52/raw"))()
 end
+})
 
--- Toggle FPS Boost
-local boosted = false
-toggle.MouseButton1Click:Connect(function()
-    if not boosted then
-        boost()
-        toggle.Text = "🔴 Đang bật"
-        toggle.BackgroundColor3 = Color3.fromRGB(150,60,60)
-    else
-        unboost()
-        toggle.Text = "🟢 Bật FPS Boost"
-        toggle.BackgroundColor3 = Color3.fromRGB(50,120,50)
-    end
-    boosted = not boosted
-end)
-
--- Ẩn/hiện UI bằng phím V hoặc icon trên mobile
-local function toggleUI()
-    f.Visible = not f.Visible
+AddButton(Tab1o, {
+    Name = "hakari",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Hakari"))()
 end
+})
 
-toggleButton.MouseButton1Click:Connect(toggleUI)
-uis.InputBegan:Connect(function(input, g)
-    if not g and input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.V then
-        toggleUI()
-    end
-end)
+AddButton(Tab1o, {
+    Name = "KJ-V1",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/g0CLohAl/raw"))()
+end
+})
+AddButton(Tab1o, {
+    Name = "KJ-V2",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Universal-Temu-KJ-19593"))()
+end
+})
 
--- AFK Timer + Tổng thời gian treo
-local totalMinutes = 0
-spawn(function()
-    while true do
-        local t = math.random(280, 320)
-        for i = t, 0, -1 do
-            if f.Visible then
-                timer.Text = "AFK: "..i.."s"
-                totalTime.Text = "Tổng thời gian treo: " .. tostring(totalMinutes) .. " phút"
-            end
-            wait(1)
-        end
-        totalMinutes += math.floor(t / 60)
-        cam.CFrame *= CFrame.Angles(0, math.rad(math.random(3, 6)), 0)
-        vu:Button2Down(Vector2.new(), cam.CFrame)
-        wait(math.random(0.4, 0.8))
-        vu:Button2Up(Vector2.new(), cam.CFrame)
+AddButton(Tab1o, {
+    Name = "goku",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Goku-UI-and-MUI-Script-CLIENTSIDED-43364"))()
+end
+})
+AddButton(Tab1o,{
+    Name = "goku tool",
+    Callback = function()
+
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FE-MOD-GOKU-HABILIDADES-86300"))()
+   end
+})
+AddButton(Tab1o, {
+    Name = "animation speed",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/speed%20animation%20"))()
+end
+})
+AddButton(Tab1o, {
+    Name = "knife",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/F3X-Workspace-script-that-lets-u-have-a-lsaer-knife-22875"))()
     end
-end)
+})
+AddButton(Tab1o, {
+    Name = "knife v2",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/retpirato/Roblox-Scripts/refs/heads/master/Grab%20Knife%20V2.lua"))()
+  end
+})
+
+AddButton(Tab1o, {
+    Name = "knife v3",
+    Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-grab-knife-v3-9232"))()
+  end
+})
+AddButton(Tab1o, {
+    Name = "gun",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/nicolasbarbosa323/rare/refs/heads/main/kitcher%20gun.lua"))()
+end
+})
+AddButton(Tab1o, {
+    Name = "ban",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Ban"))()
+    end
+})
+-- Tab2
+AddButton(Tab2o, {
+    Name = "cài lệnh",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end
+})
+AddButton(Tab2o, {
+    Name = "free cam",
+    Callback = function()
+        
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREECAM-script-80365"))()
+    end
+})
+AddButton(Tab2o, {
+    Name = "xoá bóng tối(click)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/xo%C3%A1%20b%C3%B3ng%20t%E1%BB%91i%20"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "fling",
+    Callback = function()
+        
+loadstring(game:HttpGet("https://raw.githubusercontent.com/long191910/all-my-roblox-script/refs/heads/main/touchfling.lua"))()
+    end
+})
+AddButton(Tab2o,{
+    Name = "noclip",
+    Callback = function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/noclip%20"))()
+   end
+})
+
+AddButton(Tab2o,{
+    Name = "invisibility 1.1.1.1",
+    Callback = function()
+
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
+   end
+})
+AddButton(Tab2o, {
+    Name = "auto fire",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EnesXVC/FireParts/main/Script"))()
+    end
+})
+AddButton(Tab2o, {
+    Name = "stamina",
+    Callback = function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Stamina%3A)"))()
+end
+})
+
+AddButton(Tab2o, {
+    Name = "tp player",
+    Callback = function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/tp%20player"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "music",
+    Callback = function()
+
+musicloadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-YouTube-Music-Player-72222"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "ngưng động thời gian: bật 1.1.1.1",
+    Callback = function()
+       loadstring(game:HttpGet("https://pastebin.com/raw/pzxK2xx7"))()
+    end
+})
+AddButton(Tab2o, {
+    Name = "lay",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Lay-button-21244"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "dash",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/dash"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "sit",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sit-button-21013"))()
+    end
+})
+
+AddButton(Tab2o, {
+    Name = "aim",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DanielHubll/DanielHubll/refs/heads/main/Aimbot%20Mobile"))()
+   end
+})
+
+AddButton(Tab2o, {
+    Name = "shift lock",
+    Callback = function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Shift lock Have a heart"))() 
+  end
+})
+AddButton(Tab2o, {
+    Name = "god mod",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Rawbr10/Roblox-Scripts/refs/heads/main/God%20Mode%20Script%20Universal"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "tua ngược",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/MSTTOPPER/Scripts/refs/heads/main/FlashBack"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "wall hop",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ScpGuest666/Random-Roblox-script/refs/heads/main/Roblox%20WallHop%20V4%20script"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "fly",
+    Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Fly-gui-v3-78856"))()
+   end
+})
+AddButton(Tab2o, {
+    Name = "no troll",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/amdzy088/Immune-slap-tower-/refs/heads/main/Immune%20slap%20tower%20work"))()
+  end
+})
+AddButton(Tab2o, {
+    Name = "anti afk+FPS boost",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/25752582225858852582825815711577157%29%28%29%28%29%28%29%28%29%28%29%28%29%28%29%28%29%28%28%28%28%29%28%29%28%29%28%29%28%28%29%28%29"))()
+    end
+})
+AddButton(Tab2o, {
+    Name = "to nhỏ",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/to-nh%E1%BB%8F"))()
+end
+})
+AddButton(Tab2o, {
+    Name = "hồi sinh tại chỗ",
+    Callback = function()
+        loadstring(game:HttpGet("https://github.com/duongdinhthoai12-beep/H-ng-d-n-/blob/main/h%E1%BB%93i%20sinh"))()
+end
+})
+
+AddButton(Tab2o, {
+    Name = "Aim npc",
+    Callback = function()
+loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Alpha-aimbot-npc-script-29375"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "Guest 1337-forsaken",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-block-script/refs/heads/main/FINAL%20AUTO%20BLOCK"))()
+  end
+})
+
+AddButton(Tab3o, {
+    Name = "John doe-forsaken",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/John-doe-auto-parry-404/refs/heads/main/Script"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "noli-forsaken",
+    Callback = function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/noli-void-rush-control/refs/heads/main/scripr"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "two time-forsaken",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-backstab-two-time/refs/heads/main/Auto%20backstab%20v2"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "7π7-forsaken",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/NumanTF3/invis-7n7-upon-clone/refs/heads/main/main.lua"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "chance-forsaken",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Chance-aimbot/refs/heads/main/Chance%20aimbot%20v2"))()
+  end
+})
+
+AddButton(Tab3o, {
+    Name = "god 99 day-99 days in the forest",
+    Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ProBaconHub/DATABASE/refs/heads/main/99%20Nights%20in%20the%20Forest/Infinite%20Health.lua"))()
+  end
+})
+AddButton(Tab3o, {
+    Name = "thoát khỏi sóng thần brainrots",
+    Callback = function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/Uranus9103/apexhubpro/refs/heads/main/EscapeTsunamiForBrainrots!/APEXHUB"))()
+end
+})
+AddButton(Tab3o, {
+    Name = "menu script-mm2",
+    Callback = function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptjame/mm2/refs/heads/main/bawe.lua", true))()
+end
+})
+AddButton(Tab3o, {
+    Name = "chọn nhân vật - mm2",
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/MM2%20Duels'))()
+end
+})
+AddButton(Tab3o, {
+    Name = "auto shoot - mm2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Free-Keyless-Script/MurderMystery2/refs/heads/main/Main.lua"))()
+end
+})
+--Tab4o
+
+AddButton(Tab4o, {
+    Name = "sever đông",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/sever%20%C4%91%C3%B4ng%20"))()
+end
+})
+
+AddButton(Tab4o, {
+    Name = "sever ít",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/sever%20%C3%ADt"))()
+end
+})
