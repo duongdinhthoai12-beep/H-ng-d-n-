@@ -1,17 +1,97 @@
+-- Anti Fling + Toggle GUI
+
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
 
--- Tạo RemoteEvent 1 lần ở server
-local killEvent = Instance.new("RemoteEvent")
-killEvent.Name = "KillAllEvent"
-killEvent.Parent = ReplicatedStorage
+local ANTI_ENABLED = true
+local antiConnection
 
--- Xử lý khi client bấm nút
-killEvent.OnServerEvent:Connect(function(sender)
-    -- TODO: kiểm tra quyền nếu cần (chỉ admin, v.v.)
-    for _, plr in ipairs(Players:GetPlayers()) do
-        local char = plr.Character
-        local hum = char and char:FindFirstChildOfClass("Humanoid")
-        if hum then hum.Health = 0 end
-    end
+--------------------------------------------------
+-- GUI
+--------------------------------------------------
+
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "AntiFling_GUI"
+
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0,160,0,100)
+main.Position = UDim2.new(0,20,0.6,-50)
+main.BackgroundColor3 = Color3.fromRGB(25,25,25)
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+
+local toggle = Instance.new("TextButton", main)
+toggle.Size = UDim2.new(1,-20,0,40)
+toggle.Position = UDim2.new(0,10,0,10)
+toggle.Text = "Anti Fling: ON"
+toggle.BackgroundColor3 = Color3.fromRGB(60,60,60)
+toggle.TextColor3 = Color3.new(1,1,1)
+
+local hide = Instance.new("TextButton", main)
+hide.Size = UDim2.new(1,-20,0,30)
+hide.Position = UDim2.new(0,10,0,60)
+hide.Text = "Ẩn GUI"
+hide.BackgroundColor3 = Color3.fromRGB(80,80,80)
+hide.TextColor3 = Color3.new(1,1,1)
+
+local show = Instance.new("TextButton", gui)
+show.Size = UDim2.new(0,40,0,40)
+show.Position = UDim2.new(0,20,0.6,60)
+show.Text = "🛡"
+show.Visible = false
+show.BackgroundColor3 = Color3.fromRGB(50,50,50)
+show.TextColor3 = Color3.new(1,1,1)
+
+--------------------------------------------------
+-- ANTI FLING SYSTEM
+--------------------------------------------------
+
+local function enableAnti()
+    if antiConnection then antiConnection:Disconnect() end
+
+    antiConnection = RunService.Heartbeat:Connect(function()
+        if not ANTI_ENABLED then return end
+
+        local char = LocalPlayer.Character
+        if not char then return end
+
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if not root then return end
+
+        -- Nếu velocity quá lớn → reset
+        if root.AssemblyLinearVelocity.Magnitude > 100 then
+            root.AssemblyLinearVelocity = Vector3.zero
+            root.AssemblyAngularVelocity = Vector3.zero
+        end
+    end)
+end
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(1)
+    enableAnti()
 end)
+
+enableAnti()
+
+--------------------------------------------------
+-- BUTTON EVENTS
+--------------------------------------------------
+
+toggle.MouseButton1Click:Connect(function()
+    ANTI_ENABLED = not ANTI_ENABLED
+    toggle.Text = ANTI_ENABLED and "Anti Fling: ON" or "Anti Fling: OFF"
+end)
+
+hide.MouseButton1Click:Connect(function()
+    main.Visible = false
+    show.Visible = true
+end)
+
+show.MouseButton1Click:Connect(function()
+    main.Visible = true
+    show.Visible = false
+end)
+
+print("Anti Fling Loaded ✅")
