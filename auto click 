@@ -49,7 +49,7 @@ local BtnToggle = Instance.new("TextButton")
 BtnToggle.Size = UDim2.new(1, 0, 0, 50)
 BtnToggle.Position = UDim2.new(0, 0, 0, 0)
 BtnToggle.BackgroundColor3 = blue
-BtnToggle.Text = "▶"
+BtnToggle.Text = "▮▮╏▶"
 BtnToggle.TextColor3 = Color3.new(1, 1, 1)
 BtnToggle.Parent = Bar
 
