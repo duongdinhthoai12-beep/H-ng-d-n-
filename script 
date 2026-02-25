@@ -314,10 +314,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/long191910/all-my-rob
     end
 })
 AddButton(Tab2o,{
-    Name = "invisibility ",
+    Name = "noclip",
     Callback = function()
 
-loadstring(game:HttpGet('https://raw.githubusercontent.com/ymkeee/ArbizHub/refs/heads/main/Invisible.lua'))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/noclip%20"))()
    end
 })
 
