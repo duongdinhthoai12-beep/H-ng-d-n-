@@ -1,26 +1,68 @@
--- ESP PLAYER (Drawing API)
+-- ESP Drawing + Toggle GUI
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Camera = workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 
+local ESP_ENABLED = false
 local ESP = {}
+
+--------------------------------------------------
+-- GUI
+--------------------------------------------------
+
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "ESP_GUI"
+
+local mainFrame = Instance.new("Frame", gui)
+mainFrame.Size = UDim2.new(0,150,0,100)
+mainFrame.Position = UDim2.new(0,20,0.5,-50)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+
+local toggleESP = Instance.new("TextButton", mainFrame)
+toggleESP.Size = UDim2.new(1,-20,0,40)
+toggleESP.Position = UDim2.new(0,10,0,10)
+toggleESP.Text = "ESP: OFF"
+toggleESP.BackgroundColor3 = Color3.fromRGB(60,60,60)
+toggleESP.TextColor3 = Color3.new(1,1,1)
+
+local hideButton = Instance.new("TextButton", mainFrame)
+hideButton.Size = UDim2.new(1,-20,0,30)
+hideButton.Position = UDim2.new(0,10,0,60)
+hideButton.Text = "Ẩn GUI"
+hideButton.BackgroundColor3 = Color3.fromRGB(80,80,80)
+hideButton.TextColor3 = Color3.new(1,1,1)
+
+local showButton = Instance.new("TextButton", gui)
+showButton.Size = UDim2.new(0,40,0,40)
+showButton.Position = UDim2.new(0,20,0.5,60)
+showButton.Text = "📁"
+showButton.Visible = false
+showButton.BackgroundColor3 = Color3.fromRGB(50,50,50)
+showButton.TextColor3 = Color3.new(1,1,1)
+
+--------------------------------------------------
+-- ESP SYSTEM
+--------------------------------------------------
 
 local function createESP(player)
     if player == LocalPlayer then return end
 
     local box = Drawing.new("Square")
-    box.Thickness = 1
     box.Color = Color3.fromRGB(0,255,0)
+    box.Thickness = 1
     box.Filled = false
     box.Visible = false
 
     local text = Drawing.new("Text")
     text.Size = 13
-    text.Color = Color3.fromRGB(255,255,255)
     text.Center = true
     text.Outline = true
+    text.Color = Color3.new(1,1,1)
     text.Visible = false
 
     ESP[player] = {box = box, text = text}
@@ -34,19 +76,24 @@ local function removeESP(player)
     end
 end
 
-for _, player in pairs(Players:GetPlayers()) do
-    createESP(player)
+for _, p in pairs(Players:GetPlayers()) do
+    createESP(p)
 end
 
 Players.PlayerAdded:Connect(createESP)
 Players.PlayerRemoving:Connect(removeESP)
 
 RunService.RenderStepped:Connect(function()
-    for player, drawings in pairs(ESP) do
-        local character = player.Character
-        local box = drawings.box
-        local text = drawings.text
+    if not ESP_ENABLED then
+        for _, draw in pairs(ESP) do
+            draw.box.Visible = false
+            draw.text.Visible = false
+        end
+        return
+    end
 
+    for player, draw in pairs(ESP) do
+        local character = player.Character
         if character and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Humanoid") then
             local root = character.HumanoidRootPart
             local humanoid = character.Humanoid
@@ -55,33 +102,46 @@ RunService.RenderStepped:Connect(function()
                 local pos, onScreen = Camera:WorldToViewportPoint(root.Position)
 
                 if onScreen then
-                    local distance = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")) and
-                        math.floor((LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude) or 0
+                    local distance = 0
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        distance = math.floor((LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude)
+                    end
 
                     local size = math.clamp(3000 / pos.Z, 20, 300)
 
-                    box.Size = Vector2.new(size, size * 1.5)
-                    box.Position = Vector2.new(pos.X - box.Size.X/2, pos.Y - box.Size.Y/2)
-                    box.Visible = true
+                    draw.box.Size = Vector2.new(size, size*1.5)
+                    draw.box.Position = Vector2.new(pos.X - size/2, pos.Y - (size*1.5)/2)
+                    draw.box.Visible = true
 
-                    text.Position = Vector2.new(pos.X, pos.Y - box.Size.Y/2 - 15)
-                    text.Text = player.Name ..
-                        " | HP: "..math.floor(humanoid.Health)..
-                        " | "..distance.."m"
-                    text.Visible = true
+                    draw.text.Position = Vector2.new(pos.X, pos.Y - (size*1.5)/2 - 15)
+                    draw.text.Text = player.Name.." | HP: "..math.floor(humanoid.Health).." | "..distance.."m"
+                    draw.text.Visible = true
                 else
-                    box.Visible = false
-                    text.Visible = false
+                    draw.box.Visible = false
+                    draw.text.Visible = false
                 end
-            else
-                box.Visible = false
-                text.Visible = false
             end
-        else
-            box.Visible = false
-            text.Visible = false
         end
     end
 end)
 
-print("Drawing ESP Loaded ✅")
+--------------------------------------------------
+-- BUTTON EVENTS
+--------------------------------------------------
+
+toggleESP.MouseButton1Click:Connect(function()
+    ESP_ENABLED = not ESP_ENABLED
+    toggleESP.Text = ESP_ENABLED and "ESP: ON" or "ESP: OFF"
+end)
+
+hideButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = false
+    showButton.Visible = true
+end)
+
+showButton.MouseButton1Click:Connect(function()
+    mainFrame.Visible = true
+    showButton.Visible = false
+end)
+
+print("ESP GUI Loaded ✅")
