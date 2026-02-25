@@ -1,0 +1,39 @@
+-- SERVER HOP - TÌM SERVER ĐÔNG NHẤT
+
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+
+local placeId = game.PlaceId
+local currentJob = game.JobId
+
+local servers = {}
+local cursor = ""
+
+repeat
+    local url = "https://games.roblox.com/v1/games/"..placeId.."/servers/Public?sortOrder=Desc&limit=100"
+    if cursor ~= "" then
+        url = url .. "&cursor=" .. cursor
+    end
+
+    local response = game:HttpGet(url)
+    local data = HttpService:JSONDecode(response)
+
+    for _,server in pairs(data.data) do
+        if server.playing < server.maxPlayers and server.id ~= currentJob then
+            table.insert(servers, server)
+        end
+    end
+
+    cursor = data.nextPageCursor
+until cursor == nil
+
+-- Sắp xếp từ đông nhất xuống
+table.sort(servers, function(a,b)
+    return a.playing > b.playing
+end)
+
+-- Teleport vào server đông nhất
+if #servers > 0 then
+    TeleportService:TeleportToPlaceInstance(placeId, servers[1].id, Players.LocalPlayer)
+end
