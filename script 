@@ -297,6 +297,10 @@ AddButton(Tab2o, {
 end
 })
 AddButton(Tab2o, {
+    Name = "tp vị trí die",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/hồi sinh"))()
+AddButton(Tab2o, {
     Name = "auto click",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/auto%20click%20"))()
