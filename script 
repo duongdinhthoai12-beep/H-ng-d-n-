@@ -351,6 +351,13 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep
 end
 })
 AddButton(Tab2o, {
+    Name = "music",
+    Callback = function()
+
+musicloadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-YouTube-Music-Player-72222"))()
+end
+})
+AddButton(Tab2o, {
     Name = "ngưng động thời gian: bật 1.1.1.1",
     Callback = function()
        loadstring(game:HttpGet("https://pastebin.com/raw/pzxK2xx7"))()
