@@ -203,6 +203,13 @@ end
 })
 
 AddButton(Tab2o, {
+    Name = "ESP",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/esp"))()
+    end
+})
+
+AddButton(Tab2o, {
     Name = "tp player",
     Callback = function()
 
