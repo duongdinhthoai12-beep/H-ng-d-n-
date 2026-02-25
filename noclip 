@@ -1,0 +1,173 @@
+local Workspace = game:GetService("Workspace")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local Plr = Players.LocalPlayer
+local Clipon = false
+local Stepped
+
+-- Noclip GUI
+local Noclip = Instance.new("ScreenGui")
+Noclip.Name = "Noclip"
+Noclip.Parent = CoreGui
+Noclip.Enabled = false
+
+local BG = Instance.new("Frame")
+BG.Name = "BG"
+BG.Parent = Noclip
+BG.BackgroundColor3 = Color3.new(0.2, 0.1, 0)
+BG.BorderColor3 = Color3.new(0.6, 0.4, 0)
+BG.BorderSizePixel = 2
+BG.Position = UDim2.new(0.15, 0, 0.82, 0)
+BG.Size = UDim2.new(0, 210, 0, 127)
+BG.Active = true
+BG.Draggable = true
+
+local Title = Instance.new("TextLabel")
+Title.Parent = BG
+Title.BackgroundColor3 = Color3.new(0.5, 0, 0)
+Title.BorderColor3 = Color3.new(0.3, 0, 0)
+Title.BorderSizePixel = 2
+Title.Size = UDim2.new(0, 210, 0, 33)
+Title.Font = Enum.Font.Highway
+Title.Text = "Noclip"
+Title.TextColor3 = Color3.new(1, 0.85, 0)
+Title.TextSize = 30
+Title.TextStrokeColor3 = Color3.new(0, 0, 0)
+Title.TextStrokeTransparency = 0
+
+local Toggle = Instance.new("TextButton")
+Toggle.Parent = BG
+Toggle.BackgroundColor3 = Color3.new(0.5, 0, 0)
+Toggle.BorderColor3 = Color3.new(0.3, 0, 0)
+Toggle.BorderSizePixel = 2
+Toggle.Position = UDim2.new(0.15, 0, 0.37, 0)
+Toggle.Size = UDim2.new(0, 146, 0, 36)
+Toggle.Font = Enum.Font.Highway
+Toggle.Text = "Toggle"
+Toggle.TextColor3 = Color3.new(1, 0.85, 0)
+Toggle.TextSize = 25
+Toggle.TextStrokeColor3 = Color3.new(0, 0, 0)
+Toggle.TextStrokeTransparency = 0
+
+local StatusPF = Instance.new("TextLabel")
+StatusPF.Parent = BG
+StatusPF.BackgroundTransparency = 1
+StatusPF.Position = UDim2.new(0.31, 0, 0.71, 0)
+StatusPF.Size = UDim2.new(0, 56, 0, 20)
+StatusPF.Font = Enum.Font.Highway
+StatusPF.Text = "Status:"
+StatusPF.TextColor3 = Color3.new(1, 0.85, 0)
+StatusPF.TextSize = 20
+StatusPF.TextStrokeColor3 = Color3.new(0, 0, 0)
+StatusPF.TextStrokeTransparency = 0
+
+local Status = Instance.new("TextLabel")
+Status.Parent = BG
+Status.BackgroundTransparency = 1
+Status.Position = UDim2.new(0.58, 0, 0.71, 0)
+Status.Size = UDim2.new(0, 56, 0, 20)
+Status.Font = Enum.Font.Highway
+Status.Text = "off"
+Status.TextColor3 = Color3.new(1, 0, 0)
+Status.TextScaled = true
+Status.TextStrokeColor3 = Color3.new(0, 0, 0)
+Status.TextStrokeTransparency = 0
+
+-- Hide/Show Button
+local HideBtn = Instance.new("TextButton")
+HideBtn.Parent = CoreGui
+HideBtn.Name = "HideButton"
+HideBtn.BackgroundColor3 = Color3.new(0.5, 0, 0)
+HideBtn.BorderColor3 = Color3.new(0.3, 0, 0)
+HideBtn.Position = UDim2.new(0.01, 0, 0.9, 0)
+HideBtn.Size = UDim2.new(0, 70, 0, 30)
+HideBtn.Font = Enum.Font.Highway
+HideBtn.Text = "Hide"
+HideBtn.TextColor3 = Color3.new(1, 0.85, 0)
+HideBtn.TextSize = 22
+HideBtn.TextStrokeColor3 = Color3.new(0, 0, 0)
+HideBtn.TextStrokeTransparency = 0
+HideBtn.Visible = false -- start hidden
+
+HideBtn.MouseButton1Click:Connect(function()
+ if Noclip.Enabled then
+  Noclip.Enabled = false
+  HideBtn.Text = "Show"
+ else
+  Noclip.Enabled = true
+  HideBtn.Text = "Hide"
+ end
+end)
+
+-- Toggle logic
+Toggle.MouseButton1Click:Connect(function()
+ if Status.Text == "off" then
+  Clipon = true
+  Status.Text = "on"
+  Status.TextColor3 = Color3.new(1, 0.85, 0)
+  Stepped = RunService.Stepped:Connect(function()
+   if Clipon then
+    for _, v in pairs(Workspace[Plr.Name]:GetDescendants()) do
+     if v:IsA("BasePart") then
+      v.CanCollide = false
+     end
+    end
+   else
+    if Stepped then Stepped:Disconnect() end
+   end
+  end)
+ else
+  Clipon = false
+  Status.Text = "off"
+  Status.TextColor3 = Color3.new(1, 0, 0)
+ end
+end)
+
+-- Animation GUI
+local AnimationGui = Instance.new("ScreenGui")
+AnimationGui.Name = "CreatorAnimation"
+AnimationGui.Parent = CoreGui
+
+local Text = Instance.new("TextLabel")
+Text.Parent = AnimationGui
+Text.BackgroundTransparency = 1
+Text.Position = UDim2.new(0.35, 0, 0.5, 0)
+Text.Size = UDim2.new(0, 400, 0, 50)
+Text.Font = Enum.Font.Highway
+Text.Text = ""
+Text.TextColor3 = Color3.new(1, 0, 0)
+Text.TextStrokeColor3 = Color3.new(0, 0, 0)
+Text.TextStrokeTransparency = 0
+Text.TextSize = 40
+
+-- Wait 3 seconds before animation
+task.wait(3)
+
+-- Fade-in + upward slide animation
+local message = "Thank you for using"
+local originalY = Text.Position.Y.Scale
+for i = 1, #message do
+ Text.Text = string.sub(message, 1, i)
+ Text.TextTransparency = 1
+ for t = 1, 5 do
+  Text.TextTransparency = 1 - (t / 5)
+  Text.Position = UDim2.new(Text.Position.X.Scale, 0, originalY - (t * 0.003), 0) -- slide up slightly
+  task.wait(0.02)
+ end
+ task.wait(0.01)
+end
+
+-- Fade out + slide up
+for t = 1, 10 do
+ Text.TextTransparency = t / 10
+ Text.Position = UDim2.new(Text.Position.X.Scale, 0, Text.Position.Y.Scale - 0.003, 0)
+ task.wait(0.02)
+end
+
+AnimationGui:Destroy()
+
+-- Show Noclip GUI and ensure Hide button is visible
+Noclip.Enabled = true
+HideBtn.Visible = true
