@@ -184,6 +184,7 @@ end
 local Tab1o = MakeTab({Name = "animation"})
 local Tab2o = MakeTab({Name = "lệnh"})
 local Tab3o = MakeTab({Name = "game riêng"})
+local Tab4o = MakeTab({Name = "sever"})
 
 -- (giữ nguyên phần AddButton... của bạn ở dưới đây)
 
@@ -509,5 +510,20 @@ AddButton(Tab3o, {
     Name = "auto shoot - mm2",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Free-Keyless-Script/MurderMystery2/refs/heads/main/Main.lua"))()
+end
+})
+--Tab4o
+
+AddButton(Tab4o, {
+    Name = "sever đông",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/sever%20%C4%91%C3%B4ng%20"))()
+end
+})
+
+AddButton(Tab4o, {
+    Name = "sever ít",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/sever%20%C3%ADt"))()
 end
 })
