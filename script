@@ -309,7 +309,12 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/h%E1%BB%93i%20sinh"))()
 end
 })
-
+AddButton(Tab2o, {
+    Name = "anti fling",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/Kill"))()
+    end
+})
 AddButton(Tab2o, {
     Name = "auto click",
     Callback = function()
