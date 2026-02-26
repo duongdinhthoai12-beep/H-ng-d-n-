@@ -180,7 +180,12 @@ AddButton(Tab2o,{
 loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/noclip%20"))()
    end
 })
-
+AddButton(Tab2o, {
+    Name = "NoClip v2",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/noclip%20v2"))()
+    end
+})
 AddButton(Tab2o,{
     Name = "invisibility 1.1.1.1",
     Callback = function()
