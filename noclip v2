@@ -1,0 +1,67 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local noclip = false
+
+-- --- GIAO DIỆN (UI) ---
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+screenGui.Name = "NoclipSystem"
+
+local mainFrame = Instance.new("Frame", screenGui)
+mainFrame.Size = UDim2.new(0, 150, 0, 80)
+mainFrame.Position = UDim2.new(0.5, -75, 0.5, -40)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.Active = true
+mainFrame.Draggable = true -- Có thể di chuyển nút
+
+local noclipBtn = Instance.new("TextButton", mainFrame)
+noclipBtn.Size = UDim2.new(0.9, 0, 0.5, 0)
+noclipBtn.Position = UDim2.new(0.05, 0, 0.4, 0)
+noclipBtn.Text = "Noclip: OFF"
+noclipBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+noclipBtn.TextColor3 = Color3.new(1, 1, 1)
+
+local minBtn = Instance.new("TextButton", mainFrame)
+minBtn.Size = UDim2.new(0, 25, 0, 25)
+minBtn.Position = UDim2.new(1, -30, 0, 5)
+minBtn.Text = "-"
+
+-- --- LOGIC XỬ LÝ ---
+
+-- Hàm ép trạng thái va chạm
+local function setCollide(char, state)
+    for _, part in pairs(char:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = state
+        end
+    end
+end
+
+noclipBtn.MouseButton1Click:Connect(function()
+    noclip = not noclip
+    if noclip then
+        noclipBtn.Text = "Noclip: ON"
+        noclipBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+    else
+        noclipBtn.Text = "Noclip: OFF"
+        noclipBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+        -- Khi tắt, lập tức bật lại va chạm cho nhân vật
+        if player.Character then
+            setCollide(player.Character, true)
+        end
+    end
+end)
+
+-- Vòng lặp quan trọng: Chỉ tắt va chạm khi biến noclip là true
+RunService.Stepped:Connect(function()
+    if noclip and player.Character then
+        setCollide(player.Character, false)
+    end
+end)
+
+-- Nút rút gọn
+minBtn.MouseButton1Click:Connect(function()
+    noclipBtn.Visible = not noclipBtn.Visible
+    mainFrame.Size = noclipBtn.Visible and UDim2.new(0, 150, 0, 80) or UDim2.new(0, 150, 0, 35)
+    minBtn.Text = noclipBtn.Visible and "-" or "+"
+end)
