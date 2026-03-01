@@ -161,7 +161,7 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREECAM-scr
     end
 })
 AddButton(Tab2o, {
-    Name = "xoá bóng tối(click)",
+    Name = "light",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/xo%C3%A1%20b%C3%B3ng%20t%E1%BB%91i%20"))()
 end
