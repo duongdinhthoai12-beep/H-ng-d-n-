@@ -1,86 +1,109 @@
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
+-- Light GUI (No Ball)
 
-local player = Players.LocalPlayer
+local player = game.Players.LocalPlayer
 
--- --- Lighting tweak (client-side) ---
-Lighting.FogStart = 0
-Lighting.FogEnd = 1e9
-Lighting.Brightness = 3
-Lighting.GlobalShadows = false
-Lighting.ClockTime = 12
-Lighting.ExposureCompensation = 1
+--------------------------------------------------
+-- GUI
+--------------------------------------------------
 
--- Disable certain effects if present
-for _,v in ipairs(Lighting:GetChildren()) do
-    if v:IsA("Atmosphere") or v:IsA("BloomEffect")
-    or v:IsA("ColorCorrectionEffect") or v:IsA("BlurEffect")
-    or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
-        pcall(function() v.Enabled = false end)
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "Light_GUI"
+
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0,200,0,180)
+main.Position = UDim2.new(0,30,0.4,0)
+main.BackgroundColor3 = Color3.fromRGB(30,30,30)
+main.Active = true
+main.Draggable = true
+
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0,30)
+title.Text = "Light Creator"
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.new(1,1,1)
+
+local sizeBox = Instance.new("TextBox", main)
+sizeBox.Size = UDim2.new(1,-20,0,35)
+sizeBox.Position = UDim2.new(0,10,0,40)
+sizeBox.PlaceholderText = "Kích cỡ (1-100)"
+sizeBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+sizeBox.TextColor3 = Color3.new(1,1,1)
+
+local brightBox = Instance.new("TextBox", main)
+brightBox.Size = UDim2.new(1,-20,0,35)
+brightBox.Position = UDim2.new(0,10,0,80)
+brightBox.PlaceholderText = "Độ sáng (1-5)"
+brightBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+brightBox.TextColor3 = Color3.new(1,1,1)
+
+local createBtn = Instance.new("TextButton", main)
+createBtn.Size = UDim2.new(1,-20,0,35)
+createBtn.Position = UDim2.new(0,10,0,120)
+createBtn.Text = "Tạo Light"
+createBtn.BackgroundColor3 = Color3.fromRGB(70,70,70)
+createBtn.TextColor3 = Color3.new(1,1,1)
+
+-- Nút rút gọn
+local minimize = Instance.new("TextButton", main)
+minimize.Size = UDim2.new(0,25,0,25)
+minimize.Position = UDim2.new(1,-30,0,5)
+minimize.Text = "-"
+minimize.BackgroundColor3 = Color3.fromRGB(80,80,80)
+minimize.TextColor3 = Color3.new(1,1,1)
+
+local restore = Instance.new("TextButton", gui)
+restore.Size = UDim2.new(0,40,0,40)
+restore.Position = UDim2.new(0,30,0.4,200)
+restore.Text = "💡"
+restore.Visible = false
+restore.BackgroundColor3 = Color3.fromRGB(60,60,60)
+restore.TextColor3 = Color3.new(1,1,1)
+
+--------------------------------------------------
+-- LIGHT SYSTEM
+--------------------------------------------------
+
+local currentLight
+
+createBtn.MouseButton1Click:Connect(function()
+
+    local size = tonumber(sizeBox.Text)
+    local brightness = tonumber(brightBox.Text)
+
+    if not size or size < 1 or size > 100 then return end
+    if not brightness or brightness < 1 or brightness > 5 then return end
+
+    local char = player.Character
+    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
+    local root = char.HumanoidRootPart
+
+    -- Xóa light cũ nếu có
+    if currentLight then
+        currentLight:Destroy()
     end
-end
 
--- (Optional) add a subtle SunRays for nicer look
-local sr = Lighting:FindFirstChild("__STAR179_SunRays")
-if not sr then
-    sr = Instance.new("SunRaysEffect")
-    sr.Name = "__STAR179_SunRays"
-    sr.Intensity = 0.08
-    sr.Parent = Lighting
-end
+    local light = Instance.new("PointLight")
+    light.Range = size
+    light.Brightness = brightness
+    light.Parent = root
 
--- --- GUI: hiện tên trong 3 giây ---
-local function showNameFor3s(text)
-    -- tạo ScreenGui
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "Star179_ShowName"
-    gui.ResetOnSpawn = false
-    gui.IgnoreGuiInset = true
-    gui.Parent = player:WaitForChild("PlayerGui")
+    currentLight = light
 
-    -- nền trắng mảnh (dùng để đặt nút/thanh nếu bạn muốn)
-    local bar = Instance.new("Frame")
-    bar.Name = "TopBar"
-    bar.Size = UDim2.new(0.5, 0, 0, 36)
-    bar.Position = UDim2.new(0.5, 0, 0.05, 0)
-    bar.AnchorPoint = Vector2.new(0.5, 0)
-    bar.BackgroundColor3 = Color3.fromRGB(255,255,255)
-    bar.BackgroundTransparency = 0 -- trắng
-    bar.ClipsDescendants = true
-    bar.Parent = gui
+end)
 
-    local txt = Instance.new("TextLabel")
-    txt.Size = UDim2.new(1, -10, 1, -6)
-    txt.Position = UDim2.new(0, 5, 0, 3)
-    txt.AnchorPoint = Vector2.new(0, 0)
-    txt.BackgroundTransparency = 1
-    txt.Font = Enum.Font.GothamBold
-    txt.TextScaled = true
-    txt.Text = text
-    txt.TextColor3 = Color3.fromRGB(0,0,0)
-    txt.TextStrokeTransparency = 0.8
-    txt.Parent = bar
+--------------------------------------------------
+-- MINIMIZE
+--------------------------------------------------
 
-    -- Tween: hiện -> giữ -> mờ
-    local tweenInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-    bar.BackgroundTransparency = 1
-    txt.TextTransparency = 1
+minimize.MouseButton1Click:Connect(function()
+    main.Visible = false
+    restore.Visible = true
+end)
 
-    -- appear
-    TweenService:Create(bar, tweenInfo, {BackgroundTransparency = 0}):Play()
-    TweenService:Create(txt, tweenInfo, {TextTransparency = 0}):Play()
+restore.MouseButton1Click:Connect(function()
+    main.Visible = true
+    restore.Visible = false
+end)
 
-    -- chờ 3s (giữ)
-    task.delay(3, function()
-        -- fade out
-        local outTween = TweenService:Create(bar, TweenInfo.new(0.5), {BackgroundTransparency = 1})
-        local outTween2 = TweenService:Create(txt, TweenInfo.new(0.5), {TextTransparency = 1})
-        outTween:Play(); outTween2:Play()
-        outTween.Completed:Wait()
-        pcall(function() gui:Destroy() end)
-    end)
-end
-
--- gọi hiển thị tên
-showNameFor3s("by : STAR★179")
+print("Light GUI Loaded ✅")
