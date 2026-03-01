@@ -70,8 +70,8 @@ createBtn.MouseButton1Click:Connect(function()
     local size = tonumber(sizeBox.Text)
     local brightness = tonumber(brightBox.Text)
 
-    if not size or size < 1 or size > 100 then return end
-    if not brightness or brightness < 1 or brightness > 5 then return end
+    if not size or size < 1 or size > 150 then return end
+    if not brightness or brightness < 1 or brightness > 10 then return end
 
     local char = player.Character
     if not char or not char:FindFirstChild("HumanoidRootPart") then return end
