@@ -391,6 +391,12 @@ AddButton(Tab3o, {
 end
 })
 AddButton(Tab3o, {
+    Name = "Silent-Assassin",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/waidaito/Silent-Assassin-/main/silent-assassin2"))()
+end
+})
+AddButton(Tab3o, {
     Name = "chọn nhân vật - mm2",
     Callback = function()
         loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/MM2%20Duels'))()
