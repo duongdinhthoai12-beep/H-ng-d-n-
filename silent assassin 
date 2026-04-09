@@ -1,0 +1,142 @@
+SYSTEM BY ANHTHW ROBLOX 
+    LINK GET KEY: https://taplayma.com/link/keyscript
+    KEY: AnhThwRoblox:1611
+]]
+
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local UIGradient = Instance.new("UIGradient")
+local Title = Instance.new("TextLabel")
+local KeyInput = Instance.new("TextBox")
+local CopyBtn = Instance.new("TextButton")
+local SubmitBtn = Instance.new("TextButton")
+
+-- Cấu hình ScreenGui
+ScreenGui.Parent = game.CoreGui
+ScreenGui.Name = "AnhThw_Gold_Notification_System"
+
+-- Hàm tạo THÔNG BÁO CHỮ VÀNG NHẸ RÕ NÉT (Giữa màn hình)
+local function NotifyYellow(text)
+    local NotifyGui = Instance.new("ScreenGui")
+    NotifyGui.Parent = game.CoreGui
+    
+    local Label = Instance.new("TextLabel")
+    Label.Parent = NotifyGui
+    Label.Size = UDim2.new(0, 500, 0, 50)
+    Label.Position = UDim2.new(0.5, -250, 0.25, 0) -- Hiện ở phía trên giữa màn hình
+    Label.BackgroundTransparency = 1
+    Label.TextColor3 = Color3.fromRGB(255, 255, 180) -- MÀU VÀNG NHẸ (Soft Yellow)
+    Label.Text = text
+    Label.Font = Enum.Font.GothamBold -- Phông chữ rõ nét nhất
+    Label.TextSize = 22
+    Label.TextStrokeTransparency = 0.3 -- Làm chữ nổi bật hẳn lên
+    Label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    
+    -- Hiệu ứng chữ mờ dần sau 3 giây
+    task.spawn(function()
+        task.wait(3.5)
+        for i = 0, 1, 0.1 do
+            Label.TextTransparency = i
+            Label.TextStrokeTransparency = 0.3 + (i * 0.7)
+            task.wait(0.05)
+        end
+        NotifyGui:Destroy()
+    end)
+end
+
+-- Khung Menu Chính (Giao diện Dark Neon)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Position = UDim2.new(0.5, -140, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 280, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.Parent = MainFrame
+
+-- Viền RGB đổi màu
+UIStroke.Parent = MainFrame
+UIStroke.Thickness = 3
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+UIStroke.Color = Color3.fromRGB(255, 255, 255)
+
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)), -- Vàng Gold
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)), -- Cyan
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(170, 0, 255)) -- Tím
+}
+UIGradient.Parent = UIStroke
+
+-- Tiêu đề
+Title.Parent = MainFrame
+Title.Text = "VIP SYSTEM"
+Title.Font = Enum.Font.GothamBold
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 18
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.BackgroundTransparency = 1
+
+-- Ô nhập Key
+KeyInput.Parent = MainFrame
+KeyInput.PlaceholderText = "Dán Key tại đây..."
+KeyInput.Text = ""
+KeyInput.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+KeyInput.Position = UDim2.new(0.1, 0, 0.35, 0)
+KeyInput.Size = UDim2.new(0.8, 0, 0, 35)
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.Font = Enum.Font.GothamSemibold
+Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
+
+-- Nút Sao chép Link
+CopyBtn.Parent = MainFrame
+CopyBtn.Text = "SAO CHÉP LINK GET KEY"
+CopyBtn.Font = Enum.Font.GothamBold
+CopyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+CopyBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
+CopyBtn.Position = UDim2.new(0.1, 0, 0.58, 5)
+CopyBtn.Size = UDim2.new(0.8, 0, 0, 25)
+Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0, 5)
+
+-- Nút Kích hoạt Script
+SubmitBtn.Parent = MainFrame
+SubmitBtn.Text = "KÍCH HOẠT SCRIPT"
+SubmitBtn.Font = Enum.Font.GothamBold
+SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+SubmitBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+SubmitBtn.Position = UDim2.new(0.1, 0, 0.78, 10)
+SubmitBtn.Size = UDim2.new(0.8, 0, 0, 35)
+Instance.new("UICorner", SubmitBtn).CornerRadius = UDim.new(0, 10)
+
+--- CHỨC NĂNG XỬ LÝ ---
+
+    
+    task.wait(2)
+    CopyBtn.Text = "SAO CHÉP LINK GET KEY"
+end)
+
+-- 2. Kiểm tra Key và Chạy Cath Lab
+SubmitBtn.MouseButton1Click:Connect(function()
+    local userKey = KeyInput.Text
+    local correctKey = ""
+    
+    if userKey == correctKey then
+        SubmitBtn.Text = "XÁC MINH THÀNH CÔNG!"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        task.wait(1)
+        ScreenGui:Destroy()
+        -- Load script Cath Lab (realcath)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/realcath/lab/refs/heads/main/src/main/loader.lua"))()
+    else
+        SubmitBtn.Text = "SAI KEY! KIỂM TRA LẠI"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+        SubmitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        task.wait(2)
+        SubmitBtn.Text = "KÍCH HOẠT SCRIPT"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+        SubmitBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+    end
+end)
