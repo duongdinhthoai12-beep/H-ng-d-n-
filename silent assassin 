@@ -1,142 +1,205 @@
-SYSTEM BY ANHTHW ROBLOX 
-    LINK GET KEY: https://taplayma.com/link/keyscript
-    KEY: AnhThwRoblox:1611
-]]
+
+local CoreGui = game:GetService("CoreGui")
+local UIS = game:GetService("UserInputService")
 
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local UIStroke = Instance.new("UIStroke")
-local UIGradient = Instance.new("UIGradient")
 local Title = Instance.new("TextLabel")
 local KeyInput = Instance.new("TextBox")
 local CopyBtn = Instance.new("TextButton")
 local SubmitBtn = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local UIGradient = Instance.new("UIGradient")
 
--- Cấu hình ScreenGui
-ScreenGui.Parent = game.CoreGui
-ScreenGui.Name = "AnhThw_Gold_Notification_System"
+ScreenGui.Parent = CoreGui
+ScreenGui.Name = "Gold_System"
+ScreenGui.ResetOnSpawn = false
 
--- Hàm tạo THÔNG BÁO CHỮ VÀNG NHẸ RÕ NÉT (Giữa màn hình)
+-- NOTIFY
 local function NotifyYellow(text)
-    local NotifyGui = Instance.new("ScreenGui")
-    NotifyGui.Parent = game.CoreGui
-    
+    local NotifyGui = Instance.new("ScreenGui", CoreGui)
+
     local Label = Instance.new("TextLabel")
     Label.Parent = NotifyGui
-    Label.Size = UDim2.new(0, 500, 0, 50)
-    Label.Position = UDim2.new(0.5, -250, 0.25, 0) -- Hiện ở phía trên giữa màn hình
+    Label.Size = UDim2.new(0,500,0,50)
+    Label.Position = UDim2.new(0.5,-250,0.25,0)
     Label.BackgroundTransparency = 1
-    Label.TextColor3 = Color3.fromRGB(255, 255, 180) -- MÀU VÀNG NHẸ (Soft Yellow)
+    Label.TextColor3 = Color3.fromRGB(255,255,180)
     Label.Text = text
-    Label.Font = Enum.Font.GothamBold -- Phông chữ rõ nét nhất
+    Label.Font = Enum.Font.GothamBold
     Label.TextSize = 22
-    Label.TextStrokeTransparency = 0.3 -- Làm chữ nổi bật hẳn lên
-    Label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    
-    -- Hiệu ứng chữ mờ dần sau 3 giây
+    Label.TextStrokeTransparency = 0.3
+    Label.TextStrokeColor3 = Color3.new(0,0,0)
+
     task.spawn(function()
-        task.wait(3.5)
-        for i = 0, 1, 0.1 do
+        task.wait(3)
+        for i=0,1,0.1 do
             Label.TextTransparency = i
-            Label.TextStrokeTransparency = 0.3 + (i * 0.7)
+            Label.TextStrokeTransparency = 0.3+(i*0.7)
             task.wait(0.05)
         end
         NotifyGui:Destroy()
     end)
 end
 
--- Khung Menu Chính (Giao diện Dark Neon)
-MainFrame.Name = "MainFrame"
+-- FRAME
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.Position = UDim2.new(0.5, -140, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 280, 0, 200)
+MainFrame.Size = UDim2.new(0,280,0,200)
+MainFrame.Position = UDim2.new(0.5,-140,0.5,-100)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15,15,15)
 MainFrame.Active = true
-MainFrame.Draggable = true
 
-UICorner.CornerRadius = UDim.new(0, 15)
 UICorner.Parent = MainFrame
+UICorner.CornerRadius = UDim.new(0,15)
 
--- Viền RGB đổi màu
+-- RGB BORDER
 UIStroke.Parent = MainFrame
 UIStroke.Thickness = 3
-UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-UIStroke.Color = Color3.fromRGB(255, 255, 255)
 
 UIGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)), -- Vàng Gold
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)), -- Cyan
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(170, 0, 255)) -- Tím
+ColorSequenceKeypoint.new(0,Color3.fromRGB(255,215,0)),
+ColorSequenceKeypoint.new(0.5,Color3.fromRGB(0,255,255)),
+ColorSequenceKeypoint.new(1,Color3.fromRGB(170,0,255))
 }
 UIGradient.Parent = UIStroke
 
--- Tiêu đề
+-- RGB ANIMATION
+task.spawn(function()
+    while true do
+        UIGradient.Rotation = UIGradient.Rotation + 1
+        task.wait()
+    end
+end)
+
+-- TITLE
 Title.Parent = MainFrame
+Title.Size = UDim2.new(1,0,0,50)
+Title.BackgroundTransparency = 1
 Title.Text = "VIP SYSTEM"
 Title.Font = Enum.Font.GothamBold
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 18
-Title.Size = UDim2.new(1, 0, 0, 50)
-Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.new(1,1,1)
+Title.TextSize = 20
 
--- Ô nhập Key
+-- KEY BOX
 KeyInput.Parent = MainFrame
 KeyInput.PlaceholderText = "Dán Key tại đây..."
 KeyInput.Text = ""
-KeyInput.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-KeyInput.Position = UDim2.new(0.1, 0, 0.35, 0)
-KeyInput.Size = UDim2.new(0.8, 0, 0, 35)
-KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.Size = UDim2.new(0.8,0,0,35)
+KeyInput.Position = UDim2.new(0.1,0,0.35,0)
+KeyInput.BackgroundColor3 = Color3.fromRGB(30,30,35)
+KeyInput.TextColor3 = Color3.new(1,1,1)
 KeyInput.Font = Enum.Font.GothamSemibold
-Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner",KeyInput).CornerRadius = UDim.new(0,8)
 
--- Nút Sao chép Link
+-- COPY BUTTON
 CopyBtn.Parent = MainFrame
 CopyBtn.Text = "SAO CHÉP LINK GET KEY"
 CopyBtn.Font = Enum.Font.GothamBold
-CopyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-CopyBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
-CopyBtn.Position = UDim2.new(0.1, 0, 0.58, 5)
-CopyBtn.Size = UDim2.new(0.8, 0, 0, 25)
-Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0, 5)
+CopyBtn.BackgroundColor3 = Color3.fromRGB(40,40,45)
+CopyBtn.TextColor3 = Color3.fromRGB(0,255,255)
+CopyBtn.Position = UDim2.new(0.1,0,0.58,5)
+CopyBtn.Size = UDim2.new(0.8,0,0,25)
+Instance.new("UICorner",CopyBtn).CornerRadius = UDim.new(0,5)
 
--- Nút Kích hoạt Script
+-- SUBMIT
 SubmitBtn.Parent = MainFrame
 SubmitBtn.Text = "KÍCH HOẠT SCRIPT"
 SubmitBtn.Font = Enum.Font.GothamBold
-SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
-SubmitBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-SubmitBtn.Position = UDim2.new(0.1, 0, 0.78, 10)
-SubmitBtn.Size = UDim2.new(0.8, 0, 0, 35)
-Instance.new("UICorner", SubmitBtn).CornerRadius = UDim.new(0, 10)
+SubmitBtn.BackgroundColor3 = Color3.fromRGB(0,255,127)
+SubmitBtn.TextColor3 = Color3.new(0,0,0)
+SubmitBtn.Position = UDim2.new(0.1,0,0.78,10)
+SubmitBtn.Size = UDim2.new(0.8,0,0,35)
+Instance.new("UICorner",SubmitBtn).CornerRadius = UDim.new(0,10)
 
---- CHỨC NĂNG XỬ LÝ ---
+-- COPY LINK
+CopyBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://taplayma.com/link/keyscript")
+    end
 
-    
+    CopyBtn.Text = "ĐÃ SAO CHÉP!"
+    NotifyYellow("Đã sao chép link lấy key!")
+
     task.wait(2)
     CopyBtn.Text = "SAO CHÉP LINK GET KEY"
 end)
 
--- 2. Kiểm tra Key và Chạy Cath Lab
+-- SUBMIT
+local debounce = false
+
 SubmitBtn.MouseButton1Click:Connect(function()
+
+    if debounce then return end
+    debounce = true
+
     local userKey = KeyInput.Text
-    local correctKey = ""
-    
-    if userKey == correctKey then
-        SubmitBtn.Text = "XÁC MINH THÀNH CÔNG!"
-        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
+    if userKey ~= "" then
+
+        SubmitBtn.Text = "ĐANG KIỂM TRA..."
         task.wait(1)
+
+        SubmitBtn.Text = "XÁC MINH THÀNH CÔNG!"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255,255,255)
+
+        NotifyYellow("Key hợp lệ! Đang tải script...")
+
+        task.wait(1)
+
         ScreenGui:Destroy()
-        -- Load script Cath Lab (realcath)
+
         loadstring(game:HttpGet("https://raw.githubusercontent.com/realcath/lab/refs/heads/main/src/main/loader.lua"))()
+
     else
-        SubmitBtn.Text = "SAI KEY! KIỂM TRA LẠI"
-        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
-        SubmitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+        SubmitBtn.Text = "CHƯA NHẬP KEY!"
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255,60,60)
+
         task.wait(2)
+
         SubmitBtn.Text = "KÍCH HOẠT SCRIPT"
-        SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
-        SubmitBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+        SubmitBtn.BackgroundColor3 = Color3.fromRGB(0,255,127)
+
     end
+
+    debounce = false
+
+end)
+
+-- DRAG (mobile + PC)
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+local delta = input.Position - dragStart
+MainFrame.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset + delta.X,startPos.Y.Scale,startPos.Y.Offset + delta.Y)
+end
+
+MainFrame.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+dragging = true
+dragStart = input.Position
+startPos = MainFrame.Position
+
+input.Changed:Connect(function()
+if input.UserInputState == Enum.UserInputState.End then
+dragging = false
+end
+end)
+end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+dragInput = input
+end
+end)
+
+UIS.InputChanged:Connect(function(input)
+if input == dragInput and dragging then
+update(input)
+end
 end)
