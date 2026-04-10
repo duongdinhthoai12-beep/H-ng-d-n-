@@ -191,7 +191,7 @@ RunService.RenderStepped:Connect(function()
                             {
                                 hitboxOffset = Vector3.new(0,0,-1),
                                 hitboxSize = Vector3.new(60,60,60),
-                                damage = 9999999,
+                                damage = 999999,
                                 tool = tool,
                                 attackCooldown = -0.1
                             },
