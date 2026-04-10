@@ -1,14 +1,30 @@
 -- SERVICES
 local Players = game:GetService("Players")
-local RS = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
-
+local HttpService = game:GetService("HttpService")
 local LP = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
 
 -- DELETE OLD GUI
-if game.CoreGui:FindFirstChild("STAR★Hub") then
+if game.CoreGui:FindFirstChild("STARHub") then
     game.CoreGui.STARHub:Destroy()
+end
+
+-- SAVE SYSTEM
+local SaveFile = "starhub_settings.json"
+
+local Settings = {
+    AutoHit = false,
+    ESP = false,
+    AutoChest = false
+}
+
+if isfile and isfile(SaveFile) then
+    Settings = HttpService:JSONDecode(readfile(SaveFile))
+end
+
+local function Save()
+    if writefile then
+        writefile(SaveFile,HttpService:JSONEncode(Settings))
+    end
 end
 
 -- GUI
@@ -16,220 +32,139 @@ local gui = Instance.new("ScreenGui")
 gui.Name = "STARHub"
 gui.Parent = game.CoreGui
 
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0,200,0,170)
-frame.Position = UDim2.new(0.5,-100,0.5,-85)
-frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
-frame.Active = true
-frame.Draggable = true
+-- MAIN WINDOW
+local main = Instance.new("Frame",gui)
+main.Size = UDim2.new(0,420,0,260)
+main.Position = UDim2.new(0.5,-210,0.5,-130)
+main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+main.Active = true
+main.Draggable = true
 
-local title = Instance.new("TextLabel", frame)
+-- TITLE
+local title = Instance.new("TextLabel",main)
 title.Size = UDim2.new(1,0,0,30)
-title.BackgroundTransparency = 1
-title.Text = "STAR HUB"
+title.BackgroundColor3 = Color3.fromRGB(15,15,15)
+title.Text = "⭐ STAR HUB"
 title.TextColor3 = Color3.new(1,1,1)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 
--- STATES
-local AutoHit = false
-local AutoChest = false
-local ESPOn = false
+-- TAB BUTTONS
+local combatTab = Instance.new("TextButton",main)
+combatTab.Size = UDim2.new(0,120,0,30)
+combatTab.Position = UDim2.new(0,0,0,30)
+combatTab.Text = "Combat"
 
--- BUTTON AUTO HIT
-local hitBtn = Instance.new("TextButton", frame)
-hitBtn.Size = UDim2.new(1,-20,0,30)
-hitBtn.Position = UDim2.new(0,10,0,35)
-hitBtn.Text = "Auto Hit : OFF"
-hitBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
-hitBtn.TextColor3 = Color3.new(1,1,1)
+local visualTab = Instance.new("TextButton",main)
+visualTab.Size = UDim2.new(0,120,0,30)
+visualTab.Position = UDim2.new(0,120,0,30)
+visualTab.Text = "Visual"
 
-hitBtn.MouseButton1Click:Connect(function()
-    AutoHit = not AutoHit
-    hitBtn.Text = "Auto Hit : "..(AutoHit and "ON" or "OFF")
+local miscTab = Instance.new("TextButton",main)
+miscTab.Size = UDim2.new(0,120,0,30)
+miscTab.Position = UDim2.new(0,240,0,30)
+miscTab.Text = "Misc"
+
+-- PAGES
+local combatPage = Instance.new("Frame",main)
+combatPage.Size = UDim2.new(1,0,1,-60)
+combatPage.Position = UDim2.new(0,0,0,60)
+combatPage.BackgroundTransparency = 1
+
+local visualPage = combatPage:Clone()
+visualPage.Parent = main
+visualPage.Visible = false
+
+local miscPage = combatPage:Clone()
+miscPage.Parent = main
+miscPage.Visible = false
+
+-- TAB SWITCH
+combatTab.MouseButton1Click:Connect(function()
+    combatPage.Visible = true
+    visualPage.Visible = false
+    miscPage.Visible = false
 end)
 
--- BUTTON CHEST
-local chestBtn = Instance.new("TextButton", frame)
-chestBtn.Size = UDim2.new(1,-20,0,30)
-chestBtn.Position = UDim2.new(0,10,0,70)
-chestBtn.Text = "Divine Chest : OFF"
-chestBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
-chestBtn.TextColor3 = Color3.new(1,1,1)
-
-chestBtn.MouseButton1Click:Connect(function()
-    AutoChest = not AutoChest
-    chestBtn.Text = "Divine Chest : "..(AutoChest and "ON" or "OFF")
+visualTab.MouseButton1Click:Connect(function()
+    combatPage.Visible = false
+    visualPage.Visible = true
+    miscPage.Visible = false
 end)
 
--- BUTTON ESP
-local espBtn = Instance.new("TextButton", frame)
-espBtn.Size = UDim2.new(1,-20,0,30)
-espBtn.Position = UDim2.new(0,10,0,105)
-espBtn.Text = "ESP : OFF"
-espBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
-espBtn.TextColor3 = Color3.new(1,1,1)
-
-espBtn.MouseButton1Click:Connect(function()
-    ESPOn = not ESPOn
-    espBtn.Text = "ESP : "..(ESPOn and "ON" or "OFF")
+miscTab.MouseButton1Click:Connect(function()
+    combatPage.Visible = false
+    visualPage.Visible = false
+    miscPage.Visible = true
 end)
 
--- AUTO TOOL
-local function GetTool()
-    local char = LP.Character
-    if not char then return nil end
+-- TOGGLE BUTTON FUNCTION
+local function CreateToggle(parent,text,default,callback)
 
-    local tool = char:FindFirstChildOfClass("Tool")
+    local state = default
 
-    if not tool then
-        local bp = LP.Backpack:FindFirstChildOfClass("Tool")
-        if bp then
-            bp.Parent = char
-            tool = bp
-        end
-    end
+    local btn = Instance.new("TextButton",parent)
+    btn.Size = UDim2.new(0,180,0,35)
+    btn.Text = text.." : "..(state and "ON" or "OFF")
+    btn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btn.TextColor3 = Color3.new(1,1,1)
 
-    return tool
+    btn.MouseButton1Click:Connect(function()
+
+        state = not state
+        btn.Text = text.." : "..(state and "ON" or "OFF")
+
+        callback(state)
+
+        Save()
+
+    end)
+
+    return btn
 end
 
--- ESP SYSTEM
-local ESP = {}
-
-local function createESP(plr)
-
-    local box = Drawing.new("Square")
-    box.Thickness = 1
-    box.Filled = false
-    box.Color = Color3.new(1,1,1)
-    box.Visible = false
-
-    local name = Drawing.new("Text")
-    name.Size = 13
-    name.Center = true
-    name.Outline = true
-    name.Color = Color3.new(1,1,1)
-    name.Visible = false
-
-    ESP[plr] = {box = box, name = name}
-end
-
-for _,p in pairs(Players:GetPlayers()) do
-    if p ~= LP then
-        createESP(p)
+-- COMBAT BUTTONS
+local autoHitBtn = CreateToggle(
+    combatPage,
+    "Auto Hit",
+    Settings.AutoHit,
+    function(v)
+        Settings.AutoHit = v
     end
-end
+)
 
-Players.PlayerAdded:Connect(function(p)
-    if p ~= LP then
-        createESP(p)
+autoHitBtn.Position = UDim2.new(0,20,0,20)
+
+-- VISUAL BUTTONS
+local espBtn = CreateToggle(
+    visualPage,
+    "ESP",
+    Settings.ESP,
+    function(v)
+        Settings.ESP = v
     end
-end)
+)
 
--- TELEPORT DETECT
-local lastPos = {}
+espBtn.Position = UDim2.new(0,20,0,20)
 
--- MAIN LOOP
-RunService.RenderStepped:Connect(function()
-
-    if AutoHit and LP.Character then
-
-        local myHRP = LP.Character:FindFirstChild("HumanoidRootPart")
-        local tool = GetTool()
-
-        if myHRP and tool then
-
-            for _,plr in pairs(Players:GetPlayers()) do
-                if plr ~= LP and plr.Character then
-
-                    local enemyHRP = plr.Character:FindFirstChild("HumanoidRootPart")
-
-                    if enemyHRP then
-
-                        local pos = enemyHRP.Position
-                        local old = lastPos[plr]
-
-                        if old then
-                            local dist = (pos - old).Magnitude
-
-                            -- teleport detect
-                            if dist > 40 then
-                                task.wait(0.1)
-                            end
-                        end
-
-                        lastPos[plr] = pos
-
-                        local dir = (pos - myHRP.Position).Unit
-
-                        RS.Events.GameRemoteFunction:InvokeServer(
-                            "AttemptWeaponHit",
-                            {
-                                hitboxOffset = Vector3.new(0,0,-1),
-                                hitboxSize = Vector3.new(60,60,60),
-                                damage = 123456789,
-                                tool = tool,
-                                attackCooldown = -0.1
-                            },
-                            {{
-                                enemyModel = plr.Character,
-                                origin = myHRP.Position,
-                                direction = dir
-                            }}
-                        )
-
-                    end
-                end
-            end
-        end
+-- MISC BUTTONS
+local chestBtn = CreateToggle(
+    miscPage,
+    "Divine Chest",
+    Settings.AutoChest,
+    function(v)
+        Settings.AutoChest = v
     end
+)
 
-    -- AUTO CHEST
-    if AutoChest then
-        RS.Events.GameRemoteFunction:InvokeServer("AttemptRollGachaChest","Divine")
-    end
+chestBtn.Position = UDim2.new(0,20,0,20)
 
-    -- ESP
-    for plr,esp in pairs(ESP) do
+-- HIDE GUI BUTTON
+local hide = Instance.new("TextButton",gui)
+hide.Size = UDim2.new(0,60,0,25)
+hide.Position = UDim2.new(0,10,0.5,0)
+hide.Text = "HUB"
 
-        if ESPOn then
-
-            local char = plr.Character
-            local hrp = char and char:FindFirstChild("HumanoidRootPart")
-
-            if hrp and LP.Character then
-
-                local myHRP = LP.Character:FindFirstChild("HumanoidRootPart")
-                local dist = (hrp.Position - myHRP.Position).Magnitude
-
-                local pos,visible = Camera:WorldToViewportPoint(hrp.Position)
-
-                if visible then
-
-                    esp.box.Size = Vector2.new(40,60)
-                    esp.box.Position = Vector2.new(pos.X-20,pos.Y-30)
-
-                    -- đổi màu khi gần
-                    if dist < 60 then
-                        esp.box.Color = Color3.fromRGB(255,0,0)
-                    else
-                        esp.box.Color = Color3.fromRGB(255,255,255)
-                    end
-
-                    esp.box.Visible = true
-
-                    esp.name.Text = plr.Name
-                    esp.name.Position = Vector2.new(pos.X,pos.Y-40)
-                    esp.name.Visible = true
-                end
-
-            end
-
-        else
-            esp.box.Visible = false
-            esp.name.Visible = false
-        end
-
-    end
-
+hide.MouseButton1Click:Connect(function()
+    main.Visible = not main.Visible
 end)
