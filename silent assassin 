@@ -154,7 +154,7 @@ RunService.RenderStepped:Connect(function()
 
                             -- teleport detect
                             if dist > 40 then
-                                task.wait(0.1)
+                                task.wait(-0.1)
                             end
                         end
 
