@@ -1,7 +1,11 @@
 -- SERVICES
 local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
+
 local LP = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
 
 -- DELETE OLD GUI
 if game.CoreGui:FindFirstChild("STARHub") then
@@ -28,143 +32,214 @@ local function Save()
 end
 
 -- GUI
-local gui = Instance.new("ScreenGui")
+local gui = Instance.new("ScreenGui",game.CoreGui)
 gui.Name = "STARHub"
-gui.Parent = game.CoreGui
 
--- MAIN WINDOW
-local main = Instance.new("Frame",gui)
-main.Size = UDim2.new(0,420,0,260)
-main.Position = UDim2.new(0.5,-210,0.5,-130)
-main.BackgroundColor3 = Color3.fromRGB(20,20,20)
-main.Active = true
-main.Draggable = true
+local frame = Instance.new("Frame",gui)
+frame.Size = UDim2.new(0,220,0,200)
+frame.Position = UDim2.new(0.5,-110,0.5,-100)
+frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+frame.Active = true
+frame.Draggable = true
 
--- TITLE
-local title = Instance.new("TextLabel",main)
+local title = Instance.new("TextLabel",frame)
 title.Size = UDim2.new(1,0,0,30)
-title.BackgroundColor3 = Color3.fromRGB(15,15,15)
 title.Text = "⭐ STAR HUB"
+title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1,1,1)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
 
--- TAB BUTTONS
-local combatTab = Instance.new("TextButton",main)
-combatTab.Size = UDim2.new(0,120,0,30)
-combatTab.Position = UDim2.new(0,0,0,30)
-combatTab.Text = "Combat"
+-- STATES
+local AutoHit = Settings.AutoHit
+local ESPOn = Settings.ESP
+local AutoChest = Settings.AutoChest
 
-local visualTab = Instance.new("TextButton",main)
-visualTab.Size = UDim2.new(0,120,0,30)
-visualTab.Position = UDim2.new(0,120,0,30)
-visualTab.Text = "Visual"
+-- BUTTON FUNCTION
+local function MakeButton(text,pos,callback)
 
-local miscTab = Instance.new("TextButton",main)
-miscTab.Size = UDim2.new(0,120,0,30)
-miscTab.Position = UDim2.new(0,240,0,30)
-miscTab.Text = "Misc"
-
--- PAGES
-local combatPage = Instance.new("Frame",main)
-combatPage.Size = UDim2.new(1,0,1,-60)
-combatPage.Position = UDim2.new(0,0,0,60)
-combatPage.BackgroundTransparency = 1
-
-local visualPage = combatPage:Clone()
-visualPage.Parent = main
-visualPage.Visible = false
-
-local miscPage = combatPage:Clone()
-miscPage.Parent = main
-miscPage.Visible = false
-
--- TAB SWITCH
-combatTab.MouseButton1Click:Connect(function()
-    combatPage.Visible = true
-    visualPage.Visible = false
-    miscPage.Visible = false
-end)
-
-visualTab.MouseButton1Click:Connect(function()
-    combatPage.Visible = false
-    visualPage.Visible = true
-    miscPage.Visible = false
-end)
-
-miscTab.MouseButton1Click:Connect(function()
-    combatPage.Visible = false
-    visualPage.Visible = false
-    miscPage.Visible = true
-end)
-
--- TOGGLE BUTTON FUNCTION
-local function CreateToggle(parent,text,default,callback)
-
-    local state = default
-
-    local btn = Instance.new("TextButton",parent)
-    btn.Size = UDim2.new(0,180,0,35)
-    btn.Text = text.." : "..(state and "ON" or "OFF")
+    local btn = Instance.new("TextButton",frame)
+    btn.Size = UDim2.new(1,-20,0,30)
+    btn.Position = pos
     btn.BackgroundColor3 = Color3.fromRGB(40,40,40)
     btn.TextColor3 = Color3.new(1,1,1)
+    btn.Text = text
 
-    btn.MouseButton1Click:Connect(function()
-
-        state = not state
-        btn.Text = text.." : "..(state and "ON" or "OFF")
-
-        callback(state)
-
-        Save()
-
-    end)
+    btn.MouseButton1Click:Connect(callback)
 
     return btn
 end
 
--- COMBAT BUTTONS
-local autoHitBtn = CreateToggle(
-    combatPage,
-    "Auto Hit",
-    Settings.AutoHit,
-    function(v)
-        Settings.AutoHit = v
-    end
-)
+-- AUTO HIT
+local hitBtn = MakeButton(
+"Auto Hit : "..(AutoHit and "ON" or "OFF"),
+UDim2.new(0,10,0,40),
+function()
 
-autoHitBtn.Position = UDim2.new(0,20,0,20)
+    AutoHit = not AutoHit
+    Settings.AutoHit = AutoHit
+    hitBtn.Text = "Auto Hit : "..(AutoHit and "ON" or "OFF")
 
--- VISUAL BUTTONS
-local espBtn = CreateToggle(
-    visualPage,
-    "ESP",
-    Settings.ESP,
-    function(v)
-        Settings.ESP = v
-    end
-)
+    Save()
 
-espBtn.Position = UDim2.new(0,20,0,20)
+end)
 
--- MISC BUTTONS
-local chestBtn = CreateToggle(
-    miscPage,
-    "Divine Chest",
-    Settings.AutoChest,
-    function(v)
-        Settings.AutoChest = v
-    end
-)
+-- AUTO CHEST
+local chestBtn = MakeButton(
+"Divine Chest : "..(AutoChest and "ON" or "OFF"),
+UDim2.new(0,10,0,80),
+function()
 
-chestBtn.Position = UDim2.new(0,20,0,20)
+    AutoChest = not AutoChest
+    Settings.AutoChest = AutoChest
+    chestBtn.Text = "Divine Chest : "..(AutoChest and "ON" or "OFF")
 
--- HIDE GUI BUTTON
+    Save()
+
+end)
+
+-- ESP
+local espBtn = MakeButton(
+"ESP : "..(ESPOn and "ON" or "OFF"),
+UDim2.new(0,10,0,120),
+function()
+
+    ESPOn = not ESPOn
+    Settings.ESP = ESPOn
+    espBtn.Text = "ESP : "..(ESPOn and "ON" or "OFF")
+
+    Save()
+
+end)
+
+-- HIDE GUI
 local hide = Instance.new("TextButton",gui)
 hide.Size = UDim2.new(0,60,0,25)
 hide.Position = UDim2.new(0,10,0.5,0)
 hide.Text = "HUB"
 
 hide.MouseButton1Click:Connect(function()
-    main.Visible = not main.Visible
+    frame.Visible = not frame.Visible
+end)
+
+-- ESP SYSTEM
+local ESP = {}
+
+local function createESP(plr)
+
+    local box = Drawing.new("Square")
+    box.Thickness = 1
+    box.Filled = false
+    box.Color = Color3.new(1,1,1)
+    box.Visible = false
+
+    ESP[plr] = box
+end
+
+for _,p in pairs(Players:GetPlayers()) do
+    if p ~= LP then
+        createESP(p)
+    end
+end
+
+Players.PlayerAdded:Connect(function(p)
+    if p ~= LP then
+        createESP(p)
+    end
+end)
+
+-- TOOL
+local function GetTool()
+
+    local char = LP.Character
+    if not char then return end
+
+    local tool = char:FindFirstChildOfClass("Tool")
+
+    if not tool then
+        local bp = LP.Backpack:FindFirstChildOfClass("Tool")
+        if bp then
+            bp.Parent = char
+            tool = bp
+        end
+    end
+
+    return tool
+end
+
+-- MAIN LOOP
+RunService.RenderStepped:Connect(function()
+
+    -- AUTO HIT
+    if AutoHit and LP.Character then
+
+        local myHRP = LP.Character:FindFirstChild("HumanoidRootPart")
+        local tool = GetTool()
+
+        if myHRP and tool then
+
+            for _,plr in pairs(Players:GetPlayers()) do
+
+                if plr ~= LP and plr.Character then
+
+                    local enemyHRP = plr.Character:FindFirstChild("HumanoidRootPart")
+
+                    if enemyHRP then
+
+                        local dir = (enemyHRP.Position - myHRP.Position).Unit
+
+                        RS.Events.GameRemoteFunction:InvokeServer(
+                            "AttemptWeaponHit",
+                            {
+                                hitboxOffset = Vector3.new(0,0,-1),
+                                hitboxSize = Vector3.new(60,60,60),
+                                damage = 9999999,
+                                tool = tool,
+                                attackCooldown = -0.1
+                            },
+                            {{
+                                enemyModel = plr.Character,
+                                origin = myHRP.Position,
+                                direction = dir
+                            }}
+                        )
+
+                    end
+                end
+            end
+        end
+    end
+
+    -- AUTO CHEST
+    if AutoChest then
+        RS.Events.GameRemoteFunction:InvokeServer(
+        "AttemptRollGachaChest",
+        "Divine"
+        )
+    end
+
+    -- ESP
+    for plr,box in pairs(ESP) do
+
+        if ESPOn and plr.Character then
+
+            local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
+
+            if hrp then
+
+                local pos,visible = Camera:WorldToViewportPoint(hrp.Position)
+
+                if visible then
+
+                    box.Size = Vector2.new(40,60)
+                    box.Position = Vector2.new(pos.X-20,pos.Y-30)
+                    box.Visible = true
+
+                end
+            end
+
+        else
+            box.Visible = false
+        end
+
+    end
+
 end)
