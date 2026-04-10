@@ -1,205 +1,235 @@
+-- SERVICES
+local Players = game:GetService("Players")
+local RS = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
-local CoreGui = game:GetService("CoreGui")
-local UIS = game:GetService("UserInputService")
+local LP = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
 
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local Title = Instance.new("TextLabel")
-local KeyInput = Instance.new("TextBox")
-local CopyBtn = Instance.new("TextButton")
-local SubmitBtn = Instance.new("TextButton")
-local UICorner = Instance.new("UICorner")
-local UIStroke = Instance.new("UIStroke")
-local UIGradient = Instance.new("UIGradient")
+-- DELETE OLD GUI
+if game.CoreGui:FindFirstChild("STAR★Hub") then
+    game.CoreGui.STARHub:Destroy()
+end
 
-ScreenGui.Parent = CoreGui
-ScreenGui.Name = "Gold_System"
-ScreenGui.ResetOnSpawn = false
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "STARHub"
+gui.Parent = game.CoreGui
 
--- NOTIFY
-local function NotifyYellow(text)
-    local NotifyGui = Instance.new("ScreenGui", CoreGui)
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0,200,0,170)
+frame.Position = UDim2.new(0.5,-100,0.5,-85)
+frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+frame.Active = true
+frame.Draggable = true
 
-    local Label = Instance.new("TextLabel")
-    Label.Parent = NotifyGui
-    Label.Size = UDim2.new(0,500,0,50)
-    Label.Position = UDim2.new(0.5,-250,0.25,0)
-    Label.BackgroundTransparency = 1
-    Label.TextColor3 = Color3.fromRGB(255,255,180)
-    Label.Text = text
-    Label.Font = Enum.Font.GothamBold
-    Label.TextSize = 22
-    Label.TextStrokeTransparency = 0.3
-    Label.TextStrokeColor3 = Color3.new(0,0,0)
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1,0,0,30)
+title.BackgroundTransparency = 1
+title.Text = "STAR HUB"
+title.TextColor3 = Color3.new(1,1,1)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 16
 
-    task.spawn(function()
-        task.wait(3)
-        for i=0,1,0.1 do
-            Label.TextTransparency = i
-            Label.TextStrokeTransparency = 0.3+(i*0.7)
-            task.wait(0.05)
+-- STATES
+local AutoHit = false
+local AutoChest = false
+local ESPOn = false
+
+-- BUTTON AUTO HIT
+local hitBtn = Instance.new("TextButton", frame)
+hitBtn.Size = UDim2.new(1,-20,0,30)
+hitBtn.Position = UDim2.new(0,10,0,35)
+hitBtn.Text = "Auto Hit : OFF"
+hitBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+hitBtn.TextColor3 = Color3.new(1,1,1)
+
+hitBtn.MouseButton1Click:Connect(function()
+    AutoHit = not AutoHit
+    hitBtn.Text = "Auto Hit : "..(AutoHit and "ON" or "OFF")
+end)
+
+-- BUTTON CHEST
+local chestBtn = Instance.new("TextButton", frame)
+chestBtn.Size = UDim2.new(1,-20,0,30)
+chestBtn.Position = UDim2.new(0,10,0,70)
+chestBtn.Text = "Divine Chest : OFF"
+chestBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+chestBtn.TextColor3 = Color3.new(1,1,1)
+
+chestBtn.MouseButton1Click:Connect(function()
+    AutoChest = not AutoChest
+    chestBtn.Text = "Divine Chest : "..(AutoChest and "ON" or "OFF")
+end)
+
+-- BUTTON ESP
+local espBtn = Instance.new("TextButton", frame)
+espBtn.Size = UDim2.new(1,-20,0,30)
+espBtn.Position = UDim2.new(0,10,0,105)
+espBtn.Text = "ESP : OFF"
+espBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+espBtn.TextColor3 = Color3.new(1,1,1)
+
+espBtn.MouseButton1Click:Connect(function()
+    ESPOn = not ESPOn
+    espBtn.Text = "ESP : "..(ESPOn and "ON" or "OFF")
+end)
+
+-- AUTO TOOL
+local function GetTool()
+    local char = LP.Character
+    if not char then return nil end
+
+    local tool = char:FindFirstChildOfClass("Tool")
+
+    if not tool then
+        local bp = LP.Backpack:FindFirstChildOfClass("Tool")
+        if bp then
+            bp.Parent = char
+            tool = bp
         end
-        NotifyGui:Destroy()
-    end)
+    end
+
+    return tool
 end
 
--- FRAME
-MainFrame.Parent = ScreenGui
-MainFrame.Size = UDim2.new(0,280,0,200)
-MainFrame.Position = UDim2.new(0.5,-140,0.5,-100)
-MainFrame.BackgroundColor3 = Color3.fromRGB(15,15,15)
-MainFrame.Active = true
+-- ESP SYSTEM
+local ESP = {}
 
-UICorner.Parent = MainFrame
-UICorner.CornerRadius = UDim.new(0,15)
+local function createESP(plr)
 
--- RGB BORDER
-UIStroke.Parent = MainFrame
-UIStroke.Thickness = 3
+    local box = Drawing.new("Square")
+    box.Thickness = 1
+    box.Filled = false
+    box.Color = Color3.new(1,1,1)
+    box.Visible = false
 
-UIGradient.Color = ColorSequence.new{
-ColorSequenceKeypoint.new(0,Color3.fromRGB(255,215,0)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(0,255,255)),
-ColorSequenceKeypoint.new(1,Color3.fromRGB(170,0,255))
-}
-UIGradient.Parent = UIStroke
+    local name = Drawing.new("Text")
+    name.Size = 13
+    name.Center = true
+    name.Outline = true
+    name.Color = Color3.new(1,1,1)
+    name.Visible = false
 
--- RGB ANIMATION
-task.spawn(function()
-    while true do
-        UIGradient.Rotation = UIGradient.Rotation + 1
-        task.wait()
+    ESP[plr] = {box = box, name = name}
+end
+
+for _,p in pairs(Players:GetPlayers()) do
+    if p ~= LP then
+        createESP(p)
+    end
+end
+
+Players.PlayerAdded:Connect(function(p)
+    if p ~= LP then
+        createESP(p)
     end
 end)
 
--- TITLE
-Title.Parent = MainFrame
-Title.Size = UDim2.new(1,0,0,50)
-Title.BackgroundTransparency = 1
-Title.Text = "VIP SYSTEM"
-Title.Font = Enum.Font.GothamBold
-Title.TextColor3 = Color3.new(1,1,1)
-Title.TextSize = 20
+-- TELEPORT DETECT
+local lastPos = {}
 
--- KEY BOX
-KeyInput.Parent = MainFrame
-KeyInput.PlaceholderText = "Dán Key tại đây..."
-KeyInput.Text = ""
-KeyInput.Size = UDim2.new(0.8,0,0,35)
-KeyInput.Position = UDim2.new(0.1,0,0.35,0)
-KeyInput.BackgroundColor3 = Color3.fromRGB(30,30,35)
-KeyInput.TextColor3 = Color3.new(1,1,1)
-KeyInput.Font = Enum.Font.GothamSemibold
-Instance.new("UICorner",KeyInput).CornerRadius = UDim.new(0,8)
+-- MAIN LOOP
+RunService.RenderStepped:Connect(function()
 
--- COPY BUTTON
-CopyBtn.Parent = MainFrame
-CopyBtn.Text = "SAO CHÉP LINK GET KEY"
-CopyBtn.Font = Enum.Font.GothamBold
-CopyBtn.BackgroundColor3 = Color3.fromRGB(40,40,45)
-CopyBtn.TextColor3 = Color3.fromRGB(0,255,255)
-CopyBtn.Position = UDim2.new(0.1,0,0.58,5)
-CopyBtn.Size = UDim2.new(0.8,0,0,25)
-Instance.new("UICorner",CopyBtn).CornerRadius = UDim.new(0,5)
+    if AutoHit and LP.Character then
 
--- SUBMIT
-SubmitBtn.Parent = MainFrame
-SubmitBtn.Text = "KÍCH HOẠT SCRIPT"
-SubmitBtn.Font = Enum.Font.GothamBold
-SubmitBtn.BackgroundColor3 = Color3.fromRGB(0,255,127)
-SubmitBtn.TextColor3 = Color3.new(0,0,0)
-SubmitBtn.Position = UDim2.new(0.1,0,0.78,10)
-SubmitBtn.Size = UDim2.new(0.8,0,0,35)
-Instance.new("UICorner",SubmitBtn).CornerRadius = UDim.new(0,10)
+        local myHRP = LP.Character:FindFirstChild("HumanoidRootPart")
+        local tool = GetTool()
 
--- COPY LINK
-CopyBtn.MouseButton1Click:Connect(function()
-    if setclipboard then
-        setclipboard("https://taplayma.com/link/keyscript")
+        if myHRP and tool then
+
+            for _,plr in pairs(Players:GetPlayers()) do
+                if plr ~= LP and plr.Character then
+
+                    local enemyHRP = plr.Character:FindFirstChild("HumanoidRootPart")
+
+                    if enemyHRP then
+
+                        local pos = enemyHRP.Position
+                        local old = lastPos[plr]
+
+                        if old then
+                            local dist = (pos - old).Magnitude
+
+                            -- teleport detect
+                            if dist > 40 then
+                                task.wait(0.1)
+                            end
+                        end
+
+                        lastPos[plr] = pos
+
+                        local dir = (pos - myHRP.Position).Unit
+
+                        RS.Events.GameRemoteFunction:InvokeServer(
+                            "AttemptWeaponHit",
+                            {
+                                hitboxOffset = Vector3.new(0,0,-1),
+                                hitboxSize = Vector3.new(60,60,60),
+                                damage = 123456789,
+                                tool = tool,
+                                attackCooldown = -0.1
+                            },
+                            {{
+                                enemyModel = plr.Character,
+                                origin = myHRP.Position,
+                                direction = dir
+                            }}
+                        )
+
+                    end
+                end
+            end
+        end
     end
 
-    CopyBtn.Text = "ĐÃ SAO CHÉP!"
-    NotifyYellow("Đã sao chép link lấy key!")
+    -- AUTO CHEST
+    if AutoChest then
+        RS.Events.GameRemoteFunction:InvokeServer("AttemptRollGachaChest","Divine")
+    end
 
-    task.wait(2)
-    CopyBtn.Text = "SAO CHÉP LINK GET KEY"
-end)
+    -- ESP
+    for plr,esp in pairs(ESP) do
 
--- SUBMIT
-local debounce = false
+        if ESPOn then
 
-SubmitBtn.MouseButton1Click:Connect(function()
+            local char = plr.Character
+            local hrp = char and char:FindFirstChild("HumanoidRootPart")
 
-    if debounce then return end
-    debounce = true
+            if hrp and LP.Character then
 
-    local userKey = KeyInput.Text
+                local myHRP = LP.Character:FindFirstChild("HumanoidRootPart")
+                local dist = (hrp.Position - myHRP.Position).Magnitude
 
-    if userKey ~= "" then
+                local pos,visible = Camera:WorldToViewportPoint(hrp.Position)
 
-        SubmitBtn.Text = "ĐANG KIỂM TRA..."
-        task.wait(1)
+                if visible then
 
-        SubmitBtn.Text = "XÁC MINH THÀNH CÔNG!"
-        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255,255,255)
+                    esp.box.Size = Vector2.new(40,60)
+                    esp.box.Position = Vector2.new(pos.X-20,pos.Y-30)
 
-        NotifyYellow("Key hợp lệ! Đang tải script...")
+                    -- đổi màu khi gần
+                    if dist < 60 then
+                        esp.box.Color = Color3.fromRGB(255,0,0)
+                    else
+                        esp.box.Color = Color3.fromRGB(255,255,255)
+                    end
 
-        task.wait(1)
+                    esp.box.Visible = true
 
-        ScreenGui:Destroy()
+                    esp.name.Text = plr.Name
+                    esp.name.Position = Vector2.new(pos.X,pos.Y-40)
+                    esp.name.Visible = true
+                end
 
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/realcath/lab/refs/heads/main/src/main/loader.lua"))()
+            end
 
-    else
-
-        SubmitBtn.Text = "CHƯA NHẬP KEY!"
-        SubmitBtn.BackgroundColor3 = Color3.fromRGB(255,60,60)
-
-        task.wait(2)
-
-        SubmitBtn.Text = "KÍCH HOẠT SCRIPT"
-        SubmitBtn.BackgroundColor3 = Color3.fromRGB(0,255,127)
+        else
+            esp.box.Visible = false
+            esp.name.Visible = false
+        end
 
     end
 
-    debounce = false
-
-end)
-
--- DRAG (mobile + PC)
-local dragging
-local dragInput
-local dragStart
-local startPos
-
-local function update(input)
-local delta = input.Position - dragStart
-MainFrame.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset + delta.X,startPos.Y.Scale,startPos.Y.Offset + delta.Y)
-end
-
-MainFrame.InputBegan:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-dragging = true
-dragStart = input.Position
-startPos = MainFrame.Position
-
-input.Changed:Connect(function()
-if input.UserInputState == Enum.UserInputState.End then
-dragging = false
-end
-end)
-end
-end)
-
-MainFrame.InputChanged:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-dragInput = input
-end
-end)
-
-UIS.InputChanged:Connect(function(input)
-if input == dragInput and dragging then
-update(input)
-end
 end)
