@@ -1,0 +1,130 @@
+--// PLAYER
+local player = game.Players.LocalPlayer
+
+-- XÓA GUI CŨ
+if game.CoreGui:FindFirstChild("ActionHub") then
+    game.CoreGui.ActionHub:Destroy()
+end
+
+--// GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "ActionHub"
+gui.Parent = game.CoreGui
+gui.ResetOnSpawn = false
+
+-- FRAME (WINDOW TO)
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0,300,0,180)
+frame.Position = UDim2.new(0.5,-150,0.5,-90)
+frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+frame.Active = true
+
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0,10)
+
+-- TITLE
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1,0,0,35)
+title.BackgroundTransparency = 1
+title.Text = "ACTION HUB"
+title.TextColor3 = Color3.new(1,1,1)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+
+-- STATES
+local isLaying = false
+
+--// BUTTON TEMPLATE
+local function createButton(text, pos)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(0.8,0,0,35)
+    btn.Position = pos
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    Instance.new("UICorner", btn)
+    return btn
+end
+
+--// BUTTONS
+local sitBtn = createButton("Sit", UDim2.new(0.1,0,0.3,0))
+local layBtn = createButton("Lay", UDim2.new(0.1,0,0.5,0))
+local removeBtn = createButton("Remove GUI", UDim2.new(0.1,0,0.7,0))
+
+--// FUNCTIONS
+
+-- SIT
+sitBtn.MouseButton1Click:Connect(function()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if hum then
+        hum.Sit = true
+    end
+end)
+
+-- LAY
+layBtn.MouseButton1Click:Connect(function()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    local root = char:FindFirstChild("HumanoidRootPart")
+
+    if hum and root then
+        if isLaying then
+            hum.PlatformStand = false
+            root.CFrame = root.CFrame * CFrame.Angles(math.rad(-90),0,0)
+            isLaying = false
+        else
+            hum.PlatformStand = true
+            root.CFrame = root.CFrame * CFrame.Angles(math.rad(90),0,0)
+            isLaying = true
+        end
+    end
+end)
+
+-- REMOVE
+removeBtn.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
+
+--// DRAG WINDOW (MƯỢT CHO PC + MOBILE)
+local UIS = game:GetService("UserInputService")
+
+local dragging = false
+local dragStart
+local startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(
+        startPos.X.Scale,
+        startPos.X.Offset + delta.X,
+        startPos.Y.Scale,
+        startPos.Y.Offset + delta.Y
+    )
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+    or input.UserInputType == Enum.UserInputType.Touch then
+        if dragging then
+            update(input)
+        end
+    end
+end)
