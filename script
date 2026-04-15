@@ -235,10 +235,10 @@ AddButton(Tab2o, {
     end
 })
 AddButton(Tab2o, {
-    Name = "lay",
+    Name = "lay-sit",
     Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Lay-button-21244"))()
-end
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/speed%2Bjump"))()
+    end
 })
 AddButton(Tab2o, {
     Name = "dash",
@@ -246,11 +246,12 @@ AddButton(Tab2o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/dash"))()
 end
 })
+
 AddButton(Tab2o, {
-    Name = "sit",
+    Name = "speed-jump",
     Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Sit-button-21013"))()
-    end
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/sit-%20jump"))()
+end
 })
 
 AddButton(Tab2o, {
