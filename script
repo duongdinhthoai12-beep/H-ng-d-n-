@@ -235,7 +235,7 @@ AddButton(Tab2o, {
     end
 })
 AddButton(Tab2o, {
-    Name = "lay-sit",
+    Name = "jump-speed",
     Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/speed%2Bjump"))()
     end
@@ -248,7 +248,7 @@ end
 })
 
 AddButton(Tab2o, {
-    Name = "speed-jump",
+    Name = "lay-sit",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/sit-%20jump"))()
 end
