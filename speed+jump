@@ -1,0 +1,115 @@
+-- SERVICES
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+
+local LP = Players.LocalPlayer
+
+-- GUI
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "SpeedJumpHub"
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0,220,0,180)
+frame.Position = UDim2.new(0.5,-110,0.5,-90)
+frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
+frame.Active = true
+frame.Draggable = true
+
+-- TITLE
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1,0,0,30)
+title.Text = "⚡ SPEED + JUMP HUB"
+title.TextColor3 = Color3.new(1,1,1)
+title.BackgroundTransparency = 1
+
+-- INFO LABEL
+local info = Instance.new("TextLabel", frame)
+info.Size = UDim2.new(1,0,0,30)
+info.Position = UDim2.new(0,0,0,30)
+info.BackgroundTransparency = 1
+info.TextColor3 = Color3.new(1,1,1)
+info.Text = "Speed: 16 | Jump: 50"
+
+-- BUTTON FUNCTION
+local function createBtn(text,pos,callback)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(0.4,0,0,30)
+    btn.Position = pos
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btn.TextColor3 = Color3.new(1,1,1)
+
+    btn.MouseButton1Click:Connect(callback)
+    return btn
+end
+
+-- FUNCTIONS
+local function getHum()
+    local char = LP.Character
+    if char then
+        return char:FindFirstChildOfClass("Humanoid")
+    end
+end
+
+-- SPEED BUTTONS
+createBtn("+ Speed",UDim2.new(0.05,0,0.4,0),function()
+    local hum = getHum()
+    if hum then
+        hum.WalkSpeed = hum.WalkSpeed + 5
+    end
+end)
+
+createBtn("- Speed",UDim2.new(0.55,0,0.4,0),function()
+    local hum = getHum()
+    if hum then
+        hum.WalkSpeed = hum.WalkSpeed - 5
+    end
+end)
+
+-- JUMP BUTTONS
+createBtn("+ Jump",UDim2.new(0.05,0,0.65,0),function()
+    local hum = getHum()
+    if hum then
+        hum.JumpPower = hum.JumpPower + 5
+    end
+end)
+
+createBtn("- Jump",UDim2.new(0.55,0,0.65,0),function()
+    local hum = getHum()
+    if hum then
+        hum.JumpPower = hum.JumpPower - 5
+    end
+end)
+
+-- UPDATE INFO
+task.spawn(function()
+    while true do
+        task.wait(0.2)
+
+        local hum = getHum()
+        if hum then
+            info.Text = "Speed: "..math.floor(hum.WalkSpeed).." | Jump: "..math.floor(hum.JumpPower)
+        end
+    end
+end)
+
+-- HIDE GUI BUTTON
+local hideBtn = Instance.new("TextButton", gui)
+hideBtn.Size = UDim2.new(0,60,0,25)
+hideBtn.Position = UDim2.new(0,10,0.5,0)
+hideBtn.Text = "HUB"
+
+hideBtn.MouseButton1Click:Connect(function()
+    frame.Visible = not frame.Visible
+end)
+
+-- FIX RESET (khi chết vẫn giữ speed/jump)
+LP.CharacterAdded:Connect(function()
+    task.wait(0.5)
+
+    local hum = getHum()
+    if hum then
+        hum.WalkSpeed = 16
+        hum.JumpPower = 50
+    end
+end)
