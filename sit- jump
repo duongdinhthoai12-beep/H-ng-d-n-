@@ -1,4 +1,4 @@
---// PLAYER
+ --// PLAYER
 local player = game.Players.LocalPlayer
 
 -- XÓA GUI CŨ
