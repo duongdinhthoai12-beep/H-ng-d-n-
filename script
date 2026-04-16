@@ -141,6 +141,12 @@ AddButton(Tab1o, {
 end
 })
 AddButton(Tab1o, {
+    Name = "gun laze",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/Gun%20laze%20fix"))()
+end
+})
+AddButton(Tab1o, {
     Name = "ban",
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/refs/heads/main/Ban"))()
