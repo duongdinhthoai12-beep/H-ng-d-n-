@@ -1,0 +1,158 @@
+-- LOAD NOTI
+local NotificationLibrary
+pcall(function()
+    NotificationLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/lobox920/Notification-Library/Main/Library.lua"))()
+end)
+
+-- GUI
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "InvisibleFix"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0,220,0,120)
+frame.Position = UDim2.new(0.7,0,0.4,0)
+frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+frame.Active = true
+frame.Draggable = true
+
+local btn = Instance.new("TextButton", frame)
+btn.Size = UDim2.new(0.8,0,0,40)
+btn.Position = UDim2.new(0.1,0,0.3,0)
+btn.Text = "Invisible : OFF"
+btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+btn.TextColor3 = Color3.new(1,1,1)
+
+-- STATE
+local invisible = false
+
+-- SAVE ORIGINAL
+local savedTransparency = {}
+
+-- NOTI
+local function Notify(type,text,time)
+    if NotificationLibrary then
+        NotificationLibrary:SendNotification(type,text,time or 3)
+    else
+        warn("NOTI:",text)
+    end
+end
+
+-- APPLY INVISIBLE (MỜ)
+local function SetInvisible(state)
+    local char = player.Character
+    if not char then return end
+
+    for _,v in pairs(char:GetDescendants()) do
+        if v:IsA("BasePart") or v:IsA("Decal") then
+
+            if state then
+                -- lưu lại trạng thái cũ
+                if savedTransparency[v] == nil then
+                    savedTransparency[v] = v.Transparency
+                end
+
+                -- chỉnh mờ (0.6 là nhìn thấy nhẹ)
+                v.Transparency = 0.6
+
+            else
+                -- trả lại bình thường
+                if savedTransparency[v] ~= nil then
+                    v.Transparency = savedTransparency[v]
+                end
+            end
+
+        end
+    end
+end
+
+-- BUTTON
+btn.MouseButton1Click:Connect(function()
+
+    invisible = not invisible
+
+    if invisible then
+        btn.Text = "Invisible : ON"
+        btn.BackgroundColor3 = Color3.fromRGB(0,170,0)
+
+        SetInvisible(true)
+        Notify("Success","ĐÃ BẬT TÀNG HÌNH",3)
+
+    else
+        btn.Text = "Invisible : OFF"
+        btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+
+        SetInvisible(false)
+        Notify("Info","ĐÃ TẮT TÀNG HÌNH",3)
+    end
+
+end)
+
+-- FIX RESPAWN (không lỗi mất hiệu ứng)
+player.CharacterAdded:Connect(function()
+    task.wait(1)
+    if invisible then
+        SetInvisible(true)
+    end
+end)
+
+local cloneChar = nil
+local realCFrame = nil
+
+-- HÀM TẠO CLONE + ẨN THẬT
+local function EnableFakeInvisible()
+
+    local char = player.Character
+    if not char then return end
+
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    -- lưu vị trí thật
+    realCFrame = hrp.CFrame
+
+    -- clone nhân vật
+    cloneChar = char:Clone()
+    cloneChar.Name = "FakeClone"
+    cloneChar.Parent = workspace
+
+    -- chỉnh clone mờ nhẹ (chỉ bạn thấy)
+    for _,v in pairs(cloneChar:GetDescendants()) do
+        if v:IsA("BasePart") or v:IsA("Decal") then
+            v.Transparency = 0.3
+        end
+    end
+
+    -- đưa clone về vị trí cũ
+    cloneChar:SetPrimaryPartCFrame(realCFrame)
+
+    -- đưa nhân vật thật đi xa (trên trời)
+    hrp.CFrame = realCFrame + Vector3.new(0, 10000, 0)
+
+    -- camera theo clone
+    workspace.CurrentCamera.CameraSubject = cloneChar:FindFirstChildOfClass("Humanoid")
+
+end
+
+-- HÀM TẮT
+local function DisableFakeInvisible()
+
+    local char = player.Character
+    if not char then return end
+
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    -- trả camera về người thật
+    workspace.CurrentCamera.CameraSubject = char:FindFirstChildOfClass("Humanoid")
+
+    -- KHÔNG TP về vị trí cũ (theo yêu cầu bạn)
+    
+    -- xoá clone
+    if cloneChar then
+        cloneChar:Destroy()
+        cloneChar = nil
+    end
+
+end
