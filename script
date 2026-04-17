@@ -40,7 +40,7 @@ MinimizeButton({
 })
 
 -- Nếu xác thực đúng thì tạo tabs và nội dung tiếp
-local Tab1o = MakeTab({Name = "animation"})
+local Tab1o = MakeTab({Name = "funny"})
 local Tab2o = MakeTab({Name = "lệnh"})
 local Tab3o = MakeTab({Name = "game riêng"})
 local Tab4o = MakeTab({Name = "sever"})
@@ -95,7 +95,24 @@ AddButton(Tab1o, {
         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Universal-Temu-KJ-19593"))()
 end
 })
-
+AddButton(Tab1o, {
+    Name = "KJ-V3",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/GCBxsqRs"))()
+emd
+})
+AddButton(Tab1o, {
+    Name = "Crusible lSword only",
+    Callback = function()
+        loadstring(game:HttpGet("httpGet://rawscripts.net/ram/universal-script-Crusible-Sword-only-R6-87032"))()
+end
+})
+AddButton(Tab1o, {
+    Name = "KJ-V2",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Universal-Temu-KJ-19593"))()
+end
+})
 AddButton(Tab1o, {
     Name = "goku",
     Callback = function()
