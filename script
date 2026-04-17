@@ -99,7 +99,7 @@ AddButton(Tab1o, {
     Name = "KJ-V3",
     Callback = function()
         loadstring(game:HttpGet("https://pastebin.com/raw/GCBxsqRs"))()
-emd
+end
 })
 AddButton(Tab1o, {
     Name = "Crusible lSword only",
