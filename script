@@ -104,7 +104,7 @@ end
 AddButton(Tab1o, {
     Name = "Crusible lSword only",
     Callback = function()
-        loadstring(game:HttpGet("httpGet://rawscripts.net/ram/universal-script-Crusible-Sword-only-R6-87032"))()
+        loadstring(game:HttpGet("https://rawscripts.net/ram/universal-script-Crusible-Sword-only-R6-87032"))()
 end
 })
 AddButton(Tab1o, {
