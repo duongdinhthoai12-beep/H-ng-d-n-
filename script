@@ -358,6 +358,12 @@ loadstring(game:HttpGet("https://rawscripts.net/raw/Dead-Rails-Alpha-aimbot-npc-
   end
 })
 AddButton(Tab3o, {
+    Name = "xenix-grow a garden",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XeccScript/AutoMiddle/refs/heads/main/AutoMiddlePets.txt"))()
+end
+})
+AddButton(Tab3o, {
     Name = "Guest 1337-forsaken",
     Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/skibidi399/Auto-block-script/refs/heads/main/FINAL%20AUTO%20BLOCK"))()
@@ -432,6 +438,7 @@ AddButton(Tab3o, {
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Free-Keyless-Script/MurderMystery2/refs/heads/main/Main.lua"))()
 end
 })
+
 --Tab4o
 
 AddButton(Tab4o, {
