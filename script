@@ -102,9 +102,9 @@ AddButton(Tab1o, {
 end
 })
 AddButton(Tab1o, {
-    Name = "Crusible lSword only",
+    Name = "tool meme",
     Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/ram/universal-script-Crusible-Sword-only-R6-87032"))()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Meme-Tools-V3-38009"))()
 end
 })
 AddButton(Tab1o, {
