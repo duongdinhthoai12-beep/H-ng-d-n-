@@ -159,9 +159,9 @@ AddButton(Tab1o, {
 end
 })
 AddButton(Tab1o, {
-    Name = "gun laze",
+    Name = "tool all",
     Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/duongdinhthoai12-beep/H-ng-d-n-/main/Gun%20laze%20fix"))()
+    loadstring(game:HttpGet("https://pastefy.app/qpbQo0lr/raw"))()
 end
 })
 AddButton(Tab1o, {
