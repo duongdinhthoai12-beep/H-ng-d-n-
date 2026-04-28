@@ -217,6 +217,13 @@ AddButton(Tab2o,{
 loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-script-20557"))()
    end
 })
+AddButton(Tab2o,{
+    Name = "invisibility",
+    Callback = function()
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/waidaito/wandahub/main/Invisible-1001.txt"))()
+    end
+})
 AddButton(Tab2o, {
     Name = "auto fire",
     Callback = function()
